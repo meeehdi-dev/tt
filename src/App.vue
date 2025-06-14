@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { Icon } from '@iconify/vue'
+import AppEvent from './components/AppEvent.vue'
 
 enum State {
   Idle = 'idle',
@@ -351,27 +352,63 @@ function onGrabBottom(day: number, slot: number) {
                 }em)`,
               }"
             >
-              <div
-                class="flex flex-[0_0_0.25em] cursor-row-resize"
-                @mousedown.left="onGrabTop(day, slot)"
-              ></div>
-              <div
-                class="absolute top-0 right-0 w-4 h-4 m-0.5 rounded-full flex justify-center items-center text-rose-400 hover:text-rose-600 cursor-pointer z-10"
-                @click.prevent="onRemove(day, slot)"
-              >
-                <Icon icon="carbon:circle-solid" />
-              </div>
-              <textarea
-                class="flex bg-transparent flex-auto h-full px-1 m-0 border-none outline-none resize-none text-xs"
+              <AppEvent
+                :day="day"
+                :timeslot="slot"
                 v-model="getActivity(day, slot).note"
-                @change="onChange(day, slot)"
-                @focus="onFocus(day, slot)"
-                @blur="onBlur"
-              ></textarea>
+                @onGrabTop="onGrabTop(day, slot)"
+                @onGrabBottom="onGrabBottom(day, slot)"
+                @onRemove="onRemove(day, slot)"
+                @onChange="onChange(day, slot)"
+                @onFocus="onFocus(day, slot)"
+                @onBlur="onBlur"
+              />
+            </div>
+          </div>
+          <div class="flex flex-row justify-center pt-1">
+            <div
+              :class="[
+                'group/summary text-slate-600 flex flex-row w-full gap-2 justify-center items-center relative text-xs',
+                {
+                  'cursor-pointer hover:text-slate-400':
+                    activitySlots.filter((a) => a.day === day).length > 0,
+                },
+              ]"
+            >
               <div
-                class="flex flex-[0_0_0.25em] cursor-row-resize"
-                @mousedown.left="onGrabBottom(day, slot)"
+                class="group-hover/summary:opacity-100 group-hover/summary:z-10 opacity-0 transition-opacity absolute bottom-full flex flex-col justify-center items-end bg-slate-950 rounded-sm mb-1.5 text-xs px-4 py-2 gap-1"
+                v-if="activitySlots.filter((a) => a.day === day).length > 0"
+                v-html="
+                  Object.entries(
+                    activitySlots
+                      .filter((a) => a.day === day)
+                      .reduce(
+                        (acc, cur) => {
+                          cur.note.split('\n').forEach((line) => {
+                            if (line.startsWith('#')) {
+                              const [tag] = line.split(' ')
+                              acc[tag] = (acc[tag] ?? 0) + getActivityLength(day, cur.start) / 2
+                            }
+                          })
+                          return acc
+                        },
+                        {} as Record<string, number>,
+                      ),
+                  )
+                    .map(([tag, value]) => {
+                      return `<div class='flex flex-row gap-2'><span class='bg-sky-300 text-sky-800 font-bold rounded-sm
+px-1'>${tag}</span> ${value.toFixed(1)}h</div>`
+                    })
+                    .join('<br>')
+                "
               ></div>
+              <Icon icon="carbon:time-filled" /><span
+                >{{
+                  activitySlots
+                    .filter((a) => a.day === day)
+                    .reduce((acc, cur) => acc + getActivityLength(day, cur.start) / 2, 0)
+                }}h</span
+              >
             </div>
           </div>
         </div>
