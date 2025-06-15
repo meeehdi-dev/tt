@@ -263,15 +263,17 @@ function onChange(day: number, slot: number) {
   save()
 }
 
-function onPreviousWeek() {
-  startOfWeek.value.setDate(startOfWeek.value.getDate() - 7)
-  endOfWeek.value.setDate(endOfWeek.value.getDate() - 7)
+function changeDate(days: number) {
+  startOfWeek.value.setDate(startOfWeek.value.getDate() + days)
+  endOfWeek.value.setDate(endOfWeek.value.getDate() + days)
   load()
 }
+
+function onPreviousWeek() {
+  changeDate(-7)
+}
 function onNextWeek() {
-  startOfWeek.value.setDate(startOfWeek.value.getDate() + 7)
-  endOfWeek.value.setDate(endOfWeek.value.getDate() + 7)
-  load()
+  changeDate(7)
 }
 
 function onGrabTop(day: number, slot: number) {
