@@ -8,4 +8,4 @@ jobs:
       - run: |
           curl \
               -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
-              https://coolify.kokoro-soft.fr/api/v1/deploy?uuid=nscgkwok408sskw44kcowo8k&force=false
+              "https://coolify.kokoro-soft.fr/api/v1/deploy?uuid=nscgkwok408sskw44kcowo8k&force=false"
