@@ -247,8 +247,9 @@ function onBlur() {
 }
 
 function onRemove(day: number, slot: number) {
-  if (window.confirm('Confirm?')) {
-    const key = getKey(day, slot)
+  const key = getKey(day, slot)
+  const activity = getActivityByKey(key)
+  if (activity.note == '' || window.confirm('Confirm?')) {
     activitySlots.value = activitySlots.value.filter(
       ({ day: d, start }) => getKey(d, start) !== key,
     )
