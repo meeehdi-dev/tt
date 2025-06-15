@@ -297,7 +297,10 @@ function onGrabBottom(day: number, slot: number) {
 <template>
   <div class="flex flex-col flex-auto">
     <div class="flex flex-row justify-between">
-      <div></div>
+      <div class="mt-1.5 ml-12 flex flex-row gap-1 items-center">
+        <Icon icon="circum:timer" style="font-size: 1.5em" class="rotate-y-180 text-slate-700" />
+        <span class="text-sm text-slate-600">tt</span>
+      </div>
       <div class="flex flex-row justify-center items-center mt-2 gap-2">
         <div class="text-slate-800 hover:text-slate-600 cursor-pointer p-1" @click="onPreviousWeek">
           <Icon icon="carbon:triangle-left-solid" />
