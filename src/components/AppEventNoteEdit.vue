@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { useTemplateRef } from 'vue'
+import { useTemplateRef } from "vue";
 
-const textarea = useTemplateRef('note')
+const textarea = useTemplateRef("note");
 
-const model = defineModel<string>({ default: '' })
+const model = defineModel<string>({ default: "" });
 
 const emits = defineEmits<{
-  change: []
-  blur: []
-}>()
+  change: [];
+  blur: [];
+}>();
 
 defineExpose({
   focus,
-})
+});
 
 function focus() {
-  textarea.value?.focus()
+  textarea.value?.focus();
 }
 </script>
 

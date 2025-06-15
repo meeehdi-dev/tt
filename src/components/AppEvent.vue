@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-import { ref, useTemplateRef } from 'vue'
-import AppEventNoteRender from './AppEventNoteRender.vue'
-import AppEventNoteEdit from './AppEventNoteEdit.vue'
+import { Icon } from "@iconify/vue";
+import { ref, useTemplateRef } from "vue";
+import AppEventNoteRender from "./AppEventNoteRender.vue";
+import AppEventNoteEdit from "./AppEventNoteEdit.vue";
 
-const noteEdit = useTemplateRef('note-edit')
+const noteEdit = useTemplateRef("note-edit");
 
 const emits = defineEmits<{
-  grabTop: []
-  grabBottom: []
-  remove: []
-  change: []
-  focus: []
-  blur: []
-}>()
+  grabTop: [];
+  grabBottom: [];
+  remove: [];
+  change: [];
+  focus: [];
+  blur: [];
+}>();
 
-const note = defineModel<string>({ default: '' })
+const note = defineModel<string>({ default: "" });
 
-const isFocused = ref(false)
+const isFocused = ref(false);
 
 function onFocus() {
-  isFocused.value = true
-  emits('focus')
+  isFocused.value = true;
+  emits("focus");
 
   setTimeout(() => {
-    noteEdit.value?.focus()
-  }, 100)
+    noteEdit.value?.focus();
+  }, 100);
 }
 
 function onBlur() {
-  isFocused.value = false
-  emits('blur')
+  isFocused.value = false;
+  emits("blur");
 }
 </script>
 
