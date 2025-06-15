@@ -1,50 +1,36 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { ref, useTemplateRef } from 'vue'
+import AppEventNoteRender from './AppEventNoteRender.vue'
+import AppEventNoteEdit from './AppEventNoteEdit.vue'
 
-const noteEl = useTemplateRef<HTMLTextAreaElement>('note-el')
+const noteEdit = useTemplateRef('note-edit')
 
 const emits = defineEmits<{
-  onGrabTop: [number, number]
-  onGrabBottom: [number, number]
-  onRemove: [number, number]
-  onChange: [number, number]
-  onFocus: [number, number]
-  onBlur: [number, number]
+  grabTop: []
+  grabBottom: []
+  remove: []
+  change: []
+  focus: []
+  blur: []
 }>()
 
-const { day, timeslot: slot } = defineProps<{
-  day: number
-  timeslot: number
-}>()
-
-const note = defineModel<string>()
+const note = defineModel<string>({ default: '' })
 
 const isFocused = ref(false)
 
-function onFocus(day: number, slot: number) {
+function onFocus() {
   isFocused.value = true
-  emits('onFocus', day, slot)
+  emits('focus')
 
   setTimeout(() => {
-    noteEl.value?.focus()
+    noteEdit.value?.focus()
   }, 100)
 }
 
-function onBlur(day: number, slot: number) {
+function onBlur() {
   isFocused.value = false
-  emits('onBlur', day, slot)
-}
-
-function parse(note: string) {
-  return note
-    .split('\n')
-    .map((line) => '<p class="inline-flex">' + line + '</p>')
-    .join('<br>')
-    .replace(
-      /#(\w+)/g,
-      '<span class="bg-sky-300 text-sky-800 font-bold rounded-sm px-1">#$1</span>',
-    )
+  emits('blur')
 }
 </script>
 
@@ -52,32 +38,26 @@ function parse(note: string) {
   <div
     v-if="!isFocused"
     class="flex flex-[0_0_0.25em] cursor-row-resize"
-    @mousedown.left="emits('onGrabTop', day, slot)"
+    @mousedown.left="emits('grabTop')"
   ></div>
   <div
     v-if="!isFocused"
     class="absolute top-0 right-0 w-4 h-4 m-0.5 rounded-full flex justify-center items-center text-rose-400 hover:text-rose-600 cursor-pointer z-10"
-    @click.prevent="emits('onRemove', day, slot)"
+    @click.prevent="emits('remove')"
   >
     <Icon icon="carbon:circle-solid" />
   </div>
-  <div
-    v-if="!isFocused"
-    @click="onFocus(day, slot)"
-    class="flex flex-col bg-transparent flex-auto h-full px-1 m-0 text-xs whitespace-pre justify-center"
-    v-html="parse(note ?? '')"
-  ></div>
-  <textarea
+  <AppEventNoteRender v-if="!isFocused" :note="note" @click="onFocus" />
+  <AppEventNoteEdit
+    ref="note-edit"
     v-if="isFocused"
-    ref="note-el"
-    class="flex bg-transparent flex-auto h-full p-1 m-0 border-none outline-none resize-none text-xs"
     v-model="note"
-    @change="emits('onChange', day, slot)"
-    @blur="onBlur(day, slot)"
-  ></textarea>
+    @change="emits('change')"
+    @blur="onBlur"
+  />
   <div
     v-if="!isFocused"
     class="flex flex-[0_0_0.25em] cursor-row-resize"
-    @mousedown.left="emits('onGrabBottom', day, slot)"
+    @mousedown.left="emits('grabBottom')"
   ></div>
 </template>

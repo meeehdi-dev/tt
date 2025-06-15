@@ -339,9 +339,8 @@ function onGrabBottom(day: number, slot: number) {
             <div
               v-if="isActive(day, slot)"
               :class="[
-                'activity absolute w-full z-10 flex flex-auto flex-col bg-slate-100/80 text-stone-900 rounded-xs',
+                'activity absolute w-full z-10 flex flex-auto flex-col bg-slate-300 text-slate-800 rounded-xs',
                 {
-                  'bg-slate-200': isFocused == getKey(day, slot),
                   'z-auto':
                     isGrabbingTop == getKey(day, slot) || isGrabbingBottom == getKey(day, slot),
                 },
@@ -353,15 +352,13 @@ function onGrabBottom(day: number, slot: number) {
               }"
             >
               <AppEvent
-                :day="day"
-                :timeslot="slot"
                 v-model="getActivity(day, slot).note"
-                @onGrabTop="onGrabTop(day, slot)"
-                @onGrabBottom="onGrabBottom(day, slot)"
-                @onRemove="onRemove(day, slot)"
-                @onChange="onChange(day, slot)"
-                @onFocus="onFocus(day, slot)"
-                @onBlur="onBlur"
+                @grab-top="onGrabTop(day, slot)"
+                @grab-bottom="onGrabBottom(day, slot)"
+                @remove="onRemove(day, slot)"
+                @change="onChange(day, slot)"
+                @focus="onFocus(day, slot)"
+                @blur="onBlur"
               />
             </div>
           </div>
@@ -385,9 +382,12 @@ function onGrabBottom(day: number, slot: number) {
                       .reduce(
                         (acc, cur) => {
                           cur.note.split('\n').forEach((line) => {
-                            if (line.startsWith('#')) {
-                              const [tag] = line.split(' ')
-                              acc[tag] = (acc[tag] ?? 0) + getActivityLength(day, cur.start) / 2
+                            const matches = line.match(/#(\w+)/g)
+                            if (matches) {
+                              matches.forEach((match) => {
+                                const tag = match.slice(1)
+                                acc[tag] = (acc[tag] ?? 0) + getActivityLength(day, cur.start) / 2
+                              })
                             }
                           })
                           return acc
