@@ -293,16 +293,26 @@ function onGrabBottom(day: number, slot: number) {
 
 <template>
   <div class="flex flex-col flex-auto">
-    <div class="flex flex-row justify-center items-center mt-2 gap-2">
-      <div class="text-slate-800 hover:text-slate-600 cursor-pointer" @click="onPreviousWeek">
-        <Icon icon="carbon:triangle-left-solid" />
+    <div class="flex flex-row justify-between">
+      <div></div>
+      <div class="flex flex-row justify-center items-center mt-2 gap-2">
+        <div class="text-slate-800 hover:text-slate-600 cursor-pointer" @click="onPreviousWeek">
+          <Icon icon="carbon:triangle-left-solid" />
+        </div>
+        <span class="text-slate-600 text-xs">
+          {{ startOfWeek.toLocaleDateString(undefined, { month: '2-digit', day: '2-digit' }) }} -
+          {{ endOfWeek.toLocaleDateString(undefined, { month: '2-digit', day: '2-digit' }) }}
+        </span>
+        <div class="text-slate-800 hover:text-slate-600 cursor-pointer" @click="onNextWeek">
+          <Icon icon="carbon:triangle-right-solid" />
+        </div>
       </div>
-      <span class="text-slate-600 text-xs">
-        {{ startOfWeek.toLocaleDateString(undefined, { month: '2-digit', day: '2-digit' }) }} -
-        {{ endOfWeek.toLocaleDateString(undefined, { month: '2-digit', day: '2-digit' }) }}
-      </span>
-      <div class="text-slate-800 hover:text-slate-600 cursor-pointer" @click="onNextWeek">
-        <Icon icon="carbon:triangle-right-solid" />
+      <div
+        class="text-slate-700 flex flex-row justify-center items-center mx-2 mt-1.5 hover:text-slate-600 cursor-pointer"
+      >
+        <a href="https://github.com/meeehdi-dev/tt" target="_blank">
+          <Icon icon="carbon:logo-github" style="font-size: 1.5em" />
+        </a>
       </div>
     </div>
     <div :class="['flex flex-row flex-auto gap-2 px-2', { focused: isFocused !== '' }]">
