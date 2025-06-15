@@ -37,7 +37,7 @@ function onBlur() {
 <template>
   <div
     v-if="!isFocused"
-    class="flex flex-[0_0_0.25em] cursor-row-resize"
+    class="flex flex-[0_0_0.25em] cursor-ns-resize"
     @mousedown.left="emits('grabTop')"
   ></div>
   <div
@@ -57,7 +57,7 @@ function onBlur() {
   />
   <div
     v-if="!isFocused"
-    class="flex flex-[0_0_0.25em] cursor-row-resize"
+    class="flex flex-[0_0_0.25em] cursor-ns-resize"
     @mousedown.left="emits('grabBottom')"
   ></div>
 </template>
