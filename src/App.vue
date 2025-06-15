@@ -297,14 +297,14 @@ function onGrabBottom(day: number, slot: number) {
     <div class="flex flex-row justify-between">
       <div></div>
       <div class="flex flex-row justify-center items-center mt-2 gap-2">
-        <div class="text-slate-800 hover:text-slate-600 cursor-pointer" @click="onPreviousWeek">
+        <div class="text-slate-800 hover:text-slate-600 cursor-pointer p-1" @click="onPreviousWeek">
           <Icon icon="carbon:triangle-left-solid" />
         </div>
         <span class="text-slate-600 text-xs">
           {{ startOfWeek.toLocaleDateString(undefined, { month: '2-digit', day: '2-digit' }) }} -
           {{ endOfWeek.toLocaleDateString(undefined, { month: '2-digit', day: '2-digit' }) }}
         </span>
-        <div class="text-slate-800 hover:text-slate-600 cursor-pointer" @click="onNextWeek">
+        <div class="text-slate-800 hover:text-slate-600 cursor-pointer p-1" @click="onNextWeek">
           <Icon icon="carbon:triangle-right-solid" />
         </div>
       </div>
