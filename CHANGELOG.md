@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/meeehdi-dev/tt/compare/v1.0.1...v1.0.2) (2025-06-15)
+
+
+### Miscellaneous Chores
+
+* release 1.0.2 ([21fd15e](https://github.com/meeehdi-dev/tt/commit/21fd15ead121849262b7d467caf4cfaa01bcbd3b))
+
 ## [1.0.1](https://github.com/meeehdi-dev/tt/compare/v1.0.0...v1.0.1) (2025-06-15)
 
 
