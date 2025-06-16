@@ -381,9 +381,9 @@ function onGrabBottom(day: number, slot: number) {
             v-bind:key="slot"
             v-for="slot in slots"
             :class="[
-              'slot flex flex-auto bg-slate-100/10 rounded-xs cursor-pointer relative',
+              'slot flex flex-auto bg-slate-900 rounded-xs cursor-pointer relative',
               {
-                'bg-slate-100/30 cursor-pointer': isSelected(day, slot),
+                '!bg-slate-800 cursor-pointer': isSelected(day, slot),
               },
             ]"
             :data-key="`${day}-${slot}`"
