@@ -153,14 +153,16 @@ function onMouseOver(slot: number) {
   if (state.value === State.Grabbing) {
     if (isGrabbingTop.value) {
       const activity = getActivityByKey(isGrabbingTop.value);
+      if (slot > activity.end) {
+        return;
+      }
       activity.start = slot;
       isGrabbingTop.value = getKey(activity.day, activity.start);
       return;
     }
     if (isGrabbingBottom.value) {
       const activity = getActivityByKey(isGrabbingBottom.value);
-      // if we're going up, ignore when hovering current activity
-      if (activity.start === slot && activity.end > slot + 1) {
+      if (slot < activity.start) {
         return;
       }
       activity.end = slot;
