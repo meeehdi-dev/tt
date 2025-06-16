@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/meeehdi-dev/tt/compare/v1.0.3...v1.1.0) (2025-06-16)
+
+
+### Features
+
+* cleanup index.html ([5276162](https://github.com/meeehdi-dev/tt/commit/527616280530605bb5f0fc7df3faf407898bc587))
+
+
+### Bug Fixes
+
+* times margins ([529c43f](https://github.com/meeehdi-dev/tt/commit/529c43f3ef1766d1fd7d8bcf603d817933c99279))
+
 ## [1.0.3](https://github.com/meeehdi-dev/tt/compare/v1.0.2...v1.0.3) (2025-06-15)
 
 
