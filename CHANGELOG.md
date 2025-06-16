@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/meeehdi-dev/tt/compare/v1.2.0...v1.3.0) (2025-06-16)
+
+
+### Features
+
+* dockerfile with nginx ([532856e](https://github.com/meeehdi-dev/tt/commit/532856eaecd0ddb6b3b5f9625157267df0e45b9b))
+* preview to serve static files ([98203d0](https://github.com/meeehdi-dev/tt/commit/98203d07f1de0b7c9df64c592931f5d4c682292f))
+
 ## [1.2.0](https://github.com/meeehdi-dev/tt/compare/v1.1.0...v1.2.0) (2025-06-16)
 
 
