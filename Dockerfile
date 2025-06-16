@@ -21,6 +21,5 @@ COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/dist dist
 COPY --from=prerelease /usr/src/app/package.json .
 
-USER bun
-EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "preview", "--port", "3000" ]
+FROM nginx AS runtime
+COPY --from=release /usr/src/app/dist /usr/share/nginx/html
