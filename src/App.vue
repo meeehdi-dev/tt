@@ -355,10 +355,7 @@ function onGrabBottom(day: number, slot: number) {
       </div>
     </div>
     <div
-      :class="[
-        'flex flex-row flex-auto gap-1',
-        { focused: isFocused !== '' },
-      ]"
+      :class="['flex flex-row flex-auto gap-1', { focused: isFocused !== '' }]"
     >
       <div
         class="flex flex-initial flex-col justify-between text-xs text-slate-600 -mt-2 mb-2"
@@ -372,7 +369,7 @@ function onGrabBottom(day: number, slot: number) {
           {{ time }}:00
         </div>
       </div>
-      <div class="week flex flex-auto flex-row gap-1">
+      <div class="flex flex-auto flex-row gap-1">
         <div
           class="day flex flex-auto flex-col justify-around gap-0.5"
           v-bind:key="day"
@@ -419,59 +416,57 @@ function onGrabBottom(day: number, slot: number) {
               />
             </div>
           </div>
-          <div class="flex flex-row justify-center">
-            <div
-              :class="[
-                'group/summary text-slate-600 flex flex-row w-full gap-2 justify-center items-center relative text-xs',
-                {
-                  'cursor-pointer hover:text-slate-400':
-                    activitySlots.filter((a) => a.day === day).length > 0,
-                },
-              ]"
-            >
-              <div
-                class="group-hover/summary:opacity-100 group-hover/summary:z-10 opacity-0 transition-opacity absolute bottom-full flex flex-col justify-center items-end bg-slate-950 rounded-sm mb-1 text-xs px-4 py-2 gap-1"
-                v-if="activitySlots.filter((a) => a.day === day).length > 0"
-                v-html="
-                  Object.entries(
-                    activitySlots
-                      .filter((a) => a.day === day)
-                      .reduce(
-                        (acc, cur) => {
-                          cur.note.split('\n').forEach((line) => {
-                            const matches = line.match(/#(\w+)/g);
-                            if (matches) {
-                              matches.forEach((match) => {
-                                const tag = match.slice(1);
-                                acc[tag] =
-                                  (acc[tag] ?? 0) +
-                                  getActivityLength(day, cur.start) / 2;
-                              });
-                            }
-                          });
-                          return acc;
-                        },
-                        {} as Record<string, number>,
-                      ),
+          <div
+            :class="[
+              'group/summary text-slate-600 flex flex-row gap-2 justify-center items-center relative text-xs',
+              {
+                'cursor-pointer hover:text-slate-400':
+                  activitySlots.filter((a) => a.day === day).length > 0,
+              },
+            ]"
+          >
+            <Icon icon="carbon:time-filled" />
+            <div>
+              {{
+                activitySlots
+                  .filter((a) => a.day === day)
+                  .reduce(
+                    (acc, cur) => acc + getActivityLength(day, cur.start) / 2,
+                    0,
                   )
-                    .map(([tag, value]) => {
-                      return `<div class='flex flex-row gap-1'><span class='bg-sky-300 text-sky-800 font-bold rounded-sm
-px-1'>${tag}</span> ${value.toFixed(1)}h</div>`;
-                    })
-                    .join('<br>')
-                "
-              ></div>
-              <Icon icon="carbon:time-filled" /><span
-                >{{
+              }}h
+            </div>
+            <div
+              class="group-hover/summary:opacity-100 group-hover/summary:z-10 opacity-0 transition-opacity absolute bottom-full flex flex-col justify-center items-end bg-slate-950 rounded-sm mb-1 text-xs px-4 py-2 gap-1"
+              v-html="
+                Object.entries(
                   activitySlots
                     .filter((a) => a.day === day)
                     .reduce(
-                      (acc, cur) => acc + getActivityLength(day, cur.start) / 2,
-                      0,
-                    )
-                }}h</span
-              >
-            </div>
+                      (acc, cur) => {
+                        cur.note.split('\n').forEach((line) => {
+                          const matches = line.match(/#(\w+)/g);
+                          if (matches) {
+                            matches.forEach((match) => {
+                              const tag = match.slice(1);
+                              acc[tag] =
+                                (acc[tag] ?? 0) +
+                                getActivityLength(day, cur.start) / 2;
+                            });
+                          }
+                        });
+                        return acc;
+                      },
+                      {} as Record<string, number>,
+                    ),
+                )
+                  .map(([tag, value]) => {
+                    return `<div class='flex flex-row gap-1'><span class='bg-sky-300 text-sky-800 font-bold rounded-sm
+px-1'>${tag}</span> ${value.toFixed(1)}h</div>`;
+                  })
+                  .join('<br>')
+              "
+            ></div>
           </div>
         </div>
       </div>
