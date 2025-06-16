@@ -23,4 +23,4 @@ COPY --from=prerelease /usr/src/app/package.json .
 
 USER bun
 EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "dist/index.html" ]
+ENTRYPOINT [ "bun", "preview", "--port", "3000" ]
