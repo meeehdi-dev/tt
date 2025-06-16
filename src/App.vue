@@ -369,9 +369,11 @@ function onGrabBottom(day: number, slot: number) {
           {{ time }}:00
         </div>
       </div>
-      <div class="flex flex-auto flex-row gap-1">
+      <!-- 5 days -->
+      <div class="grid grid-cols-5 gap-1 w-full">
+        <!-- day, 24 slots -->
         <div
-          class="day flex flex-auto flex-col justify-around gap-0.5"
+          class="grid grid-rows-24 h-full gap-0.5"
           v-bind:key="day"
           v-for="day in days"
         >
