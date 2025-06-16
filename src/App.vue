@@ -306,8 +306,8 @@ function onGrabBottom(day: number, slot: number) {
 
 <template>
   <div class="flex flex-col flex-auto">
-    <div class="flex flex-row justify-between">
-      <div class="mt-1.5 ml-12 flex flex-row gap-1 items-center">
+    <div class="flex flex-row justify-between my-1">
+      <div class="ml-12 flex flex-row gap-1 items-center">
         <Icon
           icon="circum:timer"
           style="font-size: 1.5em"
@@ -315,7 +315,7 @@ function onGrabBottom(day: number, slot: number) {
         />
         <span class="text-sm text-slate-600">tt</span>
       </div>
-      <div class="flex flex-row justify-center items-center mt-2 gap-2">
+      <div class="flex flex-row justify-center items-center gap-2">
         <div
           class="text-slate-800 hover:text-slate-600 cursor-pointer p-1"
           @click="onPreviousWeek"
@@ -345,7 +345,7 @@ function onGrabBottom(day: number, slot: number) {
         </div>
       </div>
       <div
-        class="text-slate-700 flex flex-row justify-center items-center mx-2 mt-1.5 hover:text-slate-600 cursor-pointer"
+        class="text-slate-700 flex flex-row justify-center items-center mx-2 hover:text-slate-600 cursor-pointer"
       >
         <a href="https://github.com/meeehdi-dev/tt" target="_blank">
           <Icon icon="carbon:logo-github" style="font-size: 1.5em" />
@@ -428,7 +428,7 @@ function onGrabBottom(day: number, slot: number) {
               ]"
             >
               <div
-                class="group-hover/summary:opacity-100 group-hover/summary:z-10 opacity-0 transition-opacity absolute bottom-full flex flex-col justify-center items-end bg-slate-950 rounded-sm mb-1.5 text-xs px-4 py-2 gap-1"
+                class="group-hover/summary:opacity-100 group-hover/summary:z-10 opacity-0 transition-opacity absolute bottom-full flex flex-col justify-center items-end bg-slate-950 rounded-sm mb-1 text-xs px-4 py-2 gap-1"
                 v-if="activitySlots.filter((a) => a.day === day).length > 0"
                 v-html="
                   Object.entries(
