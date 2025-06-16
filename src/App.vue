@@ -359,7 +359,7 @@ function onGrabBottom(day: number, slot: number) {
       ]"
     >
       <div
-        class="flex flex-initial flex-col justify-between text-xs text-slate-600 -mt-2 mb-3"
+        class="flex flex-initial flex-col justify-between text-xs text-slate-600 -mt-2 mb-2"
       >
         <div
           v-bind:key="time"
