@@ -359,7 +359,7 @@ function onGrabBottom(day: number, slot: number) {
       ]"
     >
       <div
-        class="flex flex-initial flex-col justify-between text-xs text-slate-600"
+        class="flex flex-initial flex-col justify-between text-xs text-slate-600 -mt-2 mb-5"
       >
         <div
           v-bind:key="time"
@@ -372,7 +372,7 @@ function onGrabBottom(day: number, slot: number) {
       </div>
       <div class="week flex flex-auto flex-row gap-1">
         <div
-          class="day flex flex-auto flex-col justify-around gap-0.5 py-2"
+          class="day flex flex-auto flex-col justify-around gap-0.5 pb-2"
           v-bind:key="day"
           v-for="day in days"
         >
