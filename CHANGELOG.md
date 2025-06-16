@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/meeehdi-dev/tt/compare/v1.1.0...v1.2.0) (2025-06-16)
+
+
+### Features
+
+* back to bun + dockerfile ([1431573](https://github.com/meeehdi-dev/tt/commit/1431573418e59ddca6e6b2c28cc813cd1a0b91f4))
+
+
+### Bug Fixes
+
+* header and footer margins ([d844c14](https://github.com/meeehdi-dev/tt/commit/d844c149a8db63abfc6e16e8a116b76f718acf8b))
+* update margins and paddings ([d33966d](https://github.com/meeehdi-dev/tt/commit/d33966d8d17008a392cd766682270516e0cffa44))
+
 ## [1.1.0](https://github.com/meeehdi-dev/tt/compare/v1.0.3...v1.1.0) (2025-06-16)
 
 
