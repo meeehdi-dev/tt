@@ -306,8 +306,8 @@ function onGrabBottom(day: number, slot: number) {
 
 <template>
   <div class="flex flex-col flex-auto">
-    <div class="flex flex-row justify-between my-1">
-      <div class="ml-12 flex flex-row gap-1 items-center">
+    <div class="flex flex-row justify-between mb-1">
+      <div class="ml-9 flex flex-row gap-1 items-center">
         <Icon
           icon="circum:timer"
           style="font-size: 1.5em"
@@ -345,7 +345,7 @@ function onGrabBottom(day: number, slot: number) {
         </div>
       </div>
       <div
-        class="text-slate-700 flex flex-row justify-center items-center mx-2 hover:text-slate-600 cursor-pointer"
+        class="text-slate-700 flex flex-row justify-center items-center hover:text-slate-600 cursor-pointer"
       >
         <a href="https://github.com/meeehdi-dev/tt" target="_blank">
           <Icon icon="carbon:logo-github" style="font-size: 1.5em" />
@@ -354,12 +354,12 @@ function onGrabBottom(day: number, slot: number) {
     </div>
     <div
       :class="[
-        'flex flex-row flex-auto gap-2 px-2',
+        'flex flex-row flex-auto gap-1',
         { focused: isFocused !== '' },
       ]"
     >
       <div
-        class="flex flex-initial flex-col justify-between text-xs text-slate-600 -mt-2 mb-5"
+        class="flex flex-initial flex-col justify-between text-xs text-slate-600 -mt-2 mb-3"
       >
         <div
           v-bind:key="time"
@@ -372,7 +372,7 @@ function onGrabBottom(day: number, slot: number) {
       </div>
       <div class="week flex flex-auto flex-row gap-1">
         <div
-          class="day flex flex-auto flex-col justify-around gap-0.5 pb-2"
+          class="day flex flex-auto flex-col justify-around gap-0.5"
           v-bind:key="day"
           v-for="day in days"
         >
@@ -417,7 +417,7 @@ function onGrabBottom(day: number, slot: number) {
               />
             </div>
           </div>
-          <div class="flex flex-row justify-center pt-1">
+          <div class="flex flex-row justify-center">
             <div
               :class="[
                 'group/summary text-slate-600 flex flex-row w-full gap-2 justify-center items-center relative text-xs',
@@ -453,7 +453,7 @@ function onGrabBottom(day: number, slot: number) {
                       ),
                   )
                     .map(([tag, value]) => {
-                      return `<div class='flex flex-row gap-2'><span class='bg-sky-300 text-sky-800 font-bold rounded-sm
+                      return `<div class='flex flex-row gap-1'><span class='bg-sky-300 text-sky-800 font-bold rounded-sm
 px-1'>${tag}</span> ${value.toFixed(1)}h</div>`;
                     })
                     .join('<br>')
