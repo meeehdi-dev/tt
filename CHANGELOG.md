@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.1](https://github.com/meeehdi-dev/tt/compare/v1.3.0...v1.3.1) (2025-06-16)
+
+
+### Bug Fixes
+
+* limit grab time change ([eeb698a](https://github.com/meeehdi-dev/tt/commit/eeb698af1922de23e18c98c56aa842386d139e0c))
+* remove wrapper div ([a4c41dc](https://github.com/meeehdi-dev/tt/commit/a4c41dc9f9c3f8de86823689c77926aea04128db))
+* time bottom margin ([a0a2d75](https://github.com/meeehdi-dev/tt/commit/a0a2d7516f5d4356e3f3ea748f985351be13e068))
+* use grid instead of flex for days and slots ([be8da3a](https://github.com/meeehdi-dev/tt/commit/be8da3ab6a99a836ebfbaa06641b9de3016ee52a))
+
 ## [1.3.0](https://github.com/meeehdi-dev/tt/compare/v1.2.0...v1.3.0) (2025-06-16)
 
 
