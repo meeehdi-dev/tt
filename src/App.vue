@@ -3,10 +3,10 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { Icon } from "@iconify/vue";
 import AppEvent from "./components/AppEvent.vue";
 
-const WEEK_START = 1;
-const WEEK_END = 5;
-const DAY_START = 8;
-const DAY_END = 20;
+const WEEK_START = Number(import.meta.env.VITE_WEEK_START || 0);
+const WEEK_END = Number(import.meta.env.VITE_WEEK_END || 6);
+const DAY_START = Number(import.meta.env.VITE_DAY_START || 9);
+const DAY_END = Number(import.meta.env.VITE_DAY_END || 18);
 
 enum State {
   Idle = "idle",
