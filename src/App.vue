@@ -3,6 +3,11 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { Icon } from "@iconify/vue";
 import AppEvent from "./components/AppEvent.vue";
 
+const WEEK_START = 1;
+const WEEK_END = 5;
+const DAY_START = 8;
+const DAY_END = 20;
+
 enum State {
   Idle = "idle",
   Grabbing = "grabbing",
@@ -20,18 +25,20 @@ interface SlotRange {
 const times = Array(49)
   .fill(undefined)
   .map((_, i) => i / 2)
-  .slice(16, -8);
+  .slice(DAY_START * 2, -48 + DAY_END * 2);
 const slots = times.slice(0, -1);
 enum Day {
-  // Sunday = 0,
+  Sunday = 0,
   Monday = 1,
   Tuesday = 2,
   Wednesday = 3,
   Thursday = 4,
   Friday = 5,
-  // Saturday = 6,
+  Saturday = 6,
 }
-const days = Object.values(Day).filter(Number) as number[];
+const days = Object.values(Day).filter(
+  (d) => typeof d === "number" && d >= WEEK_START && d <= WEEK_END,
+) as number[];
 
 const now = new Date();
 const currentDayIndex = now.getDay();
@@ -370,10 +377,10 @@ function onGrabBottom(day: number, slot: number) {
         </div>
       </div>
       <!-- 5 days -->
-      <div class="grid grid-cols-5 gap-1 w-full">
+      <div :class="`grid grid-cols-${WEEK_END - WEEK_START + 1} gap-1 w-full`">
         <!-- day, 24 slots -->
         <div
-          class="grid grid-rows-24 h-full gap-0.5"
+          :class="`grid grid-rows-${(DAY_END - DAY_START) * 2} h-full gap-0.5`"
           v-bind:key="day"
           v-for="day in days"
         >
