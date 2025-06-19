@@ -264,8 +264,8 @@ function onGrabBottom(day: number, slot: number) {
 
 <template>
   <div class="flex flex-col flex-auto">
-    <div class="flex flex-row justify-between mb-1">
-      <div class="ml-9 flex flex-row gap-1 items-center">
+    <div class="flex flex-row ml-10 justify-between">
+      <div class="flex flex-row gap-1 items-center">
         <Icon
           icon="circum:timer"
           style="font-size: 1.5em"
@@ -273,7 +273,7 @@ function onGrabBottom(day: number, slot: number) {
         />
         <span class="text-sm text-slate-600">tt</span>
       </div>
-      <div class="flex flex-row justify-center items-center gap-2">
+      <div class="flex flex-row items-center gap-1">
         <div
           class="text-slate-800 hover:text-slate-600 cursor-pointer p-1"
           @click="onPreviousWeek"
@@ -302,19 +302,19 @@ function onGrabBottom(day: number, slot: number) {
           <Icon icon="carbon:triangle-right-solid" />
         </div>
       </div>
-      <div
-        class="text-slate-700 flex flex-row justify-center items-center hover:text-slate-600 cursor-pointer"
-      >
-        <a href="https://github.com/meeehdi-dev/tt" target="_blank">
+      <div class="flex">
+        <a
+          href="https://github.com/meeehdi-dev/tt"
+          target="_blank"
+          class="text-slate-700 hover:text-slate-600 p-1"
+        >
           <Icon icon="carbon:logo-github" style="font-size: 1.5em" />
         </a>
       </div>
     </div>
-    <div
-      :class="['flex flex-row flex-auto gap-1', { focused: isFocused !== '' }]"
-    >
+    <div class="flex flex-row flex-auto">
       <div
-        class="flex flex-initial flex-col justify-between text-xs text-slate-600 -mt-2 mb-2"
+        class="flex flex-col min-w-10 justify-between items-center text-xs text-slate-600 -mt-3 -mb-3 p-1"
       >
         <div
           v-bind:key="time"
@@ -374,59 +374,64 @@ function onGrabBottom(day: number, slot: number) {
               />
             </div>
           </div>
-          <div
-            :class="[
-              'group/summary text-slate-600 flex flex-row gap-2 justify-center items-center relative text-xs',
-              {
-                'cursor-pointer hover:text-slate-400':
-                  events.data.value.filter((a) => a.day === day).length > 0,
-              },
-            ]"
-          >
-            <Icon icon="carbon:time-filled" />
-            <div>
-              {{
-                events.data.value
-                  .filter((a) => a.day === day)
-                  .reduce(
-                    (acc, cur) => acc + getActivityLength(day, cur.start) / 2,
-                    0,
-                  )
-              }}h
-            </div>
-            <div
-              class="group-hover/summary:opacity-100 group-hover/summary:z-10 opacity-0 transition-opacity absolute bottom-full flex flex-col justify-center items-end bg-slate-950 rounded-sm mb-1 text-xs px-4 py-2 gap-1"
-              v-html="
-                Object.entries(
-                  events.data.value
-                    .filter((a) => a.day === day)
-                    .reduce(
-                      (acc, cur) => {
-                        cur.note.split('\n').forEach((line) => {
-                          const matches = line.match(/#(\w+)/g);
-                          if (matches) {
-                            matches.forEach((match) => {
-                              const tag = match.slice(1);
-                              acc[tag] =
-                                (acc[tag] ?? 0) +
-                                getActivityLength(day, cur.start) / 2;
-                            });
-                          }
-                        });
-                        return acc;
-                      },
-                      {} as Record<string, number>,
-                    ),
-                )
-                  .map(([tag, value]) => {
-                    return `<div class='flex flex-row gap-1'><span class='bg-sky-300 text-sky-800 font-bold rounded-sm
-px-1'>${tag}</span> ${value.toFixed(1)}h</div>`;
-                  })
-                  .join('<br>')
-              "
-            ></div>
-          </div>
         </div>
+      </div>
+    </div>
+    <div :class="`ml-10 grid grid-cols-${WEEK_END - WEEK_START + 1}`">
+      <div
+        v-bind:key="day"
+        v-for="day in days"
+        :class="[
+          'group/summary text-slate-600 flex flex-row gap-1 justify-center items-center relative text-xs p-1',
+          {
+            'cursor-pointer hover:text-slate-400':
+              events.data.value.filter((a) => a.day === day).length > 0,
+          },
+        ]"
+      >
+        <Icon icon="carbon:time-filled" />
+        <div>
+          {{
+            events.data.value
+              .filter((a) => a.day === day)
+              .reduce(
+                (acc, cur) => acc + getActivityLength(day, cur.start) / 2,
+                0,
+              )
+          }}h
+        </div>
+        <div
+          v-if="events.data.value.filter((a) => a.day === day).length > 0"
+          class="group-hover/summary:opacity-100 group-hover/summary:z-10 opacity-0 transition-opacity absolute bottom-full flex flex-col justify-center items-end bg-slate-950 rounded-sm mb-1 text-xs px-4 py-2 gap-1"
+          v-html="
+            Object.entries(
+              events.data.value
+                .filter((a) => a.day === day)
+                .reduce(
+                  (acc, cur) => {
+                    cur.note.split('\n').forEach((line) => {
+                      const matches = line.match(/#(\w+)/g);
+                      if (matches) {
+                        matches.forEach((match) => {
+                          const tag = match.slice(1);
+                          acc[tag] =
+                            (acc[tag] ?? 0) +
+                            getActivityLength(day, cur.start) / 2;
+                        });
+                      }
+                    });
+                    return acc;
+                  },
+                  {} as Record<string, number>,
+                ),
+            )
+              .map(([tag, value]) => {
+                return `<div class='flex flex-row gap-1'><span class='bg-sky-300 text-sky-800 font-bold rounded-sm
+px-1'>${tag}</span> ${value.toFixed(1)}h</div>`;
+              })
+              .join('<br>')
+          "
+        ></div>
       </div>
     </div>
   </div>
