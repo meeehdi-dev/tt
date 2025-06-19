@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/meeehdi-dev/tt/compare/v1.3.1...v1.4.0) (2025-06-19)
+
+
+### Features
+
+* configurable week & day length ([8c4c88b](https://github.com/meeehdi-dev/tt/commit/8c4c88bad85b6d70e8fb739414ca3dd1aaaa71c8))
+* env var defined week & day config ([da7d4d2](https://github.com/meeehdi-dev/tt/commit/da7d4d2e8e9825bb52e1beb96b17d072d0b2bce2))
+
+
+### Bug Fixes
+
+* replace semi-transparent colors with solid counterparts ([781708b](https://github.com/meeehdi-dev/tt/commit/781708bd1cb6a3a459111952c20b398aa7e2bcc9))
+
 ## [1.3.1](https://github.com/meeehdi-dev/tt/compare/v1.3.0...v1.3.1) (2025-06-16)
 
 
