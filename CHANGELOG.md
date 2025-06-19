@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.0](https://github.com/meeehdi-dev/tt/compare/v1.4.0...v1.5.0) (2025-06-19)
+
+
+### Features
+
+* events composable + move tailwind config to ts ([65e2076](https://github.com/meeehdi-dev/tt/commit/65e20766c0aa158a9ed5331769c9a8b4e7209e26))
+* move app config to util file ([eb21af3](https://github.com/meeehdi-dev/tt/commit/eb21af382f269e3f6153b910670d5521818f57ca))
+* move release-please to dev branch ([1f95919](https://github.com/meeehdi-dev/tt/commit/1f959196661e5e2f5bde347b9f8d0f366f43d249))
+* rewrite layout ([23ab553](https://github.com/meeehdi-dev/tt/commit/23ab55374b479fb07a465a525ad0bda1b095bd0b))
+
 ## [1.4.0](https://github.com/meeehdi-dev/tt/compare/v1.3.1...v1.4.0) (2025-06-19)
 
 
