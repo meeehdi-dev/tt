@@ -1,5 +1,4 @@
 @import "tailwindcss";
 
-/* Tailwind CSS Grid for day and week */
 @source inline("grid-cols-{1..7}");
 @source inline("grid-rows-{1..24}");
