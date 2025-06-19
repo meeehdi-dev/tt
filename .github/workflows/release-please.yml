@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
+          config-file: release-please-config.json
           release-type: node
           target-branch: main
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
