@@ -2,43 +2,17 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import { Icon } from "@iconify/vue";
 import AppEvent from "./components/AppEvent.vue";
-
-const WEEK_START = Number(import.meta.env.VITE_WEEK_START || 0);
-const WEEK_END = Number(import.meta.env.VITE_WEEK_END || 6);
-const DAY_START = Number(import.meta.env.VITE_DAY_START || 9);
-const DAY_END = Number(import.meta.env.VITE_DAY_END || 18);
-
-enum State {
-  Idle = "idle",
-  Grabbing = "grabbing",
-  Focused = "focused",
-  Selecting = "selecting",
-}
-
-interface SlotRange {
-  day: number;
-  start: number;
-  end: number;
-  note: string;
-}
-
-const times = Array(49)
-  .fill(undefined)
-  .map((_, i) => i / 2)
-  .slice(DAY_START * 2, -48 + DAY_END * 2);
-const slots = times.slice(0, -1);
-enum Day {
-  Sunday = 0,
-  Monday = 1,
-  Tuesday = 2,
-  Wednesday = 3,
-  Thursday = 4,
-  Friday = 5,
-  Saturday = 6,
-}
-const days = Object.values(Day).filter(
-  (d) => typeof d === "number" && d >= WEEK_START && d <= WEEK_END,
-) as number[];
+import {
+  DAY_END,
+  DAY_START,
+  days,
+  slots,
+  State,
+  times,
+  WEEK_END,
+  WEEK_START,
+  type SlotRange,
+} from "./util";
 
 const now = new Date();
 const currentDayIndex = now.getDay();
