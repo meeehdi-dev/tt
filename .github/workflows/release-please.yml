@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - dev
+      - main
 permissions:
   contents: write
   pull-requests: write
@@ -12,5 +12,4 @@ jobs:
       - uses: googleapis/release-please-action@v4
         with:
           release-type: node
-          target-branch: main
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
