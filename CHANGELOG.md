@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/meeehdi-dev/tt/compare/v1.5.0...v1.5.1) (2025-06-19)
+
+
+### Bug Fixes
+
+* dockerfile env var ([2818d87](https://github.com/meeehdi-dev/tt/commit/2818d87c6c8349afde2bcb2dc78c32cc3cd2122a))
+
 ## [1.5.0](https://github.com/meeehdi-dev/tt/compare/v1.4.0...v1.5.0) (2025-06-19)
 
 
