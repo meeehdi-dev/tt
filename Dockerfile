@@ -1,10 +1,5 @@
 FROM oven/bun:1 AS base
 
-ARG VITE_WEEK_START
-ARG VITE_WEEK_END
-ARG VITE_DAY_START
-ARG VITE_DAY_END
-
 WORKDIR /usr/src/app
 
 FROM base AS install
@@ -19,6 +14,11 @@ RUN cd /temp/prod && bun install --frozen-lockfile --production
 FROM base AS prerelease
 COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
+
+ARG VITE_WEEK_START
+ARG VITE_WEEK_END
+ARG VITE_DAY_START
+ARG VITE_DAY_END
 
 RUN bun run build
 
