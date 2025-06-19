@@ -1,4 +1,10 @@
 FROM oven/bun:1 AS base
+
+ARG VITE_WEEK_START
+ARG VITE_WEEK_END
+ARG VITE_DAY_START
+ARG VITE_DAY_END
+
 WORKDIR /usr/src/app
 
 FROM base AS install
