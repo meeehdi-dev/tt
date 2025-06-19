@@ -12,7 +12,8 @@ import {
   WEEK_END,
   WEEK_START,
   type SlotRange,
-} from "./util";
+} from "@/util";
+import { useEvents } from "@/compasables/useEvents";
 
 const now = new Date();
 const currentDayIndex = now.getDay();
@@ -23,7 +24,7 @@ const endOfWeek = ref(new Date());
 endOfWeek.value.setDate(endOfWeek.value.getDate() + 5 - currentDayIndex);
 const isMouseDown = ref(false);
 const selectedSlots = ref<SlotRange>();
-const activitySlots = ref<SlotRange[]>([]);
+const events = useEvents();
 const slotHeight = ref(0);
 const isFocused = ref("");
 const isGrabbingTop = ref("");
@@ -50,28 +51,7 @@ onUnmounted(() => {
   window.removeEventListener("resize", setSlotHeight);
 });
 
-function getActivityKey() {
-  return startOfWeek.value.toLocaleDateString(undefined, {
-    year: "2-digit",
-    month: "2-digit",
-    day: "2-digit",
-  });
-}
-function load() {
-  const activity = localStorage.getItem("activity-" + getActivityKey());
-  if (activity) {
-    activitySlots.value = JSON.parse(activity);
-  } else {
-    activitySlots.value = [];
-  }
-}
-load();
-function save() {
-  localStorage.setItem(
-    "activity-" + getActivityKey(),
-    JSON.stringify(activitySlots.value.filter((a) => a.note !== "")),
-  );
-}
+events.load(startOfWeek.value);
 
 function getKey(day: number, slot: number) {
   return `${day}-${slot}`;
@@ -111,17 +91,17 @@ function onMouseUp() {
     isGrabbingTop.value = "";
     isGrabbingBottom.value = "";
     selectedSlots.value = undefined;
-    save();
+    events.save(startOfWeek.value);
     return;
   }
 
-  activitySlots.value.push({
+  events.data.value.push({
     day: selectedSlots.value.day,
     start: selectedSlots.value.start,
     end: selectedSlots.value.end ?? selectedSlots.value.start,
     note: "",
   });
-  save();
+  events.save(startOfWeek.value);
 
   selectedSlots.value = undefined;
 }
@@ -173,18 +153,15 @@ function isSelected(day: number, slot: number): boolean {
 function isActive(day: number, slot: number): boolean {
   const key = getKey(day, slot);
   return (
-    activitySlots.value.find(
-      ({ day: d, start }) => getKey(d, start) === key,
-    ) !== undefined
+    events.data.value.find(({ day: d, start }) => getKey(d, start) === key) !==
+    undefined
   );
 }
 
 function getActivityByKey(key: string): SlotRange {
   // TODO: refactor this
   return (
-    activitySlots.value.find(
-      ({ day: d, start }) => getKey(d, start) === key,
-    ) ?? {
+    events.data.value.find(({ day: d, start }) => getKey(d, start) === key) ?? {
       start: -1,
       end: -1,
       day: -1,
@@ -197,9 +174,7 @@ function getActivity(day: number, slot: number): SlotRange {
   const key = getKey(day, slot);
   // TODO: refactor this
   return (
-    activitySlots.value.find(
-      ({ day: d, start }) => getKey(d, start) === key,
-    ) ?? {
+    events.data.value.find(({ day: d, start }) => getKey(d, start) === key) ?? {
       start: -1,
       end: -1,
       day: -1,
@@ -243,23 +218,23 @@ function onRemove(day: number, slot: number) {
   const key = getKey(day, slot);
   const activity = getActivityByKey(key);
   if (activity.note == "" || window.confirm("Confirm?")) {
-    activitySlots.value = activitySlots.value.filter(
+    events.data.value = events.data.value.filter(
       ({ day: d, start }) => getKey(d, start) !== key,
     );
-    save();
+    events.save(startOfWeek.value);
   }
 }
 
 function onChange(day: number, slot: number) {
   const activity = getActivity(day, slot);
   activity.note = activity.note.trim();
-  save();
+  events.save(startOfWeek.value);
 }
 
 function changeDate(days: number) {
   startOfWeek.value.setDate(startOfWeek.value.getDate() + days);
   endOfWeek.value.setDate(endOfWeek.value.getDate() + days);
-  load();
+  events.load(startOfWeek.value);
 }
 
 function onPreviousWeek() {
@@ -404,14 +379,14 @@ function onGrabBottom(day: number, slot: number) {
               'group/summary text-slate-600 flex flex-row gap-2 justify-center items-center relative text-xs',
               {
                 'cursor-pointer hover:text-slate-400':
-                  activitySlots.filter((a) => a.day === day).length > 0,
+                  events.data.value.filter((a) => a.day === day).length > 0,
               },
             ]"
           >
             <Icon icon="carbon:time-filled" />
             <div>
               {{
-                activitySlots
+                events.data.value
                   .filter((a) => a.day === day)
                   .reduce(
                     (acc, cur) => acc + getActivityLength(day, cur.start) / 2,
@@ -423,7 +398,7 @@ function onGrabBottom(day: number, slot: number) {
               class="group-hover/summary:opacity-100 group-hover/summary:z-10 opacity-0 transition-opacity absolute bottom-full flex flex-col justify-center items-end bg-slate-950 rounded-sm mb-1 text-xs px-4 py-2 gap-1"
               v-html="
                 Object.entries(
-                  activitySlots
+                  events.data.value
                     .filter((a) => a.day === day)
                     .reduce(
                       (acc, cur) => {
