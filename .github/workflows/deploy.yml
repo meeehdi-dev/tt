@@ -4,8 +4,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
     steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
       - run: |
-          curl \
-              -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
-              "https://coolify.kokoro-soft.fr/api/v1/deploy?uuid=nscgkwok408sskw44kcowo8k&force=false"
+          bun run deploy.ts
