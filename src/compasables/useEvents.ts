@@ -4,7 +4,7 @@ import { ref } from "vue";
 export const useEvents = () => {
   const data = ref<SlotRange[]>([]);
 
-  function getActivityKey(date: Date) {
+  function getWeekEventsKey(date: Date) {
     return date.toLocaleDateString(undefined, {
       year: "2-digit",
       month: "2-digit",
@@ -13,7 +13,7 @@ export const useEvents = () => {
   }
 
   function load(date: Date) {
-    const activity = localStorage.getItem("activity-" + getActivityKey(date));
+    const activity = localStorage.getItem("activity-" + getWeekEventsKey(date));
     if (activity) {
       data.value = JSON.parse(activity);
     } else {
@@ -23,7 +23,7 @@ export const useEvents = () => {
 
   function save(date: Date) {
     localStorage.setItem(
-      "activity-" + getActivityKey(date),
+      "activity-" + getWeekEventsKey(date),
       JSON.stringify(data.value.filter((e) => e.note !== "")),
     );
   }

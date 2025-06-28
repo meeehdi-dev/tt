@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import { Icon } from "@iconify/vue";
 import AppEvent from "./components/AppEvent.vue";
+import AppEventsSummary from "./components/AppEventsSummary.vue";
 import {
   DAY_END,
   DAY_START,
@@ -114,7 +115,7 @@ function onMouseOver(slot: number) {
   if (state.value === State.Grabbing) {
     if (isGrabbingTop.value) {
       const activity = getActivityByKey(isGrabbingTop.value);
-      if (slot > activity.end) {
+      if (!activity || slot > activity.end) {
         return;
       }
       activity.start = slot;
@@ -123,7 +124,7 @@ function onMouseOver(slot: number) {
     }
     if (isGrabbingBottom.value) {
       const activity = getActivityByKey(isGrabbingBottom.value);
-      if (slot < activity.start) {
+      if (!activity || slot < activity.start) {
         return;
       }
       activity.end = slot;
@@ -158,33 +159,25 @@ function isActive(day: number, slot: number): boolean {
   );
 }
 
-function getActivityByKey(key: string): SlotRange {
-  // TODO: refactor this
-  return (
-    events.data.value.find(({ day: d, start }) => getKey(d, start) === key) ?? {
-      start: -1,
-      end: -1,
-      day: -1,
-      note: "",
-    }
+function getActivityByKey(key: string) {
+  return events.data.value.find(
+    ({ day: d, start }) => getKey(d, start) === key,
   );
 }
 
-function getActivity(day: number, slot: number): SlotRange {
+function getActivity(day: number, slot: number) {
   const key = getKey(day, slot);
-  // TODO: refactor this
-  return (
-    events.data.value.find(({ day: d, start }) => getKey(d, start) === key) ?? {
-      start: -1,
-      end: -1,
-      day: -1,
-      note: "",
-    }
+  return events.data.value.find(
+    ({ day: d, start }) => getKey(d, start) === key,
   );
 }
 
 function getActivityLength(day: number, slot: number): number {
   const activitySlot = getActivity(day, slot);
+  if (!activitySlot) {
+    return 0;
+  }
+
   if (activitySlot.day === -1) {
     return 1;
   }
@@ -217,7 +210,7 @@ function onBlur() {
 function onRemove(day: number, slot: number) {
   const key = getKey(day, slot);
   const activity = getActivityByKey(key);
-  if (activity.note == "" || window.confirm("Confirm?")) {
+  if (!activity || activity.note == "" || window.confirm("Confirm?")) {
     events.data.value = events.data.value.filter(
       ({ day: d, start }) => getKey(d, start) !== key,
     );
@@ -227,6 +220,10 @@ function onRemove(day: number, slot: number) {
 
 function onChange(day: number, slot: number) {
   const activity = getActivity(day, slot);
+  if (!activity) {
+    return;
+  }
+
   activity.note = activity.note.trim();
   events.save(startOfWeek.value);
 }
@@ -352,7 +349,7 @@ function onGrabBottom(day: number, slot: number) {
               :class="[
                 'activity absolute w-full z-10 flex flex-auto flex-col bg-slate-300 text-slate-800 rounded-xs',
                 {
-                  'z-auto':
+                  'pointer-events-none':
                     isGrabbingTop == getKey(day, slot) ||
                     isGrabbingBottom == getKey(day, slot),
                 },
@@ -364,7 +361,7 @@ function onGrabBottom(day: number, slot: number) {
               }"
             >
               <AppEvent
-                v-model="getActivity(day, slot).note"
+                v-model="getActivity(day, slot)!.note"
                 @grab-top="onGrabTop(day, slot)"
                 @grab-bottom="onGrabBottom(day, slot)"
                 @remove="onRemove(day, slot)"
@@ -377,62 +374,6 @@ function onGrabBottom(day: number, slot: number) {
         </div>
       </div>
     </div>
-    <div :class="`ml-10 grid grid-cols-${WEEK_END - WEEK_START + 1}`">
-      <div
-        v-bind:key="day"
-        v-for="day in days"
-        :class="[
-          'group/summary text-slate-600 flex flex-row gap-1 justify-center items-center relative text-xs p-1',
-          {
-            'cursor-pointer hover:text-slate-400':
-              events.data.value.filter((a) => a.day === day).length > 0,
-          },
-        ]"
-      >
-        <Icon icon="carbon:time-filled" />
-        <div>
-          {{
-            events.data.value
-              .filter((a) => a.day === day)
-              .reduce(
-                (acc, cur) => acc + getActivityLength(day, cur.start) / 2,
-                0,
-              )
-          }}h
-        </div>
-        <div
-          v-if="events.data.value.filter((a) => a.day === day).length > 0"
-          class="group-hover/summary:opacity-100 group-hover/summary:z-10 opacity-0 transition-opacity absolute bottom-full flex flex-col justify-center items-end bg-slate-950 rounded-sm mb-1 text-xs px-4 py-2 gap-1"
-          v-html="
-            Object.entries(
-              events.data.value
-                .filter((a) => a.day === day)
-                .reduce(
-                  (acc, cur) => {
-                    cur.note.split('\n').forEach((line) => {
-                      const matches = line.match(/#(\w+)/g);
-                      if (matches) {
-                        matches.forEach((match) => {
-                          const tag = match.slice(1);
-                          acc[tag] =
-                            (acc[tag] ?? 0) +
-                            getActivityLength(day, cur.start) / 2;
-                        });
-                      }
-                    });
-                    return acc;
-                  },
-                  {} as Record<string, number>,
-                ),
-            )
-              .map(([tag, value]) => {
-                return `<div class='flex flex-row gap-1'><span class='bg-sky-300 text-sky-800 font-bold rounded-sm
-px-1'>${tag}</span> ${value.toFixed(1)}h</div>`;
-              })
-              .join('<br>')
-          "
-        ></div>
-      </div>
-    </div>
+    <AppEventsSummary :events="events" />
   </div>
 </template>
