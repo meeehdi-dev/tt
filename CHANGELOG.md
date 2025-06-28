@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0](https://github.com/meeehdi-dev/tt/compare/v1.5.2...v1.6.0) (2025-06-28)
+
+
+### Features
+
+* bun deploy script ([04efe01](https://github.com/meeehdi-dev/tt/commit/04efe018881e073127585e6df0c967e0adb1c12e))
+* move events summary code ([7f4b170](https://github.com/meeehdi-dev/tt/commit/7f4b170ae38d79271f3824f838346115d177d7e0))
+
 ## [1.5.2](https://github.com/meeehdi-dev/tt/compare/v1.5.1...v1.5.2) (2025-06-19)
 
 
