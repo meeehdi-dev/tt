@@ -126,6 +126,7 @@ function onMouseOver(slot: number) {
         return;
       }
       activity.start = slot;
+      activity.duration = activity.end - activity.start + 0.5;
       isGrabbingTop.value = getKey(activity.day, activity.start);
       return;
     }
@@ -135,6 +136,7 @@ function onMouseOver(slot: number) {
         return;
       }
       activity.end = slot;
+      activity.duration = activity.end - activity.start + 0.5;
       return;
     }
   }
