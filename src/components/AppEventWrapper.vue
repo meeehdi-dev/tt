@@ -34,22 +34,6 @@ function getActivity(day: number, slot: number) {
   const key = getKey(day, slot);
   return events.value.find(({ day: d, start }) => getKey(d, start) === key);
 }
-
-function getActivityLength(day: number, slot: number): number {
-  const activitySlot = getActivity(day, slot);
-  if (!activitySlot) {
-    return 0;
-  }
-
-  if (activitySlot.day === -1) {
-    return 1;
-  }
-
-  const start = activitySlot.start;
-  const end = activitySlot.end;
-
-  return (end - start) * 2 + 1;
-}
 </script>
 
 <template>
@@ -64,8 +48,8 @@ function getActivityLength(day: number, slot: number): number {
       },
     ]"
     :style="{
-      height: `calc(${slotHeight * getActivityLength(day, slot)}px + ${
-        0.125 * (getActivityLength(day, slot) - 1)
+      height: `calc(${slotHeight * (getActivity(day, slot)?.duration ?? 0) * 2}px + ${
+        0.125 * (getActivity(day, slot)?.duration ?? 0)
       }em)`,
     }"
   >

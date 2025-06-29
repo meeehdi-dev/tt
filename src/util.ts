@@ -15,6 +15,7 @@ export interface SlotRange {
   start: number;
   end: number;
   note: string;
+  duration: number;
 }
 
 export const times = Array(49)
