@@ -84,18 +84,16 @@ function onMouseUp() {
   }
   state.value = State.Idle;
   if (!isMouseDown.value || !selectedSlots.value || isFocused.value) {
+    if (isGrabbingTop.value || isGrabbingBottom.value) {
+      isGrabbingTop.value = "";
+      isGrabbingBottom.value = "";
+      selectedSlots.value = undefined;
+      events.save(startOfWeek.value);
+    }
     return;
   }
 
   isMouseDown.value = false;
-
-  if (isGrabbingTop.value || isGrabbingBottom.value) {
-    isGrabbingTop.value = "";
-    isGrabbingBottom.value = "";
-    selectedSlots.value = undefined;
-    events.save(startOfWeek.value);
-    return;
-  }
 
   events.data.value.push({
     day: selectedSlots.value.day,
