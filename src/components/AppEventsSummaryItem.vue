@@ -36,7 +36,7 @@ function getActivityLength(day: number, slot: number): number {
 const dayEvents = computed(() => events.value.filter((a) => a.day === day));
 const dayEventsDuration = computed(() =>
   dayEvents.value.reduce(
-    (acc, cur) => acc + getActivityLength(cur.day, cur.start),
+    (acc, cur) => acc + getActivityLength(cur.day, cur.start) / 2,
     0,
   ),
 );
