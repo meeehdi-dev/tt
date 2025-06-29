@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.7.0](https://github.com/meeehdi-dev/tt/compare/v1.6.0...v1.7.0) (2025-06-29)
+
+
+### Features
+
+* app event wrapper ([565df48](https://github.com/meeehdi-dev/tt/commit/565df4822e878052c54a80c87dc94f2278e2ed85))
+* events summary items separate component ([3425c49](https://github.com/meeehdi-dev/tt/commit/3425c4908a71785903922e605ba62a9637190fa5))
+
+
+### Bug Fixes
+
+* grab event state reset ([a5e7d9b](https://github.com/meeehdi-dev/tt/commit/a5e7d9b6f92e8632cc5ad525402598b62fac54d3))
+* ignore mouse down events on event card ([7daa22a](https://github.com/meeehdi-dev/tt/commit/7daa22a7ee51ad631f07fd70afaeb72675566752))
+* import icon ([be86728](https://github.com/meeehdi-dev/tt/commit/be867280273264c9fef096ac1bc6ec75f6f2ab38))
+* summary total duration ([7a94aab](https://github.com/meeehdi-dev/tt/commit/7a94aabffeff50c33ebbd615da6150b01b8e2526))
+
 ## [1.6.0](https://github.com/meeehdi-dev/tt/compare/v1.5.2...v1.6.0) (2025-06-28)
 
 
