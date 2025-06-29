@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.8.0](https://github.com/meeehdi-dev/tt/compare/v1.7.0...v1.8.0) (2025-06-29)
+
+
+### Features
+
+* replace dynamic duration with precalculated ([7c14157](https://github.com/meeehdi-dev/tt/commit/7c141572225e74e3b6ae0aefe00d9409c8803e5b))
+
+
+### Bug Fixes
+
+* move events logic to event composable ([3d0426c](https://github.com/meeehdi-dev/tt/commit/3d0426ccb1cafed1e5156ec6f3134d0b4ab99a1e))
+* update duration on grab ([1d495bd](https://github.com/meeehdi-dev/tt/commit/1d495bde272a96d0c629564d3bb7e4946c04eb54))
+
 ## [1.7.0](https://github.com/meeehdi-dev/tt/compare/v1.6.0...v1.7.0) (2025-06-29)
 
 
