@@ -59,7 +59,12 @@ function getKey(day: number, slot: number) {
   return `${day}-${slot}`;
 }
 
-function onMouseDown(day: number, slot: number) {
+function onMouseDown(e: MouseEvent, day: number, slot: number) {
+  if (e.target !== e.currentTarget) {
+    // NOTE: ignore if clinking on an event
+    return;
+  }
+
   if (![State.Idle].includes(state.value)) {
     return;
   }
@@ -314,7 +319,7 @@ function onGrabBottom(day: number, slot: number) {
                 '!bg-slate-800 cursor-pointer': isSelected(day, slot),
               },
             ]"
-            @mousedown.left="onMouseDown(day, slot)"
+            @mousedown.left="(e) => onMouseDown(e, day, slot)"
             @mouseup.left="onMouseUp"
             @mouseover="onMouseOver(slot)"
           >
