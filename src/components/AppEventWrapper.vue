@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { SlotRange } from "@/util";
-import type { Ref } from "vue";
+import { getKey, useEvents } from "@/compasables/useEvents";
+import { computed } from "vue";
 
 const {
   events,
@@ -10,7 +10,7 @@ const {
   isGrabbingTop,
   isGrabbingBottom,
 } = defineProps<{
-  events: Ref<SlotRange[]>;
+  events: ReturnType<typeof useEvents>;
   day: number;
   time: number;
   slotHeight: number;
@@ -18,38 +18,23 @@ const {
   isGrabbingBottom: string;
 }>();
 
-function getKey(day: number, slot: number) {
-  return `${day}-${slot}`;
-}
-
-function isActive(day: number, slot: number): boolean {
-  const key = getKey(day, slot);
-  return (
-    events.value.find(({ day: d, start }) => getKey(d, start) === key) !==
-    undefined
-  );
-}
-
-function getActivity(day: number, slot: number) {
-  const key = getKey(day, slot);
-  return events.value.find(({ day: d, start }) => getKey(d, start) === key);
-}
+const eventKey = computed(() => getKey(day, slot));
+const event = computed(() => events.getByKey(eventKey.value));
 </script>
 
 <template>
   <div
-    v-if="isActive(day, slot)"
+    v-if="event !== undefined"
     :class="[
       'activity absolute w-full z-10 flex flex-auto flex-col bg-slate-300 text-slate-800 rounded-xs',
       {
         'pointer-events-none':
-          isGrabbingTop == getKey(day, slot) ||
-          isGrabbingBottom == getKey(day, slot),
+          isGrabbingTop == eventKey || isGrabbingBottom == eventKey,
       },
     ]"
     :style="{
-      height: `calc(${slotHeight * (getActivity(day, slot)?.duration ?? 0) * 2}px + ${
-        0.125 * (getActivity(day, slot)?.duration ?? 0)
+      height: `calc(${slotHeight * event.duration * 2}px + ${
+        0.125 * event.duration
       }em)`,
     }"
   >

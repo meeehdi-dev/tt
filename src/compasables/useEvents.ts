@@ -1,6 +1,10 @@
 import type { SlotRange } from "@/util";
 import { ref } from "vue";
 
+export function getKey(day: number, slot: number) {
+  return `${day}-${slot}`;
+}
+
 export const useEvents = () => {
   const data = ref<SlotRange[]>([]);
 
@@ -18,8 +22,9 @@ export const useEvents = () => {
       data.value = JSON.parse(activity);
       // NOTE: add duration for old data
       data.value.forEach((e) => {
-        e.duration = e.end - e.start;
+        e.duration = e.end - e.start + 0.5;
       });
+      console.log(data.value);
     } else {
       data.value = [];
     }
@@ -32,8 +37,18 @@ export const useEvents = () => {
     );
   }
 
+  function getByKey(key: string) {
+    return data.value.find(({ day: d, start }) => getKey(d, start) === key);
+  }
+
+  function getBySlot(day: number, slot: number) {
+    return getByKey(getKey(day, slot));
+  }
+
   return {
     data,
+    getByKey,
+    getBySlot,
     load,
     save,
   };
