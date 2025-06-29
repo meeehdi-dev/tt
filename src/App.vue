@@ -15,7 +15,7 @@ import {
   WEEK_START,
   type SlotRange,
 } from "@/util";
-import { useEvents } from "@/compasables/useEvents";
+import { getKey, useEvents } from "@/compasables/useEvents";
 
 const now = new Date();
 const currentDayIndex = now.getDay();
@@ -54,10 +54,6 @@ onUnmounted(() => {
 });
 
 events.load(startOfWeek.value);
-
-function getKey(day: number, slot: number) {
-  return `${day}-${slot}`;
-}
 
 function onMouseDown(e: MouseEvent, day: number, slot: number) {
   if (e.target !== e.currentTarget) {
@@ -121,7 +117,7 @@ function onMouseOver(slot: number) {
 
   if (state.value === State.Grabbing) {
     if (isGrabbingTop.value) {
-      const activity = getActivityByKey(isGrabbingTop.value);
+      const activity = events.getByKey(isGrabbingTop.value);
       if (!activity || slot > activity.end) {
         return;
       }
@@ -131,7 +127,7 @@ function onMouseOver(slot: number) {
       return;
     }
     if (isGrabbingBottom.value) {
-      const activity = getActivityByKey(isGrabbingBottom.value);
+      const activity = events.getByKey(isGrabbingBottom.value);
       if (!activity || slot < activity.start) {
         return;
       }
@@ -160,19 +156,6 @@ function isSelected(day: number, slot: number): boolean {
   return day == selectedSlots.value.day && current >= start && current <= end;
 }
 
-function getActivityByKey(key: string) {
-  return events.data.value.find(
-    ({ day: d, start }) => getKey(d, start) === key,
-  );
-}
-
-function getActivity(day: number, slot: number) {
-  const key = getKey(day, slot);
-  return events.data.value.find(
-    ({ day: d, start }) => getKey(d, start) === key,
-  );
-}
-
 function onFocus(day: number, slot: number) {
   state.value = State.Focused;
 
@@ -194,7 +177,7 @@ function onBlur() {
 
 function onRemove(day: number, slot: number) {
   const key = getKey(day, slot);
-  const activity = getActivityByKey(key);
+  const activity = events.getByKey(key);
   if (!activity || activity.note == "" || window.confirm("Confirm?")) {
     events.data.value = events.data.value.filter(
       ({ day: d, start }) => getKey(d, start) !== key,
@@ -204,7 +187,7 @@ function onRemove(day: number, slot: number) {
 }
 
 function onChange(day: number, slot: number) {
-  const activity = getActivity(day, slot);
+  const activity = events.getBySlot(day, slot);
   if (!activity) {
     return;
   }
@@ -329,7 +312,7 @@ function onGrabBottom(day: number, slot: number) {
             @mouseover="onMouseOver(slot)"
           >
             <AppEventWrapper
-              :events="events.data"
+              :events="events"
               :day="day"
               :time="slot"
               :slot-height="slotHeight"
@@ -337,7 +320,7 @@ function onGrabBottom(day: number, slot: number) {
               :is-grabbing-bottom="isGrabbingBottom"
             >
               <AppEvent
-                v-model="getActivity(day, slot)!.note"
+                v-model="events.getBySlot(day, slot)!.note"
                 @grab-top="onGrabTop(day, slot)"
                 @grab-bottom="onGrabBottom(day, slot)"
                 @remove="onRemove(day, slot)"
