@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { SlotRange } from "@/util";
 import { computed, type Ref } from "vue";
+import { Icon } from "@iconify/vue";
 
 const { events, day } = defineProps<{
   events: Ref<SlotRange[]>;
