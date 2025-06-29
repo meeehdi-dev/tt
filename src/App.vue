@@ -80,6 +80,7 @@ function onMouseDown(e: MouseEvent, day: number, slot: number) {
     start: slot,
     end: slot,
     note: "",
+    duration: 0.5,
   };
 }
 
@@ -100,11 +101,13 @@ function onMouseUp() {
 
   isMouseDown.value = false;
 
+  const end = selectedSlots.value.end ?? selectedSlots.value.start;
   events.data.value.push({
     day: selectedSlots.value.day,
     start: selectedSlots.value.start,
-    end: selectedSlots.value.end ?? selectedSlots.value.start,
+    end,
     note: "",
+    duration: end - selectedSlots.value.start + 0.5,
   });
   events.save(startOfWeek.value);
 

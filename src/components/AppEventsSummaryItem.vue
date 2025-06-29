@@ -8,37 +8,9 @@ const { events, day } = defineProps<{
   day: number;
 }>();
 
-function getKey(day: number, slot: number) {
-  return `${day}-${slot}`;
-}
-
-function getActivity(day: number, slot: number) {
-  const key = getKey(day, slot);
-  return events.value.find(({ day: d, start }) => getKey(d, start) === key);
-}
-
-function getActivityLength(day: number, slot: number): number {
-  const activitySlot = getActivity(day, slot);
-  if (!activitySlot) {
-    return 0;
-  }
-
-  if (activitySlot.day === -1) {
-    return 1;
-  }
-
-  const start = activitySlot.start;
-  const end = activitySlot.end;
-
-  return (end - start) * 2 + 1;
-}
-
 const dayEvents = computed(() => events.value.filter((a) => a.day === day));
 const dayEventsDuration = computed(() =>
-  dayEvents.value.reduce(
-    (acc, cur) => acc + getActivityLength(cur.day, cur.start) / 2,
-    0,
-  ),
+  dayEvents.value.reduce((acc, cur) => acc + cur.duration, 0),
 );
 </script>
 
@@ -58,9 +30,7 @@ const dayEventsDuration = computed(() =>
                 if (matches) {
                   matches.forEach((match) => {
                     const tag = match.slice(1);
-                    acc[tag] =
-                      (acc[tag] ?? 0) +
-                      getActivityLength(cur.day, cur.start) / 2;
+                    acc[tag] = (acc[tag] ?? 0) + cur.duration;
                   });
                 }
               });
