@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/meeehdi-dev/tt/compare/v1.8.0...v1.8.1) (2025-06-30)
+
+
+### Bug Fixes
+
+* summary css ([f68c938](https://github.com/meeehdi-dev/tt/commit/f68c93838adf65ad7740e820884e38ab7b069b05))
+
 ## [1.8.0](https://github.com/meeehdi-dev/tt/compare/v1.7.0...v1.8.0) (2025-06-29)
 
 
