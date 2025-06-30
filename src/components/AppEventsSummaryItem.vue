@@ -15,7 +15,14 @@ const dayEventsDuration = computed(() =>
 </script>
 
 <template>
-  <div>
+  <div
+    :class="[
+      'group/summary text-slate-600 flex flex-row gap-1 justify-center items-center relative text-xs p-1',
+      {
+        'cursor-pointer hover:text-slate-400': dayEvents.length > 0,
+      },
+    ]"
+  >
     <Icon icon="carbon:time-filled" />
     <div>{{ dayEventsDuration }}h</div>
     <div
