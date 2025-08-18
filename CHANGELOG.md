@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.2](https://github.com/meeehdi-dev/tt/compare/v1.8.1...v1.8.2) (2025-08-18)
+
+
+### Bug Fixes
+
+* rerender date str on date change ([4872bfe](https://github.com/meeehdi-dev/tt/commit/4872bfe77fd7c76c98ea5c37fa3c20eada9ba23f))
+
 ## [1.8.1](https://github.com/meeehdi-dev/tt/compare/v1.8.0...v1.8.1) (2025-06-30)
 
 
