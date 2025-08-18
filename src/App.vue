@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { Icon } from "@iconify/vue";
 import AppEventWrapper from "./components/AppEventWrapper.vue";
 import AppEvent from "./components/AppEvent.vue";
@@ -199,6 +199,8 @@ function onChange(day: number, slot: number) {
 function changeDate(days: number) {
   startOfWeek.value.setDate(startOfWeek.value.getDate() + days);
   endOfWeek.value.setDate(endOfWeek.value.getDate() + days);
+  startOfWeek.value = new Date(startOfWeek.value.getTime());
+  endOfWeek.value = new Date(endOfWeek.value.getTime());
   events.load(startOfWeek.value);
 }
 
@@ -225,6 +227,19 @@ function onGrabBottom(day: number, slot: number) {
 
   isGrabbingBottom.value = getKey(day, slot);
 }
+
+const startOfWeekStr = computed(() => {
+  return startOfWeek.value.toLocaleDateString(undefined, {
+    month: "2-digit",
+    day: "2-digit",
+  });
+});
+const endOfWeekStr = computed(() => {
+  return endOfWeek.value.toLocaleDateString(undefined, {
+    month: "2-digit",
+    day: "2-digit",
+  });
+});
 </script>
 
 <template>
@@ -246,19 +261,9 @@ function onGrabBottom(day: number, slot: number) {
           <Icon icon="carbon:triangle-left-solid" />
         </div>
         <span class="text-slate-600 text-xs">
-          {{
-            startOfWeek.toLocaleDateString(undefined, {
-              month: "2-digit",
-              day: "2-digit",
-            })
-          }}
+          {{ startOfWeekStr }}
           -
-          {{
-            endOfWeek.toLocaleDateString(undefined, {
-              month: "2-digit",
-              day: "2-digit",
-            })
-          }}
+          {{ endOfWeekStr }}
         </span>
         <div
           class="text-slate-800 hover:text-slate-600 cursor-pointer p-1"
