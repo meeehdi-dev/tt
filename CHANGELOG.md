@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.3](https://github.com/meeehdi-dev/tt/compare/v1.8.2...v1.8.3) (2025-08-26)
+
+
+### Bug Fixes
+
+* slot height ([c7ec8b6](https://github.com/meeehdi-dev/tt/commit/c7ec8b644f23a624cacd22619cdf660b6bda5857))
+* slot height for long event ([1824d51](https://github.com/meeehdi-dev/tt/commit/1824d51a851ee69bdaabf2917556aded172e1670))
+
 ## [1.8.2](https://github.com/meeehdi-dev/tt/compare/v1.8.1...v1.8.2) (2025-08-18)
 
 
