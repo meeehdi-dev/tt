@@ -34,7 +34,7 @@ const event = computed(() => events.getByKey(eventKey.value));
     ]"
     :style="{
       height: `calc(${slotHeight * event.duration * 2}px + ${
-        0.25 * event.duration
+        0.25 * (event.duration - 0.5)
       }em)`,
     }"
   >

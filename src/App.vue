@@ -39,7 +39,7 @@ function setSlotHeight(): boolean {
   if (!slotElement) {
     return false;
   }
-  slotHeight.value = slotElement.offsetHeight;
+  slotHeight.value = Number(getComputedStyle(slotElement).height.replace("px", ""));
   return true;
 }
 
