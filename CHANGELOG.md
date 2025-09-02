@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.4](https://github.com/meeehdi-dev/tt/compare/v1.8.3...v1.8.4) (2025-09-02)
+
+
+### Bug Fixes
+
+* note remove icon transparency ([397d0c8](https://github.com/meeehdi-dev/tt/commit/397d0c8e72c13cee8802503ab9bf696d2e19fd64))
+* whitespace for long lines ([c094c17](https://github.com/meeehdi-dev/tt/commit/c094c17ab1bbb4b2af038dfabc62f4a3f2c81bce))
+
 ## [1.8.3](https://github.com/meeehdi-dev/tt/compare/v1.8.2...v1.8.3) (2025-08-26)
 
 
