@@ -42,7 +42,7 @@ function onBlur() {
   ></div>
   <div
     v-if="!isFocused"
-    class="absolute top-0 right-0 w-4 h-4 m-0.5 rounded-full flex justify-center items-center text-rose-400 hover:text-rose-600 cursor-pointer z-10"
+    class="absolute top-0 right-0 w-4 h-4 m-0.5 rounded-full flex justify-center items-center text-rose-400/60 hover:text-rose-400 cursor-pointer z-10"
     @click.prevent="emits('remove')"
   >
     <Icon icon="carbon:circle-solid" />
