@@ -10,7 +10,7 @@ const emits = defineEmits<{
 function parse(note: string) {
   return note
     .split("\n")
-    .map((line) => '<p class="inline-flex">' + line + "</p>")
+    .map((line) => "<p>" + line + "</p>")
     .join("<br>")
     .replace(
       /#(\w+)/g,
@@ -22,7 +22,7 @@ function parse(note: string) {
 <template>
   <div
     @click="emits('click')"
-    class="flex flex-col bg-transparent flex-auto h-full px-1 m-0 text-xs whitespace-pre justify-center"
+    class="flex flex-col bg-transparent flex-auto h-full px-1 m-0 text-xs justify-center"
     v-html="parse(note)"
   ></div>
 </template>
