@@ -22,7 +22,7 @@ function parse(note: string) {
 <template>
   <div
     @click="emits('click')"
-    class="flex flex-col bg-transparent flex-auto h-full px-1 m-0 text-xs justify-center"
+    class="flex flex-col bg-transparent flex-auto h-full px-1 m-0 text-xs justify-center select-none"
     v-html="parse(note)"
   ></div>
 </template>
