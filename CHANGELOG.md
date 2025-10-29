@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.0](https://github.com/meeehdi-dev/tt/compare/v1.8.4...v1.9.0) (2025-10-29)
+
+
+### Features
+
+* improve event creation (start/end handling) ([6ef0c05](https://github.com/meeehdi-dev/tt/commit/6ef0c05240635e852a5281025f41ff555d3dbd74))
+
+
+### Bug Fixes
+
+* remove select on event render ([0a78d03](https://github.com/meeehdi-dev/tt/commit/0a78d03553329b5d55b6454bd7d5d8c283e52cbe))
+
 ## [1.8.4](https://github.com/meeehdi-dev/tt/compare/v1.8.3...v1.8.4) (2025-09-02)
 
 
