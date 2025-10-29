@@ -39,7 +39,9 @@ function setSlotHeight(): boolean {
   if (!slotElement) {
     return false;
   }
-  slotHeight.value = Number(getComputedStyle(slotElement).height.replace("px", ""));
+  slotHeight.value = Number(
+    getComputedStyle(slotElement).height.replace("px", ""),
+  );
   return true;
 }
 
@@ -138,6 +140,29 @@ function onMouseOver(slot: number) {
   }
 
   if (!isMouseDown.value || !selectedSlots.value) {
+    return;
+  }
+
+  if (slot < selectedSlots.value.start) {
+    if (slot < selectedSlots.value.start - 0.5) {
+      // skipped a slot (probably already an activity in the middle, see below)
+      return;
+    }
+    const activity = events.getBySlot(selectedSlots.value.day, slot);
+    if (activity) {
+      return;
+    }
+    selectedSlots.value.start = slot;
+    return;
+  }
+
+  if (slot > selectedSlots.value.end + 0.5) {
+    // skipped a slot (probably already an activity in the middle, see below)
+    return;
+  }
+
+  const activity = events.getBySlot(selectedSlots.value.day, slot);
+  if (activity) {
     return;
   }
 
