@@ -1,4 +1,0 @@
-@import "tailwindcss";
-
-@source inline("grid-cols-{1..7}");
-@source inline("grid-rows-{1..24}");
