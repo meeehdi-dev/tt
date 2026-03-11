@@ -1,3 +1,4 @@
+import { useEventListener } from "@vueuse/core";
 import type { ShallowRef } from "vue";
 
 interface UseLongPressProps {
@@ -35,14 +36,8 @@ export default function useLongPress({
     }, 500);
   }
 
-  watch(target, () => {
-    if (!target.value) {
-      return;
-    }
-
-    target.value.addEventListener("mousedown", onMouseDown);
-    target.value.addEventListener("mouseup", onMouseUp);
-  });
+  useEventListener(target, "mousedown", onMouseDown);
+  useEventListener(target, "mouseup", onMouseUp);
 
   return { isLongPress };
 }

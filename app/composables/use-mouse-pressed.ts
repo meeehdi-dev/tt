@@ -1,3 +1,4 @@
+import { useEventListener } from "@vueuse/core";
 import type { ShallowRef } from "vue";
 
 interface useMousePressedProps {
@@ -18,12 +19,6 @@ export default function useMousePressed({
     onReleased(e);
   }
 
-  watch(target, () => {
-    if (!target.value) {
-      return;
-    }
-
-    target.value.addEventListener("mousedown", onMouseDown);
-    target.value.addEventListener("mouseup", onMouseUp);
-  });
+  useEventListener(target, "mousedown", onMouseDown);
+  useEventListener(target, "mouseup", onMouseUp);
 }

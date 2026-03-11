@@ -1,4 +1,6 @@
-export default function useMouse() {
+import { createSharedComposable, useEventListener } from "@vueuse/core";
+
+function useMouse() {
   const x = shallowRef(0);
   const y = shallowRef(0);
 
@@ -7,15 +9,14 @@ export default function useMouse() {
     y.value = e.clientY;
   }
 
-  onMounted(() => {
-    document.addEventListener("mousemove", onMouseMove);
-  });
-  onUnmounted(() => {
-    document.removeEventListener("mousemove", onMouseMove);
-  });
+  useEventListener("mousemove", onMouseMove);
 
   return {
     x,
     y,
   };
 }
+
+const useSharedMouse = createSharedComposable(useMouse);
+
+export default useSharedMouse;

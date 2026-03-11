@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { size } from "zod";
+import { useEventListener } from "@vueuse/core";
 import type { Event } from "~/types";
 
 enum State {
@@ -14,7 +14,7 @@ const { slotHeight } = defineProps<{
   slotHeight: number;
 }>();
 
-const emits = defineEmits<{
+const emit = defineEmits<{
   edit: [Event];
   remove: [Event];
   move: [HTMLElement];
@@ -46,7 +46,7 @@ useLongPress({
       return;
     }
 
-    emits("move", eventRef.value!);
+    emit("move", eventRef.value!);
     state.value = State.Idle;
   },
 });
@@ -66,7 +66,7 @@ function onUngrabTop() {
     return;
   }
 
-  emits("moveTop", eventRef.value!);
+  emit("moveTop", eventRef.value!);
   state.value = State.Idle;
 }
 function onGrabBottom() {
@@ -82,18 +82,12 @@ function onUngrabBottom() {
     return;
   }
 
-  emits("moveBottom", eventRef.value!);
+  emit("moveBottom", eventRef.value!);
   state.value = State.Idle;
 }
 
-onMounted(() => {
-  document.addEventListener("mouseup", onUngrabTop);
-  document.addEventListener("mouseup", onUngrabBottom);
-});
-onUnmounted(() => {
-  document.removeEventListener("mouseup", onUngrabTop);
-  document.removeEventListener("mouseup", onUngrabBottom);
-});
+useEventListener("mouseup", onUngrabTop);
+useEventListener("mouseup", onUngrabBottom);
 </script>
 
 <template>
@@ -139,7 +133,7 @@ onUnmounted(() => {
           class="cursor-pointer"
           variant="ghost"
           color="secondary"
-          @click="emits('edit', event)"
+          @click="emit('edit', event)"
         />
         <UPopover :content="{ side: 'top' }" arrow>
           <UButton
@@ -157,7 +151,7 @@ onUnmounted(() => {
               class="cursor-pointer"
               variant="link"
               color="error"
-              @click="emits('remove', event)"
+              @click="emit('remove', event)"
             />
           </template>
         </UPopover>

@@ -5,7 +5,7 @@ import type { Event } from "~/types";
 
 const { event } = defineProps<{ event: Event | undefined }>();
 
-const emits = defineEmits<{ save: [Event]; cancel: [Event] }>();
+const emit = defineEmits<{ save: [Event]; cancel: [Event] }>();
 
 const form = useTemplateRef("form");
 
@@ -21,7 +21,7 @@ const state = reactive<Schema>({
 });
 
 function onSubmit(e: FormSubmitEvent<Schema>) {
-  emits("save", {
+  emit("save", {
     ...event!,
     project: e.data.project,
     description: e.data.description.trim(),
@@ -68,7 +68,7 @@ watch(
     :open="event !== undefined"
     :title="event?.id ? 'Edit event' : 'Add event'"
     :ui="{ footer: 'justify-end' }"
-    :close="{ onClick: () => emits('cancel', event!) }"
+    :close="{ onClick: () => emit('cancel', event!) }"
   >
     <template #body>
       <UForm
@@ -93,7 +93,7 @@ watch(
     </template>
 
     <template #footer>
-      <UButton color="neutral" variant="soft" @click="emits('cancel', event!)"
+      <UButton color="neutral" variant="soft" @click="emit('cancel', event!)"
         >Cancel</UButton
       >
       <UButton type="submit" @click="form?.submit()">Save</UButton>
