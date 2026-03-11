@@ -7,7 +7,7 @@ const eventTime = computed(() => getEventTime(event));
 </script>
 
 <template>
-  <div class="flex gap-2 items-center">
+  <div class="flex items-center gap-2">
     <UBadge variant="soft">
       {{ event.project }}
     </UBadge>

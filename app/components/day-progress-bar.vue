@@ -17,7 +17,7 @@ const overtimeProgress = computed(
     }"
   />
   <div
-    class="h-full w-(--overtime-progress) bg-primary-500/30 transition-[width]"
+    class="bg-primary-500/30 h-full w-(--overtime-progress) transition-[width]"
     :style="{
       '--overtime-progress': overtimeProgress + '%',
     }"

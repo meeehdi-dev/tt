@@ -170,14 +170,14 @@ function onRemoveEvent(event: Event) {
 
 <template>
   <ClientOnly>
-    <div class="w-screen h-screen flex flex-col gap-1">
-      <div class="flex items-center justify-between mt-1">
+    <div class="flex h-screen w-screen flex-col gap-1">
+      <div class="mt-1 flex items-center justify-between">
         <UButton
           :variant="
             currentWeekDate.isoWeek() === now.isoWeek() ? 'soft' : 'outline'
           "
           label="This week"
-          class="ml-13 py-1 cursor-pointer"
+          class="ml-13 cursor-pointer py-1"
           size="sm"
           :color="
             currentWeekDate.isoWeek() === now.isoWeek() ? 'primary' : 'neutral'
@@ -193,15 +193,15 @@ function onRemoveEvent(event: Event) {
           <!-- TODO: settings, signin/out -->
         </div>
       </div>
-      <div class="flex gap-2 px-1 w-full h-full">
-        <div class="h-full grid grid-rows-12">
+      <div class="flex h-full w-full gap-2 px-1">
+        <div class="grid h-full grid-rows-12">
           <TimeIndicator />
         </div>
-        <div ref="week" class="grid grid-cols-7 gap-1 w-full h-full">
+        <div ref="week" class="grid h-full w-full grid-cols-7 gap-1">
           <div
             v-for="day in days"
             :key="day"
-            class="relative rounded-sm h-full grid"
+            class="relative grid h-full rounded-sm"
           >
             <CurrentTimeIndicator :day="day" :day-height="weekHeight" />
             <DaySlot
@@ -214,7 +214,7 @@ function onRemoveEvent(event: Event) {
               @slot-hover="onSlotHover"
             />
             <div
-              class="absolute w-full h-full pointer-events-none grid grid-rows-24 gap-1"
+              class="pointer-events-none absolute grid h-full w-full grid-rows-24 gap-1"
             >
               <Event
                 v-for="event in events.filter((e) => e.day === day)"
@@ -231,9 +231,9 @@ function onRemoveEvent(event: Event) {
           </div>
         </div>
       </div>
-      <div class="flex gap-2 px-1 pb-1 w-full">
+      <div class="flex w-full gap-2 px-1 pb-1">
         <div class="-translate-y-4">20:00</div>
-        <div class="grid grid-cols-7 gap-1 w-full">
+        <div class="grid w-full grid-cols-7 gap-1">
           <DayProgress
             v-for="day in days"
             :key="`${day}-progress`"

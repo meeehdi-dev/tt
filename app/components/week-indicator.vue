@@ -29,10 +29,10 @@ function getWeekLabel(date: Dayjs) {
     <UButton
       icon="lucide:chevron-left"
       variant="soft"
-      class="py-0 cursor-pointer"
+      class="cursor-pointer py-0"
       @click="emit('previous')"
     />
-    <span class="text-sm text-muted">
+    <span class="text-muted text-sm">
       Week {{ date.isoWeek() }} |
       {{ getWeekLabel(startOfWeek) }}
       -
@@ -41,7 +41,7 @@ function getWeekLabel(date: Dayjs) {
     <UButton
       icon="lucide:chevron-right"
       variant="soft"
-      class="py-0 cursor-pointer"
+      class="cursor-pointer py-0"
       @click="emit('next')"
     />
   </div>

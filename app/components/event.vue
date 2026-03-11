@@ -93,9 +93,9 @@ useEventListener("mouseup", onUngrabBottom);
 <template>
   <div
     ref="event"
-    class="bg-neutral-800 rounded-sm row-start-(--row-start) row-span-(--row-span) pointer-events-auto relative transition-[outline] outline-0 outline-primary overflow-hidden select-none"
+    class="outline-primary pointer-events-auto relative row-span-(--row-span) row-start-(--row-start) overflow-hidden rounded-sm bg-neutral-800 outline-0 transition-[outline] select-none"
     :class="{
-      'outline-1 shadow-[0_0_8px] shadow-primary-500 z-20':
+      'shadow-primary-500 z-20 shadow-[0_0_8px] outline-1':
         state === State.Dragging,
     }"
     :style="{
@@ -116,12 +116,12 @@ useEventListener("mouseup", onUngrabBottom);
     }"
   >
     <div
-      class="h-2 w-full rounded-t-sm cursor-n-resize bg-linear-to-t from-transparent to-transparent hover:to-primary/50 transition-colors absolute top-0"
+      class="hover:to-primary/50 absolute top-0 h-2 w-full cursor-n-resize rounded-t-sm bg-linear-to-t from-transparent to-transparent transition-colors"
       @mousedown="onGrabTop"
     />
     <div
       v-if="!event.project"
-      class="absolute h-full w-full flex justify-center items-center"
+      class="absolute flex h-full w-full items-center justify-center"
     >
       <UIcon name="lucide:loader-circle" class="animate-spin" />
     </div>
@@ -160,12 +160,12 @@ useEventListener("mouseup", onUngrabBottom);
         <UBadge class="place-self-start" variant="soft">{{
           event.project
         }}</UBadge>
-        <div class="whitespace-pre text-sm text-muted">
+        <div class="text-muted text-sm whitespace-pre">
           {{ event.description }}
         </div>
       </div>
       <div
-        class="h-2 w-full rounded-b-sm cursor-s-resize bg-linear-to-b from-transparent to-transparent hover:to-primary/50 transition-colors absolute bottom-0"
+        class="hover:to-primary/50 absolute bottom-0 h-2 w-full cursor-s-resize rounded-b-sm bg-linear-to-b from-transparent to-transparent transition-colors"
         @mousedown="onGrabBottom"
       />
     </div>

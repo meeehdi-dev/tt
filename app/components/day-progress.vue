@@ -13,8 +13,8 @@ const dayTimeLabel = computed(() => getTimeLabel(dayTime.value));
 </script>
 
 <template>
-  <div class="rounded-sm h-full bg-neutral-800 overflow-hidden flex relative">
-    <div class="absolute left-1/2 top-1/2 flex justify-center items-center">
+  <div class="relative flex h-full overflow-hidden rounded-sm bg-neutral-800">
+    <div class="absolute top-1/2 left-1/2 flex items-center justify-center">
       <UPopover arrow>
         <UBadge
           class="absolute cursor-pointer text-sm"
@@ -23,7 +23,7 @@ const dayTimeLabel = computed(() => getTimeLabel(dayTime.value));
           ><span class="whitespace-nowrap">{{ dayTimeLabel }} hrs</span></UBadge
         >
         <template #content
-          ><div class="p-1 pr-2 bg-neutral-900 rounded-xl flex flex-col gap-1">
+          ><div class="flex flex-col gap-1 rounded-xl bg-neutral-900 p-1 pr-2">
             <DayProgressEvent
               v-for="event in dayEvents"
               :key="`${day}-progress-${event.id}`"

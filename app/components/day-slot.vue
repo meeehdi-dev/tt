@@ -14,7 +14,7 @@ const emit = defineEmits<{ slotHover: [MouseEvent] }>();
   <div
     :data-slot="time.index"
     :data-day="day"
-    class="rounded-sm hover:bg-neutral-700 transition-colors cursor-pointer border-y-2 border-neutral-900"
+    class="cursor-pointer rounded-sm border-y-2 border-neutral-900 transition-colors hover:bg-neutral-700"
     :class="{
       'bg-neutral-700!':
         currentEvent &&

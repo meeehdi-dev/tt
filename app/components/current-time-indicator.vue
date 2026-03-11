@@ -33,7 +33,7 @@ const timeLabel = computed(() => `${now.value.format("HH:mm:ss")}`);
     v-if="day === currentDay && currentTime > 8 * 60 && currentTime < 20 * 60"
     color="primary"
     decorative
-    class="absolute translate-y-(--translate-y) pointer-events-none z-10"
+    class="pointer-events-none absolute z-10 translate-y-(--translate-y)"
     :style="{
       '--translate-y': `calc(${currentDayNowIndicatorTranslate}px - 50%)`,
     }"
