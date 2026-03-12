@@ -42,7 +42,7 @@ useMousePressed({
   <ClientOnly>
     <div class="flex h-screen w-screen flex-col gap-1">
       <Header />
-      <div class="flex h-full w-full gap-2 px-1">
+      <div class="flex h-full w-full gap-1 px-1">
         <div class="grid h-full grid-rows-12">
           <TimeIndicator />
         </div>
@@ -74,7 +74,7 @@ useMousePressed({
           </div>
         </div>
       </div>
-      <div class="flex min-h-8 w-full gap-2 px-1 pb-1">
+      <div class="flex min-h-8 w-full gap-1 px-1 pb-1">
         <div class="-translate-y-4 text-xs">20:00</div>
         <div class="grid w-full grid-cols-7 gap-1">
           <DayProgress
