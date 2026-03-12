@@ -57,26 +57,59 @@ useMousePressed({
 <template>
   <ClientOnly>
     <div class="flex h-screen w-screen flex-col gap-1">
-      <div class="mt-1 flex items-center justify-between">
-        <UButton
-          :variant="
-            currentWeekDate.isoWeek() === now.isoWeek() ? 'soft' : 'outline'
-          "
-          label="This week"
-          class="ml-13 cursor-pointer py-1"
-          size="sm"
-          :color="
-            currentWeekDate.isoWeek() === now.isoWeek() ? 'primary' : 'neutral'
-          "
-          @click="currentWeekDate = dayjs()"
-        />
-        <WeekIndicator
-          :date="currentWeekDate"
-          @previous="currentWeekDate = currentWeekDate.subtract(1, 'week')"
-          @next="currentWeekDate = currentWeekDate.add(1, 'week')"
-        />
+      <div class="mt-1 grid grid-cols-3">
         <div>
-          <!-- TODO: settings, signin/out -->
+          <UButton
+            :variant="
+              currentWeekDate.isoWeek() === now.isoWeek() ? 'soft' : 'outline'
+            "
+            label="This week"
+            class="ml-13 py-1"
+            size="sm"
+            :color="
+              currentWeekDate.isoWeek() === now.isoWeek()
+                ? 'primary'
+                : 'neutral'
+            "
+            @click="currentWeekDate = dayjs()"
+          />
+        </div>
+        <div class="flex justify-center">
+          <WeekIndicator
+            :date="currentWeekDate"
+            @previous="currentWeekDate = currentWeekDate.subtract(1, 'week')"
+            @next="currentWeekDate = currentWeekDate.add(1, 'week')"
+          />
+        </div>
+        <div class="mr-2 flex items-center justify-end gap-2">
+          <UButton
+            icon="lucide:cog"
+            color="secondary"
+            variant="soft"
+            size="sm"
+          />
+          <UPopover :content="{ side: 'bottom' }">
+            <UButton
+              icon="lucide:log-out"
+              variant="soft"
+              color="error"
+              size="sm"
+            />
+            <template #content>
+              <UButton icon="lucide:log-out" variant="soft" color="error"
+                >Log out</UButton
+              >
+            </template>
+          </UPopover>
+          <UButton
+            icon="lucide:github"
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            href="https://github.com/meeehdi-dev/tt"
+            target="_blank"
+            rel="noopener noreferrer"
+          />
         </div>
       </div>
       <div class="flex h-full w-full gap-2 px-1">

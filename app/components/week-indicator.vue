@@ -29,7 +29,7 @@ function getWeekLabel(date: Dayjs) {
     <UButton
       icon="lucide:chevron-left"
       variant="soft"
-      class="cursor-pointer py-0"
+      size="sm"
       @click="emit('previous')"
     />
     <span class="text-muted text-sm">
@@ -41,7 +41,7 @@ function getWeekLabel(date: Dayjs) {
     <UButton
       icon="lucide:chevron-right"
       variant="soft"
-      class="cursor-pointer py-0"
+      size="sm"
       @click="emit('next')"
     />
   </div>

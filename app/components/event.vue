@@ -155,25 +155,17 @@ useEventListener("mouseup", onUngrabBottom);
         <UButton
           icon="lucide:edit"
           size="xs"
-          class="cursor-pointer"
           variant="ghost"
           color="secondary"
           @click="selectEvent(event.id)"
         />
         <UPopover :content="{ side: 'top' }" arrow>
-          <UButton
-            icon="lucide:x"
-            size="xs"
-            class="cursor-pointer"
-            variant="ghost"
-            color="error"
-          />
+          <UButton icon="lucide:x" size="xs" variant="ghost" color="error" />
 
           <template #content>
             <UButton
               label="Confirm"
               icon="lucide:x"
-              class="cursor-pointer"
               variant="link"
               color="error"
               @click="removeEvent(event.id)"

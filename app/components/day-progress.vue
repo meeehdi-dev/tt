@@ -18,10 +18,7 @@ const dayTimeLabel = computed(() => getTimeLabel(dayTime.value));
   <div class="relative flex h-full overflow-hidden rounded-sm bg-neutral-800">
     <div class="absolute top-1/2 left-1/2 flex items-center justify-center">
       <UPopover arrow>
-        <UBadge
-          class="absolute cursor-pointer text-sm"
-          variant="soft"
-          icon="lucide:clock"
+        <UBadge class="absolute text-sm" variant="soft" icon="lucide:clock"
           ><span class="whitespace-nowrap">{{ dayTimeLabel }} hrs</span></UBadge
         >
         <template #content
