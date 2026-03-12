@@ -24,7 +24,7 @@ function onSubmit(e: FormSubmitEvent<Schema>) {
   state.description = "";
 }
 
-const projects = ref<string[]>(["vo2", "jda", "ri", "lvmhcom"]);
+const { projects } = useProjects();
 
 watch(selectedEvent, () => {
   if (!selectedEvent.value) {
@@ -51,20 +51,22 @@ watch(selectedEvent, () => {
         class="space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Title" name="title">
+        <UFormField label="Project" name="project">
           <UInputMenu
             v-model="state.project"
             :items="projects"
+            value-key="value"
+            label-key="label"
             :trailing-icon="false"
             class="w-full"
-            placeholder="Your project name"
+            placeholder="Select a project"
           />
         </UFormField>
         <UFormField label="Description" name="description">
           <UTextarea
             v-model="state.description"
             class="w-full"
-            placeholder="Your description"
+            placeholder="What did you work on?"
           />
         </UFormField>
       </UForm>

@@ -20,6 +20,8 @@ const { y } = useMouse();
 const { selectEvent, moveEvent, removeEvent, moveEventStart, moveEventBottom } =
   useEvents();
 
+const { getProjectLabel } = useProjects();
+
 const state = shallowRef(State.Idle);
 const currentY = shallowRef(0);
 const maxY = shallowRef(0);
@@ -182,7 +184,7 @@ const height = computed(() => {
       </div>
       <div class="flex flex-col p-1">
         <UBadge class="place-self-start" variant="soft">{{
-          event.project
+          getProjectLabel(event.project)
         }}</UBadge>
         <div class="text-muted text-sm whitespace-pre">
           {{ event.description }}
