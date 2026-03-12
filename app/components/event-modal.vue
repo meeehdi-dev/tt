@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import type { FormSubmitEvent, SelectMenuItem } from "@nuxt/ui";
+import type { FormSubmitEvent } from "@nuxt/ui";
 import { z } from "zod";
-import type { Event } from "~/types";
-
-const { event } = defineProps<{ event: Event | undefined }>();
-
-const emit = defineEmits<{ save: [Event]; cancel: [Event] }>();
 
 const form = useTemplateRef("form");
+
+const { selectedEvent, cancelEvent, saveEvent } = useEvents();
 
 const schema = z.object({
   project: z.string().min(1),
@@ -21,11 +18,7 @@ const state = reactive<Schema>({
 });
 
 function onSubmit(e: FormSubmitEvent<Schema>) {
-  emit("save", {
-    ...event!,
-    project: e.data.project,
-    description: e.data.description.trim(),
-  });
+  saveEvent(selectedEvent.value!.id, e.data);
 
   state.project = "";
   state.description = "";
@@ -33,25 +26,22 @@ function onSubmit(e: FormSubmitEvent<Schema>) {
 
 const projects = ref<string[]>(["vo2", "jda", "ri", "lvmhcom"]);
 
-watch(
-  () => event,
-  () => {
-    if (!event) {
-      return;
-    }
+watch(selectedEvent, () => {
+  if (!selectedEvent.value) {
+    return;
+  }
 
-    state.project = event.project;
-    state.description = event.description;
-  },
-);
+  state.project = selectedEvent.value.project;
+  state.description = selectedEvent.value.description;
+});
 </script>
 
 <template>
   <UModal
-    :open="event !== undefined"
-    :title="event?.id ? 'Edit event' : 'Add event'"
+    :open="selectedEvent !== undefined"
+    :title="selectedEvent?.id ? 'Edit event' : 'Add event'"
     :ui="{ footer: 'justify-end' }"
-    :close="{ onClick: () => emit('cancel', event!) }"
+    :close="{ onClick: () => cancelEvent() }"
   >
     <template #body>
       <UForm
@@ -81,7 +71,7 @@ watch(
     </template>
 
     <template #footer>
-      <UButton color="neutral" variant="soft" @click="emit('cancel', event!)"
+      <UButton color="neutral" variant="soft" @click="cancelEvent()"
         >Cancel</UButton
       >
       <UButton type="submit" @click="form?.submit()">Save</UButton>

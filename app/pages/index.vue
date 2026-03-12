@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
-import { StartOfWeekDay, type Event } from "~/types";
 
 useSeoMeta({
   title: "Calendar",
@@ -19,140 +18,8 @@ const currentWeekDate = ref(dayjs());
 
 const now = ref(dayjs());
 
-const startOfWeekOffset = shallowRef(StartOfWeekDay.Monday);
-
-const days = ref<number[]>(
-  Array(7)
-    .fill(undefined)
-    .map((_, i) => (i + startOfWeekOffset.value + 7) % 7),
-);
-
-const { events, currentEvent, selectedEvent, onSlotHover } = useEvents({
-  target: weekRef,
-});
-
-function onEventMove(target: HTMLElement, event: Event) {
-  const rect = target.getBoundingClientRect();
-  const x = rect.x + rect.width / 2;
-  const y = rect.y;
-  target.style.visibility = "hidden";
-  let slotElement = document.elementFromPoint(x, y) as HTMLElement;
-  target.style.visibility = "";
-  if (!slotElement) {
-    return;
-  }
-  const slotElementRect = slotElement.getBoundingClientRect();
-  if (
-    y > slotElementRect.y + slotElementRect.height / 2 &&
-    slotElement.nextElementSibling
-  ) {
-    slotElement = slotElement.nextElementSibling as HTMLElement;
-  }
-
-  const eventLength = event.end.index - event.start.index;
-
-  const startSlotIndex = Number(slotElement.dataset["slot"]);
-  if (isNaN(startSlotIndex)) {
-    event.start = getSlotFromIndex(0);
-    event.end = getSlotFromIndex(eventLength);
-    return;
-  }
-
-  const slot = availableSlots.find((s) => s.index === startSlotIndex);
-  if (!slot) {
-    return;
-  }
-
-  const diff = event.start.index - slot.index;
-  const endIndex = event.end.index - diff;
-
-  if (endIndex > 23) {
-    event.start = getSlotFromIndex(23 - eventLength);
-    event.end = getSlotFromIndex(23);
-    return;
-  }
-
-  event.start = getSlotFromIndex(slot.index);
-  event.end = getSlotFromIndex(endIndex);
-}
-
-function onEventMoveTop(target: HTMLElement, event: Event) {
-  const rect = target.getBoundingClientRect();
-  const x = rect.x + rect.width / 2;
-  const y = rect.y;
-  target.style.visibility = "hidden";
-  let slotElement = document.elementFromPoint(x, y) as HTMLElement;
-  target.style.visibility = "";
-  if (!slotElement) {
-    return;
-  }
-  const slotElementRect = slotElement.getBoundingClientRect();
-  if (
-    y > slotElementRect.y + slotElementRect.height / 2 &&
-    slotElement.nextElementSibling
-  ) {
-    slotElement = slotElement.nextElementSibling as HTMLElement;
-  }
-
-  const slot = getSlotFromElement(slotElement);
-  if (!slot) {
-    return;
-  }
-
-  event.start = getSlotFromIndex(slot.index);
-}
-
-function onEventMoveBottom(target: HTMLElement, event: Event) {
-  const rect = target.getBoundingClientRect();
-  const x = rect.x + rect.width / 2;
-  const y = rect.y + rect.height;
-  target.style.visibility = "hidden";
-  let slotElement = document.elementFromPoint(x, y) as HTMLElement;
-  target.style.visibility = "";
-  if (!slotElement) {
-    return;
-  }
-  const slotElementRect = slotElement.getBoundingClientRect();
-  if (
-    y < slotElementRect.y + slotElementRect.height / 2 &&
-    slotElement.previousElementSibling
-  ) {
-    slotElement = slotElement.previousElementSibling as HTMLElement;
-  }
-
-  const endSlotIndex = Number(slotElement.dataset["slot"]);
-  if (isNaN(endSlotIndex)) {
-    return;
-  }
-
-  const slot = availableSlots.find((s) => s.index === endSlotIndex);
-  if (!slot) {
-    return;
-  }
-
-  event.end = getSlotFromIndex(slot.index);
-}
-
-function onSaveEvent(ev: Event) {
-  const event = events.value.find((e) => e.id === ev.id);
-  if (!event) {
-    return;
-  }
-
-  event.project = ev.project;
-  event.description = ev.description;
-
-  selectedEvent.value = undefined;
-}
-
-function onCloseEventModal(event: Event) {
-  selectedEvent.value = undefined;
-  if (event.project !== "") {
-    return;
-  }
-
-  events.value = events.value.filter((e) => e.id !== event.id);
-}
+const { events, currentEvent, onSlotHover, addEvent, createEvent } =
+  useEvents();
 
 const slotHeight = shallowRef(0);
 watch(slotsRef, () => {
@@ -163,9 +30,28 @@ watch(slotsRef, () => {
     Number(computedStyle.borderTopWidth.slice(0, -2)) * 2;
 });
 
-function onRemoveEvent(event: Event) {
-  events.value = events.value.filter((e) => e !== event);
-}
+useMousePressed({
+  target: weekRef,
+  onPressed: (e) => {
+    const eventTarget = e.target as HTMLElement;
+
+    const slot = getSlotFromElement(eventTarget);
+    if (!slot) {
+      return;
+    }
+
+    const day = Number(eventTarget.dataset.day);
+
+    createEvent(day, slot);
+  },
+  onReleased: () => {
+    if (!currentEvent.value) {
+      return;
+    }
+
+    addEvent();
+  },
+});
 </script>
 
 <template>
@@ -221,11 +107,6 @@ function onRemoveEvent(event: Event) {
                 :key="`${day}-${event.id}`"
                 :event="event"
                 :slot-height="slotHeight"
-                @edit="selectedEvent = $event"
-                @remove="onRemoveEvent"
-                @move="onEventMove($event, event)"
-                @move-top="onEventMoveTop($event, event)"
-                @move-bottom="onEventMoveBottom($event, event)"
               />
             </div>
           </div>
@@ -243,10 +124,6 @@ function onRemoveEvent(event: Event) {
         </div>
       </div>
     </div>
-    <EventModal
-      :event="selectedEvent"
-      @save="onSaveEvent"
-      @cancel="onCloseEventModal"
-    />
+    <EventModal />
   </ClientOnly>
 </template>

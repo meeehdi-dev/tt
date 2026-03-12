@@ -9,22 +9,17 @@ enum State {
   GrabbingBottom,
 }
 
-const { slotHeight } = defineProps<{
+const { event, slotHeight } = defineProps<{
   event: Event;
   slotHeight: number;
-}>();
-
-const emit = defineEmits<{
-  edit: [Event];
-  remove: [Event];
-  move: [HTMLElement];
-  moveTop: [HTMLElement];
-  moveBottom: [HTMLElement];
 }>();
 
 const eventRef = useTemplateRef("event");
 
 const { y } = useMouse();
+
+const { selectEvent, moveEvent, removeEvent, moveEventStart, moveEventBottom } =
+  useEvents();
 
 const state = shallowRef(State.Idle);
 const currentY = shallowRef(0);
@@ -39,6 +34,7 @@ useLongPress({
     }
 
     currentY.value = y.value;
+
     state.value = State.Dragging;
   },
   onRelease: () => {
@@ -46,7 +42,18 @@ useLongPress({
       return;
     }
 
-    emit("move", eventRef.value!);
+    const slotElement = getSlotElementFromElement(eventRef.value!, "top");
+    if (!slotElement) {
+      return;
+    }
+
+    const slot = getSlotFromElement(slotElement);
+    if (!slot) {
+      return;
+    }
+
+    moveEvent(event.id, slot);
+
     state.value = State.Idle;
   },
 });
@@ -66,7 +73,18 @@ function onUngrabTop() {
     return;
   }
 
-  emit("moveTop", eventRef.value!);
+  const slotElement = getSlotElementFromElement(eventRef.value!, "top");
+  if (!slotElement) {
+    return;
+  }
+
+  const slot = getSlotFromElement(slotElement);
+  if (!slot) {
+    return;
+  }
+
+  moveEventStart(event.id, slot);
+
   state.value = State.Idle;
 }
 function onGrabBottom() {
@@ -82,7 +100,18 @@ function onUngrabBottom() {
     return;
   }
 
-  emit("moveBottom", eventRef.value!);
+  const slotElement = getSlotElementFromElement(eventRef.value!, "bottom");
+  if (!slotElement) {
+    return;
+  }
+
+  const slot = getSlotFromElement(slotElement);
+  if (!slot) {
+    return;
+  }
+
+  moveEventBottom(event.id, slot);
+
   state.value = State.Idle;
 }
 
@@ -133,7 +162,7 @@ useEventListener("mouseup", onUngrabBottom);
           class="cursor-pointer"
           variant="ghost"
           color="secondary"
-          @click="emit('edit', event)"
+          @click="selectEvent(event.id)"
         />
         <UPopover :content="{ side: 'top' }" arrow>
           <UButton
@@ -151,7 +180,7 @@ useEventListener("mouseup", onUngrabBottom);
               class="cursor-pointer"
               variant="link"
               color="error"
-              @click="emit('remove', event)"
+              @click="removeEvent(event.id)"
             />
           </template>
         </UPopover>

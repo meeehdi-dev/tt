@@ -1,8 +1,19 @@
-import type { Event, EventSlot, TimeSlot } from "~/types";
+import {
+  StartOfWeekDay,
+  type Event,
+  type EventSlot,
+  type TimeSlot,
+} from "~/types";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 
 dayjs.extend(isoWeek);
+
+const startOfWeekOffset = StartOfWeekDay.Monday;
+
+export const days = Array(7)
+  .fill(undefined)
+  .map((_, i) => (i + startOfWeekOffset + 7) % 7);
 
 export const hours: TimeSlot[] = Array(12)
   .fill(undefined)
@@ -22,6 +33,37 @@ export function getSlotFromElement(target: HTMLElement) {
   }
 
   return availableSlots.find((s) => s.index === Number(target.dataset.slot));
+}
+
+type Anchor = "top" | "bottom";
+export function getSlotElementFromElement(target: HTMLElement, anchor: Anchor) {
+  const rect = target.getBoundingClientRect();
+  const x = rect.x + rect.width / 2;
+  const y = rect.y + (anchor === "bottom" ? rect.height : 0);
+  target.style.visibility = "hidden";
+  let slotElement = document.elementFromPoint(x, y) as HTMLElement;
+  target.style.visibility = "";
+  if (!slotElement) {
+    return;
+  }
+  const slotElementRect = slotElement.getBoundingClientRect();
+  if (anchor === "top") {
+    if (
+      y > slotElementRect.y + slotElementRect.height / 2 &&
+      slotElement.nextElementSibling
+    ) {
+      slotElement = slotElement.nextElementSibling as HTMLElement;
+    }
+  } else if (anchor === "bottom") {
+    if (
+      y < slotElementRect.y + slotElementRect.height / 2 &&
+      slotElement.previousElementSibling
+    ) {
+      slotElement = slotElement.previousElementSibling as HTMLElement;
+    }
+  }
+
+  return slotElement;
 }
 
 export function getSlotFromIndex(index: number) {

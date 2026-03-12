@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import type { Day, Event } from "~/types";
+import type { Day } from "~/types";
 
-const { day, events } = defineProps<{ day: Day; events: Event[] }>();
+const { day } = defineProps<{ day: Day }>();
 
-const dayEvents = computed(() => events.filter((e) => e.day === day));
+const { events } = useEvents();
+
+const dayEvents = computed(() => events.value.filter((e) => e.day === day));
 
 const dayTime = computed(() =>
   dayEvents.value.reduce((sum, e) => sum + getEventTime(e), 0),

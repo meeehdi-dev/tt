@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 
-const { day, dayHeight: weekHeight } = defineProps<{
+const { day, dayHeight } = defineProps<{
   day: number;
   dayHeight: number;
 }>();
@@ -22,7 +22,7 @@ const currentDay = now.value.day();
 const currentTime = computed(() => now.value.hour() * 60 + now.value.minute());
 
 const currentDayNowIndicatorTranslate = computed(() =>
-  Math.round(((currentTime.value - 8 * 60) / (12 * 60)) * weekHeight),
+  Math.round(((currentTime.value - 8 * 60) / (12 * 60)) * dayHeight),
 );
 
 const timeLabel = computed(() => `${now.value.format("HH:mm:ss")}`);
