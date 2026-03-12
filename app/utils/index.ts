@@ -28,10 +28,6 @@ export const availableSlots: EventSlot[] = Array(24)
   }));
 
 export function getSlotFromElement(target: HTMLElement) {
-  if (!target.dataset.slot) {
-    return;
-  }
-
   return availableSlots.find((s) => s.index === Number(target.dataset.slot));
 }
 
@@ -46,6 +42,7 @@ export function getSlotElementFromElement(target: HTMLElement, anchor: Anchor) {
   if (!slotElement) {
     return;
   }
+
   const slotElementRect = slotElement.getBoundingClientRect();
   if (anchor === "top") {
     if (

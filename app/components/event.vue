@@ -43,14 +43,10 @@ useLongPress({
     }
 
     const slotElement = getSlotElementFromElement(eventRef.value!, "top");
-    if (!slotElement) {
-      return;
-    }
 
-    const slot = getSlotFromElement(slotElement);
-    if (!slot) {
-      return;
-    }
+    const slot = slotElement
+      ? getSlotFromElement(slotElement)!
+      : getSlotFromIndex(0);
 
     moveEvent(event.id, slot);
 
