@@ -53,7 +53,7 @@ If/when `vitest` is introduced to the repository, tests should be written in a c
 ### Vue Composition API
 
 1. **Script Setup:** Only write Vue code using `<script setup lang="ts">`. The Options API is strictly prohibited.
-2. **Auto-imports:** Rely on Nuxt's auto-import feature. Do not add manual import statements for Vue reactivity APIs (`ref`, `computed`, `watch`, `onMounted`) or Nuxt helpers (`useHead`, `useRouter`, `useFetch`).
+2. **Auto-imports:** Rely on Nuxt's auto-import feature. Do not add manual import statements for Vue reactivity APIs (`ref`, `computed`, `watch`, `onMounted`) or Nuxt helpers (`useHead`, `useRouter`, `useFetch`). **Never import from `"#imports"`** as all these variables and internal composables are automatically available in the global scope.
 3. **Props & Emits:** Use the type-based macro `defineProps<{ ... }>()`. Use `defineEmits<{ (e: 'event', payload: type): void }>()`.
 
 ### State Management & Data Fetching
