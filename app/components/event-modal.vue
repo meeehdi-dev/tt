@@ -31,24 +31,7 @@ function onSubmit(e: FormSubmitEvent<Schema>) {
   state.description = "";
 }
 
-const projects = ref<SelectMenuItem[]>([
-  {
-    label: "VO2",
-    value: "vo2",
-  },
-  {
-    label: "JDA",
-    value: "jda",
-  },
-  {
-    label: "Inside",
-    value: "ri",
-  },
-  {
-    label: "LVMHCOM",
-    value: "lvmhcom",
-  },
-]);
+const projects = ref<string[]>(["vo2", "jda", "ri", "lvmhcom"]);
 
 watch(
   () => event,
@@ -79,15 +62,20 @@ watch(
         @submit="onSubmit"
       >
         <UFormField label="Title" name="title">
-          <USelectMenu
+          <UInputMenu
             v-model="state.project"
-            value-key="value"
             :items="projects"
+            :trailing-icon="false"
             class="w-full"
+            placeholder="Your project name"
           />
         </UFormField>
         <UFormField label="Description" name="description">
-          <UTextarea v-model="state.description" class="w-full" />
+          <UTextarea
+            v-model="state.description"
+            class="w-full"
+            placeholder="Your description"
+          />
         </UFormField>
       </UForm>
     </template>
