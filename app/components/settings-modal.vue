@@ -60,7 +60,11 @@ function updateProjectLabel(index: number, label: string) {
   const project = localProjects.value[index];
   if (!project) return;
   project.label = label;
-  project.value = slugify(label, { lower: true, strict: true });
+  project.value = slugify(label, {
+    replacement: "_",
+    lower: true,
+    strict: true,
+  });
 }
 </script>
 
