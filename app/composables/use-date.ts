@@ -1,12 +1,15 @@
 import { createSharedComposable } from "@vueuse/core";
 import dayjs from "dayjs";
 import { StartOfWeekDay } from "~/types";
-
-const startOfWeekOffset = StartOfWeekDay.Monday;
+import { getDays } from "~/utils";
 
 function useDate() {
-  const currentWeek = useState("current", () => dayjs());
-  const now = useState("now", () => dayjs());
+  const startOfWeekDay = useCookie<StartOfWeekDay>("startOfWeekDay", {
+    default: () => StartOfWeekDay.Monday,
+  });
+
+  const currentWeek = ref(dayjs());
+  const now = ref(dayjs());
 
   let nowTimeout = 0;
   onMounted(() => {
@@ -31,17 +34,21 @@ function useDate() {
   }
 
   const startOfWeek = computed(() =>
-    currentWeek.value.startOf("week").add(startOfWeekOffset, "day"),
+    currentWeek.value.startOf("week").add(startOfWeekDay.value, "day"),
   );
   const endOfWeek = computed(() =>
-    currentWeek.value.endOf("week").add(startOfWeekOffset, "day"),
+    currentWeek.value.endOf("week").add(startOfWeekDay.value, "day"),
   );
+
+  const days = computed(() => getDays(startOfWeekDay.value));
 
   return {
     currentWeek,
     now,
+    startOfWeekDay,
     startOfWeek,
     endOfWeek,
+    days,
 
     resetCurrentWeek,
     setPreviousWeek,

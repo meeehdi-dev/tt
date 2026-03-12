@@ -9,6 +9,8 @@ const weekRef = useTemplateRef("week");
 
 const { height: weekHeight } = useElementSize(weekRef);
 
+const { days } = useDate();
+
 const { events, currentEvent, onSlotHover, addEvent, createEvent } =
   useEvents();
 

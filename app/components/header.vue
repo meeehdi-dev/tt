@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const { currentWeek, now, resetCurrentWeek } = useDate();
 const { signOut } = useAuth();
+
+const isSettingsModalOpen = ref(false);
 </script>
 
 <template>
@@ -19,7 +21,13 @@ const { signOut } = useAuth();
       <WeekIndicator />
     </div>
     <div class="mr-2 flex items-center justify-end gap-2">
-      <UButton icon="lucide:cog" color="secondary" variant="soft" size="sm" />
+      <UButton
+        icon="lucide:cog"
+        color="secondary"
+        variant="soft"
+        size="sm"
+        @click="isSettingsModalOpen = true"
+      />
       <UPopover :content="{ side: 'bottom' }">
         <UButton icon="lucide:log-out" variant="soft" color="error" size="sm" />
         <template #content>
@@ -42,5 +50,7 @@ const { signOut } = useAuth();
         rel="noopener noreferrer"
       />
     </div>
+
+    <SettingsModal v-model="isSettingsModalOpen" />
   </div>
 </template>

@@ -1,19 +1,14 @@
-import {
-  StartOfWeekDay,
-  type Event,
-  type EventSlot,
-  type TimeSlot,
-} from "~/types";
+import type { StartOfWeekDay, Event, EventSlot, TimeSlot } from "~/types";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 
 dayjs.extend(isoWeek);
 
-const startOfWeekOffset = StartOfWeekDay.Monday;
-
-export const days = Array(7)
-  .fill(undefined)
-  .map((_, i) => (i + startOfWeekOffset + 7) % 7);
+export function getDays(startOfWeekOffset: StartOfWeekDay) {
+  return Array(7)
+    .fill(undefined)
+    .map((_, i) => (i + startOfWeekOffset + 7) % 7);
+}
 
 export const hours: TimeSlot[] = Array(12)
   .fill(undefined)
