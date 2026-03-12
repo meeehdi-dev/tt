@@ -9,9 +9,8 @@ enum State {
   GrabbingBottom,
 }
 
-const { event, slotHeight } = defineProps<{
+const { event } = defineProps<{
   event: Event;
-  slotHeight: number;
 }>();
 
 const eventRef = useTemplateRef("event");
@@ -60,7 +59,7 @@ function onGrabTop() {
   currentY.value = y.value;
   currentHeight.value = rect.height;
 
-  maxY.value = rect.height - slotHeight;
+  maxY.value = rect.height - getSlotHeight();
 
   state.value = State.GrabbingTop;
 }
@@ -113,6 +112,24 @@ function onUngrabBottom() {
 
 useEventListener("mouseup", onUngrabTop);
 useEventListener("mouseup", onUngrabBottom);
+
+const translate = computed(() => {
+  return state.value === State.GrabbingTop
+    ? `0 ${Math.min(maxY.value, y.value - currentY.value)}px`
+    : state.value === State.Dragging
+      ? `0 ${y.value - currentY.value}px`
+      : undefined;
+});
+
+const height = computed(() => {
+  const slotHeight = getSlotHeight();
+
+  return state.value === State.GrabbingTop
+    ? `${Math.max(slotHeight, currentHeight.value + currentY.value - y.value)}px`
+    : state.value === State.GrabbingBottom
+      ? `${Math.max(slotHeight, currentHeight.value + y.value - currentY.value)}px`
+      : undefined;
+});
 </script>
 
 <template>
@@ -126,18 +143,8 @@ useEventListener("mouseup", onUngrabBottom);
     :style="{
       '--row-start': event.start.index + 1,
       '--row-span': event.end.index + 1 - event.start.index,
-      translate:
-        state === State.GrabbingTop
-          ? `0 ${Math.min(maxY, y - currentY)}px`
-          : state === State.Dragging
-            ? `0 ${y - currentY}px`
-            : undefined,
-      height:
-        state === State.GrabbingTop
-          ? `${Math.max(slotHeight, currentHeight + currentY - y)}px`
-          : state === State.GrabbingBottom
-            ? `${Math.max(slotHeight, currentHeight + y - currentY)}px`
-            : undefined,
+      translate,
+      height,
     }"
   >
     <div

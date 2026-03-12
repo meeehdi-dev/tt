@@ -78,3 +78,12 @@ export function getTimeLabel(time: number) {
 export function getEventTime(event: Event) {
   return event.end.index - event.start.index + 1;
 }
+
+export function getSlotHeight() {
+  const el = document.getElementById("slot-0-0")!;
+  const computedStyle = getComputedStyle(el);
+  return (
+    el.getBoundingClientRect().height -
+    Number(computedStyle.borderTopWidth.slice(0, -2)) * 2 // NOTE: ignore borders
+  );
+}

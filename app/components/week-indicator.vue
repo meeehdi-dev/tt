@@ -1,20 +1,8 @@
 <script setup lang="ts">
 import type { Dayjs } from "dayjs";
-import { StartOfWeekDay } from "~/types";
 
-// TODO: settings
-const startOfWeekOffset = shallowRef(StartOfWeekDay.Monday);
-
-const { date } = defineProps<{ date: Dayjs }>();
-
-const emit = defineEmits<{ previous: []; next: [] }>();
-
-const startOfWeek = computed(() =>
-  date.startOf("week").add(startOfWeekOffset.value, "day"),
-);
-const endOfWeek = computed(() =>
-  date.endOf("week").add(startOfWeekOffset.value, "day"),
-);
+const { currentWeek, startOfWeek, endOfWeek, setPreviousWeek, setNextWeek } =
+  useDate();
 
 function getWeekLabel(date: Dayjs) {
   return date.toDate().toLocaleDateString(undefined, {
@@ -30,10 +18,10 @@ function getWeekLabel(date: Dayjs) {
       icon="lucide:chevron-left"
       variant="soft"
       size="sm"
-      @click="emit('previous')"
+      @click="setPreviousWeek()"
     />
     <span class="text-muted text-sm">
-      Week {{ date.isoWeek() }} |
+      Week {{ currentWeek.isoWeek() }} |
       {{ getWeekLabel(startOfWeek) }}
       -
       {{ getWeekLabel(endOfWeek) }}
@@ -42,7 +30,7 @@ function getWeekLabel(date: Dayjs) {
       icon="lucide:chevron-right"
       variant="soft"
       size="sm"
-      @click="emit('next')"
+      @click="setNextWeek"
     />
   </div>
 </template>
