@@ -74,8 +74,8 @@ useMousePressed({
           </div>
         </div>
       </div>
-      <div class="flex w-full gap-2 px-1 pb-1">
-        <div class="-translate-y-4">20:00</div>
+      <div class="flex min-h-8 w-full gap-2 px-1 pb-1">
+        <div class="-translate-y-4 text-xs">20:00</div>
         <div class="grid w-full grid-cols-7 gap-1">
           <DayProgress
             v-for="day in days"
