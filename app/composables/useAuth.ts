@@ -1,10 +1,7 @@
-import { useCookie, navigateTo } from "#imports";
-
 export function useAuth() {
   const token = useCookie<string | null>("fake_jwt");
 
-  const signIn = async () => {
-    // In the future, this will be replaced by better-auth
+  const signIn = async (_email: string, _password: string) => {
     token.value = "dummy-jwt-token-xyz-123";
     await navigateTo("/");
   };

@@ -26,16 +26,14 @@ const fields: AuthFormField[] = [
 ];
 
 const schema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
 });
 
 type Schema = z.output<typeof schema>;
 
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
-  // Simulating an API call/authentication delay
-  console.log("Submitting login for:", payload.data.email);
-  await signIn();
+  await signIn(payload.data.email, payload.data.password);
 }
 </script>
 
