@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { currentWeek, now, resetCurrentWeek } = useDate();
+const { signOut } = useAuth();
 </script>
 
 <template>
@@ -22,7 +23,11 @@ const { currentWeek, now, resetCurrentWeek } = useDate();
       <UPopover :content="{ side: 'bottom' }">
         <UButton icon="lucide:log-out" variant="soft" color="error" size="sm" />
         <template #content>
-          <UButton icon="lucide:log-out" variant="soft" color="error"
+          <UButton
+            icon="lucide:log-out"
+            variant="soft"
+            color="error"
+            @click="signOut"
             >Log out</UButton
           >
         </template>

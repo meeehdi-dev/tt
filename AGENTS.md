@@ -18,6 +18,7 @@ This project follows the Nuxt 4 directory structure, meaning all client-side Vue
 - `app/components/`: Reusable Vue UI components
 - `app/composables/`: Reusable stateful functions (`useName.ts`)
 - `app/pages/`: File-based routing views
+- `app/middleware/`: Route middleware for navigation guards
 - `app/utils/`: Stateless helper functions
 - `app/types/`: Centralized TypeScript interfaces
 - `server/api/`: Nitro-powered API endpoints (if applicable)
@@ -59,6 +60,11 @@ If/when `vitest` is introduced to the repository, tests should be written in a c
 
 1. **Global State:** For reactive global state, define a composable using Nuxt's `useState<Type>('key', () => init)`.
 2. **Data Fetching:** Inside Vue components, rely exclusively on `useAsyncData` or `useFetch` to prevent hydration mismatches. Use `$fetch` for programmatic triggers (e.g., clicking a "Submit" button or inside `server/api/`).
+
+### Authentication & Routing
+
+1. **Route Guards:** Use Nuxt route middleware (`app/middleware/`) for protecting routes. Global middleware (e.g., `auth.global.ts`) automatically applies to all navigations.
+2. **Auth State:** Rely on cookies (via Nuxt's `useCookie()`) rather than `localStorage` for authentication tokens. This prevents UI flashing and hydration mismatches during Server-Side Rendering (SSR). Currently, authentication is mocked via a `fake_jwt` cookie using the `useAuth` composable.
 
 ### Typing & Validation
 
