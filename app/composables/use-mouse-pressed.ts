@@ -1,5 +1,5 @@
-import { useEventListener } from "@vueuse/core";
 import type { ShallowRef } from "vue";
+import { useEventListener } from "@vueuse/core";
 
 interface useMousePressedProps {
   target: ShallowRef<HTMLElement | null>;

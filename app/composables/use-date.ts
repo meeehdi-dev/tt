@@ -1,7 +1,6 @@
+import { StartOfWeekDay } from "~/types";
 import { createSharedComposable } from "@vueuse/core";
 import dayjs from "dayjs";
-import { StartOfWeekDay } from "~/types";
-import { getDays } from "~/utils";
 
 function useDate() {
   const startOfWeekDay = useCookie<StartOfWeekDay>("startOfWeekDay", {

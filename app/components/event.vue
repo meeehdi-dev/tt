@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useEventListener } from "@vueuse/core";
 import type { Event } from "~/types";
+import { useEventListener } from "@vueuse/core";
 
 enum State {
   Idle,

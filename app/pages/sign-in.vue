@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as z from "zod";
-import type { FormSubmitEvent, AuthFormField } from "@nuxt/ui";
+import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
 
 useSeoMeta({
   title: "Sign In",

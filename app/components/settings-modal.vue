@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { StartOfWeekDay } from "~/types";
 import type { Project } from "~/composables/useProjects";
+import { StartOfWeekDay } from "~/types";
 
 import slugify from "slugify";
 

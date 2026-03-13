@@ -1,4 +1,4 @@
-import type { StartOfWeekDay, Event, EventSlot, TimeSlot } from "~/types";
+import type { Event, EventSlot, StartOfWeekDay, TimeSlot } from "~/types";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 

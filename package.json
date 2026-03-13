@@ -10,7 +10,9 @@
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",
     "lint": "eslint",
-    "fmt": "prettier --check ."
+    "lint:fix": "eslint --fix",
+    "fmt": "prettier --check .",
+    "fmt:fix": "prettier --write ."
   },
   "dependencies": {
     "@nuxt/eslint": "1.15.2",

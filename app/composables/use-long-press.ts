@@ -1,5 +1,5 @@
-import { useEventListener } from "@vueuse/core";
 import type { ShallowRef } from "vue";
+import { useEventListener } from "@vueuse/core";
 
 interface UseLongPressProps {
   target: ShallowRef<HTMLElement | null>;
