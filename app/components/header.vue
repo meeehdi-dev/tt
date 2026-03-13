@@ -10,6 +10,7 @@ const isSettingsModalOpen = ref(false);
 
 const items = ref<DropdownMenuItem[]>([
   {
+    icon: "lucide:cog",
     label: "Settings",
     color: "secondary",
     onSelect: () => {
@@ -17,6 +18,7 @@ const items = ref<DropdownMenuItem[]>([
     },
   },
   {
+    icon: "lucide:log-out",
     label: "Sign out",
     color: "error",
     onSelect: async () => {
