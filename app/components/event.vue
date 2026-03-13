@@ -15,7 +15,7 @@ const { event } = defineProps<{
 
 const eventRef = useTemplateRef("event");
 
-const { y } = useMouse();
+const { x, y } = useMouse();
 
 const { selectEvent, moveEvent, removeEvent, moveEventStart, moveEventBottom } =
   useEvents();
@@ -23,6 +23,7 @@ const { selectEvent, moveEvent, removeEvent, moveEventStart, moveEventBottom } =
 const { getProjectLabel } = useProjects();
 
 const state = shallowRef(State.Idle);
+const currentX = shallowRef(0);
 const currentY = shallowRef(0);
 const maxY = shallowRef(0);
 const currentHeight = shallowRef(0);
@@ -34,6 +35,7 @@ useLongPress({
       return;
     }
 
+    currentX.value = x.value;
     currentY.value = y.value;
 
     state.value = State.Dragging;
@@ -45,11 +47,16 @@ useLongPress({
 
     const slotElement = getSlotElementFromElement(eventRef.value!, "top");
 
+    let day = event.day;
+    if (slotElement) {
+      day = Number(slotElement.dataset.day);
+    }
+
     const slot = slotElement
       ? getSlotFromElement(slotElement)!
       : getSlotFromIndex(0);
 
-    moveEvent(event.id, slot);
+    moveEvent(event.id, slot, day);
 
     state.value = State.Idle;
   },
@@ -117,9 +124,9 @@ useEventListener("mouseup", onUngrabBottom);
 
 const translate = computed(() => {
   return state.value === State.GrabbingTop
-    ? `0 ${Math.min(maxY.value, y.value - currentY.value)}px`
+    ? `0px ${Math.min(maxY.value, y.value - currentY.value)}px`
     : state.value === State.Dragging
-      ? `0 ${y.value - currentY.value}px`
+      ? `${x.value - currentX.value}px ${y.value - currentY.value}px`
       : undefined;
 });
 

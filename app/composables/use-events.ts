@@ -57,10 +57,14 @@ export default function useEvents() {
     events.value = events.value.filter((e) => e.id !== eventId);
   }
 
-  function moveEvent(eventId: string, slot: Slot) {
+  function moveEvent(eventId: string, slot: Slot, day?: number) {
     const event = events.value.find((e) => e.id === eventId);
     if (!event) {
       return;
+    }
+
+    if (day) {
+      event.day = day;
     }
 
     const eventLength = event.end.index - event.start.index;
