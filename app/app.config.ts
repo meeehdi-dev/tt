@@ -4,10 +4,5 @@ export default defineAppConfig({
       neutral: "zinc",
       primary: "amber",
     },
-    button: {
-      slots: {
-        base: "cursor-pointer",
-      },
-    },
   },
 });

@@ -1,11 +1,13 @@
-export default defineNuxtRouteMiddleware((to) => {
-  const { token } = useAuth();
+import { authClient } from "~/lib/auth";
 
-  if (!token.value && to.path !== "/sign-in") {
+export default defineNuxtRouteMiddleware(async (to) => {
+  const { data: session } = await authClient.useSession(useFetch);
+
+  if (!session.value && to.path !== "/sign-in") {
     return navigateTo("/sign-in");
   }
 
-  if (token.value && to.path === "/sign-in") {
+  if (session.value && to.path === "/sign-in") {
     return navigateTo("/");
   }
 });

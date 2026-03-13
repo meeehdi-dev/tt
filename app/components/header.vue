@@ -1,8 +1,30 @@
 <script setup lang="ts">
+import type { DropdownMenuItem } from "@nuxt/ui";
+import { authClient } from "~/lib/auth";
+
+const session = authClient.useSession();
+
 const { currentWeek, now, resetCurrentWeek } = useDate();
-const { signOut } = useAuth();
 
 const isSettingsModalOpen = ref(false);
+
+const items = ref<DropdownMenuItem[]>([
+  {
+    label: "Settings",
+    color: "secondary",
+    onSelect: () => {
+      isSettingsModalOpen.value = true;
+    },
+  },
+  {
+    label: "Sign out",
+    color: "error",
+    onSelect: () => {
+      void authClient.signOut();
+      void navigateTo("/sign-in");
+    },
+  },
+]);
 </script>
 
 <template>
@@ -21,25 +43,30 @@ const isSettingsModalOpen = ref(false);
       <WeekIndicator />
     </div>
     <div class="mr-2 flex items-center justify-end gap-2">
-      <UButton
-        icon="lucide:cog"
-        color="secondary"
-        variant="soft"
-        size="sm"
-        @click="isSettingsModalOpen = true"
-      />
-      <UPopover :content="{ side: 'bottom' }">
-        <UButton icon="lucide:log-out" variant="soft" color="error" size="sm" />
-        <template #content>
-          <UButton
-            icon="lucide:log-out"
-            variant="soft"
-            color="error"
-            @click="signOut"
-            >Log out</UButton
-          >
-        </template>
-      </UPopover>
+      <UDropdownMenu :items="items">
+        <UButton
+          color="neutral"
+          variant="soft"
+          size="sm"
+          :avatar="
+            session.isPending
+              ? undefined
+              : session.data!.user.image
+                ? { src: session.data!.user.image }
+                : undefined
+          "
+          :icon="
+            session.isPending
+              ? 'lucide:loader-circle'
+              : session.data!.user.image
+                ? undefined
+                : 'lucide:user'
+          "
+          :label="session.isPending ? undefined : session.data?.user.name"
+          :loading="session.isPending"
+        />
+      </UDropdownMenu>
+
       <UButton
         icon="lucide:github"
         color="neutral"

@@ -4,3 +4,7 @@
 @theme {
   --font-sans: "Funnel Display", sans-serif;
 }
+
+button {
+  @apply pointer-fine:cursor-pointer;
+}
