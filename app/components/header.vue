@@ -19,8 +19,8 @@ const items = ref<DropdownMenuItem[]>([
   {
     label: "Sign out",
     color: "error",
-    onSelect: () => {
-      void authClient.signOut();
+    onSelect: async () => {
+      await authClient.signOut();
       void navigateTo("/sign-in");
     },
   },
