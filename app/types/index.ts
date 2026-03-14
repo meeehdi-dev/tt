@@ -32,7 +32,6 @@ export interface Event {
   day: Day;
   start: EventSlot;
   end: EventSlot;
-  source: EventSlot;
 
   project: string;
   description: string;

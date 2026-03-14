@@ -5,10 +5,11 @@ export default function useEvents() {
 
   const events = useState<Event[]>("events", () => []);
   const currentEvent = useState<Event | undefined>("currentEvent");
+  const currentEventOrigin = useState<Slot | undefined>("currentEventOrigin");
   const selectedEvent = useState<Event | undefined>("selectedEvent");
 
   function onSlotHover(e: MouseEvent) {
-    if (!currentEvent.value) {
+    if (!currentEvent.value || !currentEventOrigin.value) {
       return;
     }
 
@@ -19,15 +20,15 @@ export default function useEvents() {
       return;
     }
 
-    if (slot.index === currentEvent.value.source.index) {
-      currentEvent.value.start = currentEvent.value.source;
-      currentEvent.value.end = currentEvent.value.source;
-    } else if (slot.index < currentEvent.value.source.index) {
+    if (slot.index === currentEventOrigin.value.index) {
+      currentEvent.value.start = currentEventOrigin.value;
+      currentEvent.value.end = currentEventOrigin.value;
+    } else if (slot.index < currentEventOrigin.value.index) {
       currentEvent.value.start = slot;
-      currentEvent.value.end = currentEvent.value.source;
+      currentEvent.value.end = currentEventOrigin.value;
     } else {
       currentEvent.value.end = slot;
-      currentEvent.value.start = currentEvent.value.source;
+      currentEvent.value.start = currentEventOrigin.value;
     }
   }
 
@@ -51,6 +52,7 @@ export default function useEvents() {
     }
 
     currentEvent.value = undefined;
+    currentEventOrigin.value = undefined;
   }
 
   function removeEvent(eventId: string) {
@@ -100,10 +102,10 @@ export default function useEvents() {
       day,
       start: slot,
       end: slot,
-      source: slot,
       project: "",
       description: "",
     };
+    currentEventOrigin.value = slot;
   }
 
   function saveEvent(
