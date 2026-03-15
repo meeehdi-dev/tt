@@ -6,10 +6,13 @@ import slugify from "slugify";
 
 const isOpen = defineModel<boolean>();
 
-const { startOfWeekDay } = useDate();
+const { startOfWeekDay, startOfDay, endOfDay, workDayDuration } = useDate();
 const { projects } = useProjects();
 
 const localStartOfWeekDay = ref<StartOfWeekDay>(startOfWeekDay.value);
+const localStartOfDay = ref<number>(startOfDay.value);
+const localEndOfDay = ref<number>(endOfDay.value);
+const localWorkDayDuration = ref<number>(workDayDuration.value / 60);
 const localProjects = ref<Project[]>([]);
 const inputRefs = ref<Array<{ inputRef: HTMLInputElement } | null>>([]);
 
@@ -19,14 +22,25 @@ const startOfWeekOptions = [
   { label: "Monday", value: StartOfWeekDay.Monday },
 ];
 
+const timeOptions = Array.from({ length: 25 }, (_, i) => ({
+  label: `${i.toString().padStart(2, "0")}:00`,
+  value: i * 60,
+}));
+
 function onCancel() {
   localStartOfWeekDay.value = startOfWeekDay.value;
+  localStartOfDay.value = startOfDay.value;
+  localEndOfDay.value = endOfDay.value;
+  localWorkDayDuration.value = workDayDuration.value / 60;
   localProjects.value = JSON.parse(JSON.stringify(projects.value));
   isOpen.value = false;
 }
 
 function onSave() {
   startOfWeekDay.value = localStartOfWeekDay.value;
+  startOfDay.value = localStartOfDay.value;
+  endOfDay.value = localEndOfDay.value;
+  workDayDuration.value = localWorkDayDuration.value * 60;
   // Filter out any projects with empty values just in case
   projects.value = localProjects.value.filter((p) => p.value.trim() !== "");
   isOpen.value = false;
@@ -35,6 +49,9 @@ function onSave() {
 watch(isOpen, (open) => {
   if (open) {
     localStartOfWeekDay.value = startOfWeekDay.value;
+    localStartOfDay.value = startOfDay.value;
+    localEndOfDay.value = endOfDay.value;
+    localWorkDayDuration.value = workDayDuration.value / 60;
     localProjects.value = JSON.parse(JSON.stringify(projects.value));
   }
 });
@@ -76,12 +93,38 @@ function updateProjectLabel(index: number, label: string) {
     :close="{ onClick: onCancel }"
   >
     <template #body>
-      <div class="space-y-4">
+      <UForm class="space-y-4">
         <UFormField label="Start of the week">
           <USelect
             v-model="localStartOfWeekDay"
             :items="startOfWeekOptions"
             class="w-full"
+          />
+        </UFormField>
+
+        <UFormField
+          label="Start/End time"
+          :ui="{ container: 'flex gap-2' }"
+          :error="localEndOfDay <= localStartOfDay"
+        >
+          <USelect
+            v-model="localStartOfDay"
+            :items="timeOptions.slice(0, -1)"
+            class="w-full"
+          />
+          <USelect
+            v-model="localEndOfDay"
+            :items="timeOptions.slice(1)"
+            class="w-full"
+          />
+        </UFormField>
+
+        <UFormField label="Work day duration">
+          <UInputNumber
+            v-model="localWorkDayDuration"
+            class="w-full"
+            :min="1"
+            :max="24"
           />
         </UFormField>
 
@@ -124,7 +167,7 @@ function updateProjectLabel(index: number, label: string) {
             @click="addProject"
           />
         </div>
-      </div>
+      </UForm>
     </template>
 
     <template #footer>

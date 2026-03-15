@@ -1,4 +1,4 @@
-import type { Event, EventSlot, StartOfWeekDay, TimeSlot } from "~/types";
+import type { Event, StartOfWeekDay } from "~/types";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 
@@ -10,21 +10,13 @@ export function getDays(startOfWeekOffset: StartOfWeekDay) {
     .map((_, i) => (i + startOfWeekOffset + 7) % 7);
 }
 
-export const hours: TimeSlot[] = Array(12)
+export const hours: number[] = Array(24)
   .fill(undefined)
-  .map((_, i) => ({ index: i, hour: i + 8, minute: 0 }));
+  .map((_, i) => i * 60);
 
-export const availableSlots: EventSlot[] = Array(24)
+export const availableSlots: number[] = Array(48)
   .fill(undefined)
-  .map((_, i) => ({
-    index: i,
-    hour: Math.floor(i / 2 + 8),
-    minute: i % 2 === 0 ? 0 : 30,
-  }));
-
-export function getSlotFromElement(target: HTMLElement) {
-  return availableSlots.find((s) => s.index === Number(target.dataset.slot));
-}
+  .map((_, i) => i * 30);
 
 type Anchor = "top" | "bottom";
 export function getSlotElementFromElement(target: HTMLElement, anchor: Anchor) {
@@ -58,12 +50,8 @@ export function getSlotElementFromElement(target: HTMLElement, anchor: Anchor) {
   return slotElement;
 }
 
-export function getSlotFromIndex(index: number) {
-  return availableSlots.find((s) => s.index === index)!;
-}
-
 export function getTimeLabel(time: number) {
-  const hours = (time / 2).toFixed(1);
+  const hours = (time / 60).toFixed(1);
   if (hours.endsWith(".0")) {
     return hours.slice(0, -2);
   }
@@ -71,14 +59,17 @@ export function getTimeLabel(time: number) {
 }
 
 export function getEventTime(event: Event) {
-  return event.end.index - event.start.index + 1;
+  return event.end - event.start;
 }
 
 export function getSlotHeight() {
-  const el = document.getElementById("slot-0-0")!;
-  const computedStyle = getComputedStyle(el);
+  const slot = document.querySelector<HTMLElement>("[data-group='slot']")!;
+  if (!slot) {
+    return 0;
+  }
+  const computedStyle = getComputedStyle(slot);
   return (
-    el.getBoundingClientRect().height -
+    slot.getBoundingClientRect().height -
     Number(computedStyle.borderTopWidth.slice(0, -2)) * 2 // NOTE: ignore borders
   );
 }

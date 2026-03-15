@@ -13,6 +13,8 @@ const { event } = defineProps<{
   event: Event;
 }>();
 
+const { startOfDay } = useDate();
+
 const eventRef = useTemplateRef("event");
 
 const { x, y } = useMouse();
@@ -52,9 +54,7 @@ useLongPress({
       day = Number(slotElement.dataset.day);
     }
 
-    const slot = slotElement
-      ? getSlotFromElement(slotElement)!
-      : getSlotFromIndex(0);
+    const slot = slotElement ? Number(slotElement.dataset.minute) : 0;
 
     moveEvent(event.id, slot, day);
 
@@ -82,10 +82,7 @@ function onUngrabTop() {
     return;
   }
 
-  const slot = getSlotFromElement(slotElement);
-  if (!slot) {
-    return;
-  }
+  const slot = Number(slotElement.dataset.minute);
 
   moveEventStart(event.id, slot);
 
@@ -109,10 +106,7 @@ function onUngrabBottom() {
     return;
   }
 
-  const slot = getSlotFromElement(slotElement);
-  if (!slot) {
-    return;
-  }
+  const slot = Number(slotElement.dataset.minute);
 
   moveEventBottom(event.id, slot);
 
@@ -150,11 +144,13 @@ const height = computed(() => {
         state === State.Dragging,
     }"
     :style="{
-      '--row-start': event.start.index + 1,
-      '--row-span': event.end.index + 1 - event.start.index,
+      '--row-start': (event.start - startOfDay) / 30 + 1,
+      '--row-span': (event.end - event.start) / 30,
       translate,
       height,
     }"
+    :data-start="event.start"
+    :data-end="event.end"
   >
     <div
       class="hover:to-primary/50 absolute top-0 h-2 w-full cursor-n-resize rounded-t-sm bg-linear-to-t from-transparent to-transparent transition-colors"

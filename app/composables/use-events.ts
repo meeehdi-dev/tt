@@ -1,12 +1,14 @@
-import type { Event, Slot } from "~/types";
+import type { Event } from "~/types";
 
 export default function useEvents() {
   const toast = useToast();
 
   const events = useState<Event[]>("events", () => []);
   const currentEvent = useState<Event | undefined>("currentEvent");
-  const currentEventOrigin = useState<Slot | undefined>("currentEventOrigin");
+  const currentEventOrigin = useState<number | undefined>("currentEventOrigin");
   const selectedEvent = useState<Event | undefined>("selectedEvent");
+
+  const { endOfDay } = useDate();
 
   function onSlotHover(e: MouseEvent) {
     if (!currentEvent.value || !currentEventOrigin.value) {
@@ -15,19 +17,16 @@ export default function useEvents() {
 
     const target = e.target as HTMLElement;
 
-    const slot = getSlotFromElement(target);
-    if (!slot) {
-      return;
-    }
+    const slot = Number(target.dataset.minute);
 
-    if (slot.index === currentEventOrigin.value.index) {
+    if (slot === currentEventOrigin.value) {
       currentEvent.value.start = currentEventOrigin.value;
-      currentEvent.value.end = currentEventOrigin.value;
-    } else if (slot.index < currentEventOrigin.value.index) {
+      currentEvent.value.end = currentEventOrigin.value + 30;
+    } else if (slot < currentEventOrigin.value) {
       currentEvent.value.start = slot;
-      currentEvent.value.end = currentEventOrigin.value;
+      currentEvent.value.end = currentEventOrigin.value + 30;
     } else {
-      currentEvent.value.end = slot;
+      currentEvent.value.end = slot + 30;
       currentEvent.value.start = currentEventOrigin.value;
     }
   }
@@ -37,8 +36,8 @@ export default function useEvents() {
       events.value.filter(
         (e) =>
           e.day === currentEvent.value!.day &&
-          e.start.index >= currentEvent.value!.start.index &&
-          e.end.index <= currentEvent.value!.end.index,
+          e.start >= currentEvent.value!.start &&
+          e.end <= currentEvent.value!.end,
       ).length > 0
     ) {
       toast.add({
@@ -59,7 +58,7 @@ export default function useEvents() {
     events.value = events.value.filter((e) => e.id !== eventId);
   }
 
-  function moveEvent(eventId: string, slot: Slot, day?: number) {
+  function moveEvent(eventId: string, minute: number, day?: number) {
     const event = events.value.find((e) => e.id === eventId);
     if (!event) {
       return;
@@ -69,43 +68,43 @@ export default function useEvents() {
       event.day = day;
     }
 
-    const eventLength = event.end.index - event.start.index;
+    const eventLength = event.end - event.start;
 
-    const diff = event.start.index - slot.index;
-    const endIndex = event.end.index - diff;
+    const diff = event.start - minute;
+    const endMinute = event.end - diff;
 
-    if (endIndex > 23) {
-      event.start = getSlotFromIndex(23 - eventLength);
-      event.end = getSlotFromIndex(23);
+    if (endMinute > endOfDay.value) {
+      event.start = endOfDay.value - eventLength;
+      event.end = endOfDay.value;
       return;
     }
 
-    event.start = slot;
-    event.end = getSlotFromIndex(endIndex);
+    event.start = minute;
+    event.end = endMinute;
   }
 
-  function moveEventStart(eventId: string, slot: Slot) {
+  function moveEventStart(eventId: string, minute: number) {
     const event = events.value.find((e) => e.id === eventId)!;
 
-    event.start = slot;
+    event.start = minute;
   }
 
-  function moveEventBottom(eventId: string, slot: Slot) {
+  function moveEventBottom(eventId: string, minute: number) {
     const event = events.value.find((e) => e.id === eventId)!;
 
-    event.end = slot;
+    event.end = minute + 30;
   }
 
-  function createEvent(day: number, slot: Slot) {
+  function createEvent(day: number, minute: number) {
     currentEvent.value = {
       id: crypto.randomUUID(),
       day,
-      start: slot,
-      end: slot,
+      start: minute,
+      end: minute + 30,
       project: "",
       description: "",
     };
-    currentEventOrigin.value = slot;
+    currentEventOrigin.value = minute;
   }
 
   function saveEvent(

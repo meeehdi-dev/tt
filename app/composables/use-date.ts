@@ -6,18 +6,27 @@ function useDate() {
   const startOfWeekDay = useCookie<StartOfWeekDay>("startOfWeekDay", {
     default: () => StartOfWeekDay.Monday,
   });
+  const startOfDay = useCookie<number>("startOfDay", {
+    default: () => 8 * 60,
+  });
+  const endOfDay = useCookie<number>("endOfDay", {
+    default: () => 20 * 60,
+  });
+  const workDayDuration = useCookie<number>("workDayDuration", {
+    default: () => 8 * 60,
+  });
 
   const currentWeek = ref(dayjs());
   const now = ref(dayjs());
 
   let nowTimeout = 0;
   onMounted(() => {
-    nowTimeout = setInterval(() => {
+    nowTimeout = window.setInterval(() => {
       now.value = dayjs();
     }, 1000);
   });
   onUnmounted(() => {
-    clearTimeout(nowTimeout);
+    clearInterval(nowTimeout);
   });
 
   function resetCurrentWeek() {
@@ -45,6 +54,9 @@ function useDate() {
     currentWeek,
     now,
     startOfWeekDay,
+    startOfDay,
+    endOfDay,
+    workDayDuration,
     startOfWeek,
     endOfWeek,
     days,

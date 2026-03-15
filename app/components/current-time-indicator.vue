@@ -4,18 +4,20 @@ const { day, dayHeight } = defineProps<{
   dayHeight: number;
 }>();
 
-const { now } = useDate();
+const { now, startOfDay, endOfDay } = useDate();
 
 const currentTime = computed(() => now.value.hour() * 60 + now.value.minute());
 
 const currentDayNowIndicatorTranslate = computed(() =>
-  Math.round(((currentTime.value - 8 * 60) / (12 * 60)) * dayHeight),
+  Math.round((currentTime.value / (24 * 60)) * dayHeight),
 );
 </script>
 
 <template>
   <USeparator
-    v-if="day === now.day() && currentTime > 8 * 60 && currentTime < 20 * 60"
+    v-if="
+      day === now.day() && currentTime > startOfDay && currentTime < endOfDay
+    "
     color="primary"
     decorative
     class="pointer-events-none absolute z-10 translate-y-(--translate-y)"

@@ -1,16 +1,3 @@
-export interface Time {
-  hour: number;
-  minute: number;
-}
-
-export interface Slot {
-  index: number;
-}
-
-export interface TimeSlot extends Time, Slot {}
-
-export interface EventSlot extends Slot {}
-
 export enum Day {
   Sunday,
   Monday,
@@ -30,8 +17,8 @@ export enum StartOfWeekDay {
 export interface Event {
   id: string;
   day: Day;
-  start: EventSlot;
-  end: EventSlot;
+  start: number;
+  end: number;
 
   project: string;
   description: string;

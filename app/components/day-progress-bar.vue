@@ -1,11 +1,18 @@
 <script setup lang="ts">
 const { time } = defineProps<{ time: number }>();
 
-const dayProgress = computed(
-  () => (time > 16 ? (24 - time) / 8 : time / 16) * 100,
+const { workDayDuration, startOfDay, endOfDay } = useDate();
+
+const dayProgress = computed(() =>
+  time <= workDayDuration.value ? (time / workDayDuration.value) * 100 : 100,
 );
-const overtimeProgress = computed(
-  () => (time > 16 ? (time - 16) / 8 : 0) * 100,
+
+const overtimeProgress = computed(() =>
+  time > workDayDuration.value
+    ? ((time - workDayDuration.value) /
+        (endOfDay.value - startOfDay.value - workDayDuration.value)) *
+      100
+    : 0,
 );
 </script>
 
@@ -13,7 +20,7 @@ const overtimeProgress = computed(
   <div
     class="h-full w-(--day-progress) bg-neutral-700 transition-[width]"
     :style="{
-      '--day-progress': dayProgress + '%',
+      '--day-progress': dayProgress - overtimeProgress + '%',
     }"
   />
   <div

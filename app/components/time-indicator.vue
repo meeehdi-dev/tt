@@ -1,11 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { startOfDay, endOfDay } = useDate();
+</script>
 
 <template>
   <div
-    v-for="time in hours.slice(0, 12)"
-    :key="time.index"
+    v-for="time in hours.slice(startOfDay / 60, endOfDay / 60)"
+    :key="time"
     class="-translate-y-2 text-xs"
   >
-    {{ time.hour.toString().padStart(2, "0") }}:00
+    {{
+      Math.floor(time / 60)
+        .toString()
+        .padStart(2, "0")
+    }}:00
   </div>
 </template>

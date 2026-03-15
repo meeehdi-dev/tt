@@ -47,7 +47,7 @@ export default function useLongPress({
     initialX.value = x.value;
     initialY.value = y.value;
 
-    longPressTimeout.value = setTimeout(() => {
+    longPressTimeout.value = window.setTimeout(() => {
       if (getDistanceFromInitial() > DISTANCE_THRESHOLD) {
         return;
       }
