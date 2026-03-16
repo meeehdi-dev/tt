@@ -9,7 +9,11 @@ const { now, startOfDay, endOfDay } = useDate();
 const currentTime = computed(() => now.value.hour() * 60 + now.value.minute());
 
 const currentDayNowIndicatorTranslate = computed(() =>
-  Math.round((currentTime.value / (24 * 60)) * dayHeight),
+  Math.round(
+    ((currentTime.value - startOfDay.value) /
+      (endOfDay.value - startOfDay.value)) *
+      dayHeight,
+  ),
 );
 </script>
 

@@ -8,20 +8,23 @@ const { selectedEvent, cancelEvent, saveEvent } = useEvents();
 
 const schema = z.object({
   project: z.string().min(1),
-  description: z.string(),
+  description: z.string().optional(),
 });
 type Schema = z.infer<typeof schema>;
 
 const state = reactive<Schema>({
   project: "",
-  description: "",
+  description: undefined,
 });
 
 function onSubmit(e: FormSubmitEvent<Schema>) {
-  saveEvent(selectedEvent.value!.id, e.data);
+  saveEvent(selectedEvent.value!.id, {
+    project: e.data.project,
+    description: e.data.description ?? null,
+  });
 
   state.project = "";
-  state.description = "";
+  state.description = undefined;
 }
 
 const { projects } = useProjects();
@@ -32,7 +35,7 @@ watch(selectedEvent, () => {
   }
 
   state.project = selectedEvent.value.project;
-  state.description = selectedEvent.value.description;
+  state.description = selectedEvent.value.description ?? undefined;
 });
 </script>
 
@@ -48,6 +51,7 @@ watch(selectedEvent, () => {
         ref="form"
         :schema="schema"
         :state="state"
+        :validate-on="['change', 'submit']"
         class="space-y-4"
         @submit="onSubmit"
       >

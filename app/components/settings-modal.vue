@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Project } from "~/composables/useProjects";
+import type { Project } from "~/composables/use-projects";
 import { StartOfWeekDay } from "~/types";
 
 import slugify from "slugify";
@@ -73,6 +73,8 @@ function removeProject(index: number) {
   localProjects.value.splice(index, 1);
 }
 
+const isValid = computed(() => localEndOfDay.value > localStartOfDay.value);
+
 function updateProjectLabel(index: number, label: string) {
   const project = localProjects.value[index];
   if (!project) return;
@@ -105,7 +107,7 @@ function updateProjectLabel(index: number, label: string) {
         <UFormField
           label="Start/End time"
           :ui="{ container: 'flex gap-2' }"
-          :error="localEndOfDay <= localStartOfDay"
+          :error="!isValid"
         >
           <USelect
             v-model="localStartOfDay"
@@ -174,7 +176,7 @@ function updateProjectLabel(index: number, label: string) {
       <UButton color="neutral" variant="soft" @click="onCancel">
         Cancel
       </UButton>
-      <UButton @click="onSave"> Save </UButton>
+      <UButton :disabled="!isValid" @click="onSave"> Save </UButton>
     </template>
   </UModal>
 </template>

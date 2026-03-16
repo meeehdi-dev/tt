@@ -4,6 +4,8 @@ import isoWeek from "dayjs/plugin/isoWeek";
 
 dayjs.extend(isoWeek);
 
+export const SLOT_DURATION = 30;
+
 export function getDays(startOfWeekOffset: StartOfWeekDay) {
   return Array(7)
     .fill(undefined)
@@ -14,18 +16,36 @@ export const hours: number[] = Array(24)
   .fill(undefined)
   .map((_, i) => i * 60);
 
-export const availableSlots: number[] = Array(48)
+export const availableSlots: number[] = Array((24 * 60) / SLOT_DURATION)
   .fill(undefined)
-  .map((_, i) => i * 30);
+  .map((_, i) => i * SLOT_DURATION);
 
 type Anchor = "top" | "bottom";
 export function getSlotElementFromElement(target: HTMLElement, anchor: Anchor) {
   const rect = target.getBoundingClientRect();
   const x = rect.x + rect.width / 2;
   const y = rect.y + (anchor === "bottom" ? rect.height : 0);
+
+  const hiddenElements: HTMLElement[] = [target];
   target.style.visibility = "hidden";
-  let slotElement = document.elementFromPoint(x, y) as HTMLElement;
-  target.style.visibility = "";
+
+  let el = document.elementFromPoint(x, y) as HTMLElement | null;
+
+  if (el && el.dataset.group !== "slot") {
+    const blockingEvent = el.closest<HTMLElement>("[data-start]");
+    if (blockingEvent) {
+      blockingEvent.style.visibility = "hidden";
+      hiddenElements.push(blockingEvent);
+      el = document.elementFromPoint(x, y) as HTMLElement | null;
+    }
+  }
+
+  let slotElement = el?.dataset.group === "slot" ? el : null;
+
+  for (const el of hiddenElements) {
+    el.style.visibility = "";
+  }
+
   if (!slotElement) {
     return;
   }

@@ -58,8 +58,8 @@ useMousePressed({
           <CurrentTimeIndicator :day="day" :day-height="weekHeight" />
           <DaySlot
             v-for="minute in availableSlots.slice(
-              (startOfDay * 2) / 60,
-              (endOfDay * 2) / 60,
+              startOfDay / SLOT_DURATION,
+              endOfDay / SLOT_DURATION,
             )"
             :id="`slot-${day}-${minute}`"
             :key="`${day}-${minute}`"
@@ -72,7 +72,7 @@ useMousePressed({
           <div
             class="pointer-events-none absolute grid h-full w-full grid-rows-(--grid-rows) gap-1"
             :style="{
-              '--grid-rows': `repeat(${(endOfDay * 2) / 60 - (startOfDay * 2) / 60}, minmax(0, 1fr))`,
+              '--grid-rows': `repeat(${endOfDay / SLOT_DURATION - startOfDay / SLOT_DURATION}, minmax(0, 1fr))`,
             }"
           >
             <Event

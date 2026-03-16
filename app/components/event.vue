@@ -13,7 +13,7 @@ const { event } = defineProps<{
   event: Event;
 }>();
 
-const { startOfDay } = useDate();
+const { startOfDay, endOfDay } = useDate();
 
 const eventRef = useTemplateRef("event");
 
@@ -52,6 +52,11 @@ useLongPress({
     let day = event.day;
     if (slotElement) {
       day = Number(slotElement.dataset.day);
+    } else {
+      const bottomSlot = getSlotElementFromElement(eventRef.value!, "bottom");
+      if (bottomSlot) {
+        day = Number(bottomSlot.dataset.day);
+      }
     }
 
     const slot = slotElement ? Number(slotElement.dataset.minute) : 0;
@@ -78,11 +83,9 @@ function onUngrabTop() {
   }
 
   const slotElement = getSlotElementFromElement(eventRef.value!, "top");
-  if (!slotElement) {
-    return;
-  }
-
-  const slot = Number(slotElement.dataset.minute);
+  const slot = slotElement
+    ? Number(slotElement.dataset.minute)
+    : startOfDay.value;
 
   moveEventStart(event.id, slot);
 
@@ -102,11 +105,9 @@ function onUngrabBottom() {
   }
 
   const slotElement = getSlotElementFromElement(eventRef.value!, "bottom");
-  if (!slotElement) {
-    return;
-  }
-
-  const slot = Number(slotElement.dataset.minute);
+  const slot = slotElement
+    ? Number(slotElement.dataset.minute)
+    : endOfDay.value - SLOT_DURATION;
 
   moveEventBottom(event.id, slot);
 
@@ -144,8 +145,8 @@ const height = computed(() => {
         state === State.Dragging,
     }"
     :style="{
-      '--row-start': (event.start - startOfDay) / 30 + 1,
-      '--row-span': (event.end - event.start) / 30,
+      '--row-start': (event.start - startOfDay) / SLOT_DURATION + 1,
+      '--row-span': (event.end - event.start) / SLOT_DURATION,
       translate,
       height,
     }"

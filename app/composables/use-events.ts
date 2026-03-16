@@ -8,10 +8,22 @@ export default function useEvents() {
   const currentEventOrigin = useState<number | undefined>("currentEventOrigin");
   const selectedEvent = useState<Event | undefined>("selectedEvent");
 
-  const { endOfDay } = useDate();
+  const { startOfDay, endOfDay } = useDate();
+
+  function hasOverlap(
+    day: number,
+    start: number,
+    end: number,
+    excludeId?: string,
+  ) {
+    return events.value.some(
+      (e) =>
+        e.id !== excludeId && e.day === day && e.start < end && e.end > start,
+    );
+  }
 
   function onSlotHover(e: MouseEvent) {
-    if (!currentEvent.value || !currentEventOrigin.value) {
+    if (!currentEvent.value || currentEventOrigin.value === undefined) {
       return;
     }
 
@@ -21,24 +33,23 @@ export default function useEvents() {
 
     if (slot === currentEventOrigin.value) {
       currentEvent.value.start = currentEventOrigin.value;
-      currentEvent.value.end = currentEventOrigin.value + 30;
+      currentEvent.value.end = currentEventOrigin.value + SLOT_DURATION;
     } else if (slot < currentEventOrigin.value) {
       currentEvent.value.start = slot;
-      currentEvent.value.end = currentEventOrigin.value + 30;
+      currentEvent.value.end = currentEventOrigin.value + SLOT_DURATION;
     } else {
-      currentEvent.value.end = slot + 30;
+      currentEvent.value.end = slot + SLOT_DURATION;
       currentEvent.value.start = currentEventOrigin.value;
     }
   }
 
   function addEvent() {
     if (
-      events.value.filter(
-        (e) =>
-          e.day === currentEvent.value!.day &&
-          e.start >= currentEvent.value!.start &&
-          e.end <= currentEvent.value!.end,
-      ).length > 0
+      hasOverlap(
+        currentEvent.value!.day,
+        currentEvent.value!.start,
+        currentEvent.value!.end,
+      )
     ) {
       toast.add({
         title: "Unable to create event",
@@ -64,35 +75,108 @@ export default function useEvents() {
       return;
     }
 
-    if (day) {
-      event.day = day;
-    }
-
+    const targetDay = day !== undefined ? day : event.day;
     const eventLength = event.end - event.start;
+
+    let candidateStart: number;
+    let candidateEnd: number;
 
     const diff = event.start - minute;
     const endMinute = event.end - diff;
 
     if (endMinute > endOfDay.value) {
-      event.start = endOfDay.value - eventLength;
-      event.end = endOfDay.value;
-      return;
+      candidateStart = endOfDay.value - eventLength;
+      candidateEnd = endOfDay.value;
+    } else if (minute < startOfDay.value) {
+      candidateStart = startOfDay.value;
+      candidateEnd = startOfDay.value + eventLength;
+    } else {
+      candidateStart = minute;
+      candidateEnd = endMinute;
     }
 
-    event.start = minute;
-    event.end = endMinute;
+    if (hasOverlap(targetDay, candidateStart, candidateEnd, eventId)) {
+      const blocker = events.value.find(
+        (e) =>
+          e.id !== eventId &&
+          e.day === targetDay &&
+          e.start < candidateEnd &&
+          e.end > candidateStart,
+      );
+
+      if (!blocker) return;
+
+      const overflowBottom = candidateEnd - blocker.start;
+      const overflowTop = blocker.end - candidateStart;
+
+      if (overflowBottom <= overflowTop) {
+        candidateEnd = blocker.start;
+        candidateStart = candidateEnd - eventLength;
+      } else {
+        candidateStart = blocker.end;
+        candidateEnd = candidateStart + eventLength;
+      }
+
+      if (candidateStart < startOfDay.value) {
+        candidateStart = startOfDay.value;
+        candidateEnd = candidateStart + eventLength;
+      }
+      if (candidateEnd > endOfDay.value) {
+        candidateEnd = endOfDay.value;
+        candidateStart = candidateEnd - eventLength;
+      }
+
+      if (hasOverlap(targetDay, candidateStart, candidateEnd, eventId)) {
+        return;
+      }
+    }
+
+    event.day = targetDay;
+    event.start = candidateStart;
+    event.end = candidateEnd;
   }
 
   function moveEventStart(eventId: string, minute: number) {
     const event = events.value.find((e) => e.id === eventId)!;
+
+    const blocker = events.value.find(
+      (e) =>
+        e.id !== eventId &&
+        e.day === event.day &&
+        e.start < event.end &&
+        e.end > minute,
+    );
+
+    if (blocker) {
+      if (blocker.end < event.end) {
+        event.start = blocker.end;
+      }
+      return;
+    }
 
     event.start = minute;
   }
 
   function moveEventBottom(eventId: string, minute: number) {
     const event = events.value.find((e) => e.id === eventId)!;
+    const candidateEnd = minute + SLOT_DURATION;
 
-    event.end = minute + 30;
+    const blocker = events.value.find(
+      (e) =>
+        e.id !== eventId &&
+        e.day === event.day &&
+        e.start < candidateEnd &&
+        e.end > event.start,
+    );
+
+    if (blocker) {
+      if (blocker.start > event.start) {
+        event.end = blocker.start;
+      }
+      return;
+    }
+
+    event.end = candidateEnd;
   }
 
   function createEvent(day: number, minute: number) {
@@ -100,9 +184,9 @@ export default function useEvents() {
       id: crypto.randomUUID(),
       day,
       start: minute,
-      end: minute + 30,
+      end: minute + SLOT_DURATION,
       project: "",
-      description: "",
+      description: null,
     };
     currentEventOrigin.value = minute;
   }

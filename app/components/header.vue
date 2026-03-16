@@ -35,7 +35,7 @@ const items = ref<DropdownMenuItem[]>([
       <UButton
         :variant="currentWeek.isoWeek() === now.isoWeek() ? 'soft' : 'outline'"
         label="This week"
-        class="ml-13 py-1"
+        class="ml-10 py-1"
         size="sm"
         :color="currentWeek.isoWeek() === now.isoWeek() ? 'primary' : 'neutral'"
         @click="resetCurrentWeek"

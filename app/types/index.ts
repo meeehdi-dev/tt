@@ -21,5 +21,5 @@ export interface Event {
   end: number;
 
   project: string;
-  description: string;
+  description: string | null;
 }
