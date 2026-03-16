@@ -51,7 +51,7 @@ watch(selectedEvent, () => {
         ref="form"
         :schema="schema"
         :state="state"
-        :validate-on="['change', 'submit']"
+        :validate-on="['change']"
         class="space-y-4"
         @submit="onSubmit"
       >
