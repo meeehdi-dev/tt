@@ -17,6 +17,7 @@ WORKDIR /app
 RUN apt update -y && apt install curl wget -y
 
 COPY --from=build /app/.output /app
+COPY --from=build /app/server/db/migrations /app/server/db/migrations
 
 EXPOSE 3000/tcp
 ENTRYPOINT [ "bun", "--bun", "run", "/app/server/index.mjs" ]
