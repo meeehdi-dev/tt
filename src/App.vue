@@ -307,9 +307,13 @@ function onExport() {
       const { projectName, description } = parseNote(event.note);
       const projectId = projectMap.get(projectName)!;
       const eventDate = new Date(startOfWeek.getTime() + (event.day - 1) * 86400000);
-      const dateStr = eventDate.toISOString().split("T")[0];
+      const dateStr = [
+        eventDate.getFullYear(),
+        String(eventDate.getMonth() + 1).padStart(2, "0"),
+        String(eventDate.getDate()).padStart(2, "0"),
+      ].join("-");
       const start = Math.round(event.start * 60);
-      const end = Math.round(event.end * 60);
+      const end = Math.round(event.end * 60) + 30;
       const desc = description.replace(/'/g, "''");
       eventRows.push(
         `  ('${uuidv7()}', '${dateStr}', ${start}, ${end}, '${projectId}', '${desc}', '${USER_ID}', NOW(), NOW())`,
