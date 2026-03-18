@@ -12,21 +12,29 @@ export default function useEvents() {
   const startDate = computed(() => startOfWeek.value.format("YYYY-MM-DD"));
 
   const nuxtApp = useNuxtApp();
+  const lastFetchedDate = useState<string>("lastFetchedDate", () => "");
 
   const { data: events } = useAsyncData(
     "events",
-    () =>
-      $fetch("/api/events", {
+    async () => {
+      const data = await $fetch("/api/events", {
         query: {
           startDate: startDate.value,
           endDate: startOfWeek.value.add(6, "day").format("YYYY-MM-DD"),
         },
-      }),
+      });
+      lastFetchedDate.value = startDate.value;
+      return data;
+    },
     {
       default: () => [] as Event[],
       watch: [startDate],
       server: false,
+      dedupe: "defer",
       getCachedData(key) {
+        if (lastFetchedDate.value !== startDate.value) {
+          return undefined; // Force refetch when navigating to a new week
+        }
         return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
       },
     },

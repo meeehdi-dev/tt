@@ -1,6 +1,9 @@
 <script setup lang="ts">
 useHead({
-  htmlAttrs: { lang: "en" },
+  htmlAttrs: {
+    lang: "en",
+  },
+  link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
 });
 useSeoMeta({
   titleTemplate: (title) => (title ? `${title} - tt` : "tt"),
