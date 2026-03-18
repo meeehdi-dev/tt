@@ -15,7 +15,8 @@ import {
   WEEK_START,
   type SlotRange,
 } from "@/util";
-import { getKey, useEvents } from "@/compasables/useEvents";
+import { getKey, getWeekEventsKey, useEvents } from "@/compasables/useEvents";
+import { uuidv7 } from "uuidv7";
 
 const now = new Date();
 const currentDayIndex = now.getDay();
@@ -253,6 +254,85 @@ function onGrabBottom(day: number, slot: number) {
   isGrabbingBottom.value = getKey(day, slot);
 }
 
+function parseNote(note: string): { projectName: string; description: string } {
+  const match = note.match(/#(\w+)\s*(.*)/s);
+  if (match) return { projectName: match[1].toLowerCase(), description: match[2].trim() };
+  return { projectName: "misc", description: note.trim() };
+}
+
+function onExport() {
+  const USER_ID = "00000000-0000-0000-0000-000000000000";
+  const weeks: { startOfWeek: Date; events: SlotRange[] }[] = [];
+
+  const start = new Date(2025, 0, 6); // First Monday on or after Jan 1, 2025
+  const today = new Date();
+
+  for (let d = new Date(start); d <= today; d.setDate(d.getDate() + 7)) {
+    const weekStart = new Date(d);
+    const key = "activity-" + getWeekEventsKey(weekStart);
+    const raw = localStorage.getItem(key);
+    if (raw) {
+      const parsed: SlotRange[] = JSON.parse(raw);
+      weeks.push({ startOfWeek: weekStart, events: parsed });
+    }
+  }
+
+  const projectMap = new Map<string, string>(); // name -> uuid
+
+  for (const { events } of weeks) {
+    for (const event of events) {
+      if (!event.note) continue;
+      const { projectName } = parseNote(event.note);
+      if (!projectMap.has(projectName)) {
+        projectMap.set(projectName, uuidv7());
+      }
+    }
+  }
+
+  const lines: string[] = [];
+
+  if (projectMap.size > 0) {
+    const projectValues = [...projectMap.entries()]
+      .map(([name, id]) => `  ('${id}', '${name}', '${USER_ID}', NOW(), NOW())`)
+      .join(",\n");
+    lines.push(
+      `INSERT INTO "project" ("id", "name", "user_id", "created_at", "updated_at") VALUES\n${projectValues};`,
+    );
+  }
+
+  const eventRows: string[] = [];
+  for (const { startOfWeek, events } of weeks) {
+    for (const event of events) {
+      if (!event.note) continue;
+      const { projectName, description } = parseNote(event.note);
+      const projectId = projectMap.get(projectName)!;
+      const eventDate = new Date(startOfWeek.getTime() + (event.day - 1) * 86400000);
+      const dateStr = eventDate.toISOString().split("T")[0];
+      const start = Math.round(event.start * 60);
+      const end = Math.round(event.end * 60);
+      const desc = description.replace(/'/g, "''");
+      eventRows.push(
+        `  ('${uuidv7()}', '${dateStr}', ${start}, ${end}, '${projectId}', '${desc}', '${USER_ID}', NOW(), NOW())`,
+      );
+    }
+  }
+
+  if (eventRows.length > 0) {
+    lines.push(
+      `INSERT INTO "event" ("id", "date", "start", "end", "project_id", "description", "user_id", "created_at", "updated_at") VALUES\n${eventRows.join(",\n")};`,
+    );
+  }
+
+  const sql = lines.join("\n\n") + "\n";
+  const blob = new Blob([sql], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "tt-export.sql";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 const startOfWeekStr = computed(() => {
   return startOfWeek.value.toLocaleDateString(undefined, {
     month: "2-digit",
@@ -298,6 +378,9 @@ const endOfWeekStr = computed(() => {
         </div>
       </div>
       <div class="flex">
+        <button @click="onExport" class="text-slate-700 hover:text-slate-600 p-1">
+          <Icon icon="carbon:export" style="font-size: 1.5em" />
+        </button>
         <a
           href="https://github.com/meeehdi-dev/tt"
           target="_blank"

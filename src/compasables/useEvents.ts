@@ -5,16 +5,16 @@ export function getKey(day: number, slot: number) {
   return `${day}-${slot}`;
 }
 
+export function getWeekEventsKey(date: Date) {
+  return date.toLocaleDateString(undefined, {
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+  });
+}
+
 export const useEvents = () => {
   const data = ref<SlotRange[]>([]);
-
-  function getWeekEventsKey(date: Date) {
-    return date.toLocaleDateString(undefined, {
-      year: "2-digit",
-      month: "2-digit",
-      day: "2-digit",
-    });
-  }
 
   function load(date: Date) {
     const activity = localStorage.getItem("activity-" + getWeekEventsKey(date));
