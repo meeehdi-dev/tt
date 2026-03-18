@@ -1,10 +1,19 @@
 import type { Project } from "~/types";
 
 export default function useProjects() {
+  const nuxtApp = useNuxtApp();
+
   const { data: projects } = useAsyncData(
     "projects",
     () => $fetch("/api/projects"),
-    { default: () => [] as Project[], server: false },
+    {
+      default: () => [] as Project[],
+      server: false,
+      dedupe: "defer",
+      getCachedData(key) {
+        return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+      },
+    },
   );
 
   function getProjectName(id: string) {
