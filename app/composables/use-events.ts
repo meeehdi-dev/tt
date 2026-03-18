@@ -158,14 +158,14 @@ export default function useEvents() {
 
     if (event.projectId) {
       try {
-        await $fetch(`/api/events/${eventId}`, {
+        const updated = await $fetch(`/api/events/${eventId}`, {
           method: "PATCH",
-          body: { date: event.date, start: event.start, end: event.end },
+          body: { date: targetDate, start: candidateStart, end: candidateEnd },
         });
 
-        event.date = targetDate;
-        event.start = candidateStart;
-        event.end = candidateEnd;
+        event.date = updated.date;
+        event.start = updated.start;
+        event.end = updated.end;
         events.value = [...events.value];
       } catch {
         toast.add({ title: "Failed to update event", color: "error" });
