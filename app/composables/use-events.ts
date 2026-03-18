@@ -11,6 +11,8 @@ export default function useEvents() {
 
   const startDate = computed(() => startOfWeek.value.format("YYYY-MM-DD"));
 
+  const nuxtApp = useNuxtApp();
+
   const { data: events } = useAsyncData(
     "events",
     () =>
@@ -20,7 +22,14 @@ export default function useEvents() {
           endDate: startOfWeek.value.add(6, "day").format("YYYY-MM-DD"),
         },
       }),
-    { default: () => [] as Event[], watch: [startDate], server: false },
+    {
+      default: () => [] as Event[],
+      watch: [startDate],
+      server: false,
+      getCachedData(key) {
+        return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+      },
+    },
   );
 
   function hasOverlap(
