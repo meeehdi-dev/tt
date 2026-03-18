@@ -3,7 +3,7 @@ import type { Event } from "~/types";
 
 const { event } = defineProps<{ event: Event }>();
 
-const { getProjectLabel } = useProjects();
+const { getProjectName } = useProjects();
 
 const eventTime = computed(() => getEventTime(event));
 </script>
@@ -11,7 +11,7 @@ const eventTime = computed(() => getEventTime(event));
 <template>
   <div class="flex items-center gap-2">
     <UBadge variant="soft">
-      {{ getProjectLabel(event.project) }}
+      {{ getProjectName(event.projectId) }}
     </UBadge>
     <span class="text-sm">
       {{ getTimeLabel(eventTime) }}

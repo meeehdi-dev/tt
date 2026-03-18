@@ -1,16 +1,10 @@
-import type { Event, StartOfWeekDay } from "~/types";
+import type { Event } from "~/types";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
 
 dayjs.extend(isoWeek);
 
 export const SLOT_DURATION = 30;
-
-export function getDays(startOfWeekOffset: StartOfWeekDay) {
-  return Array(7)
-    .fill(undefined)
-    .map((_, i) => (i + startOfWeekOffset + 7) % 7);
-}
 
 export const hours: number[] = Array(24)
   .fill(undefined)

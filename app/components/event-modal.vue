@@ -4,37 +4,44 @@ import { z } from "zod";
 
 const form = useTemplateRef("form");
 
-const { selectedEvent, cancelEvent, saveEvent } = useEvents();
+const { selectedEvent, unselectEvent, saveEvent } = useEvents();
 
 const schema = z.object({
-  project: z.string().min(1),
+  projectId: z.string().min(1),
   description: z.string().optional(),
 });
 type Schema = z.infer<typeof schema>;
 
 const state = reactive<Schema>({
-  project: "",
+  projectId: "",
   description: undefined,
 });
 
-function onSubmit(e: FormSubmitEvent<Schema>) {
-  saveEvent(selectedEvent.value!.id, {
-    project: e.data.project,
+async function onSubmit(e: FormSubmitEvent<Schema>) {
+  await saveEvent({
+    projectId: e.data.projectId,
     description: e.data.description ?? null,
   });
 
-  state.project = "";
+  state.projectId = "";
   state.description = undefined;
 }
 
 const { projects } = useProjects();
+
+const localProjects = ref([...projects.value]);
+
+watch(projects, () => {
+  localProjects.value = [...projects.value];
+});
 
 watch(selectedEvent, () => {
   if (!selectedEvent.value) {
     return;
   }
 
-  state.project = selectedEvent.value.project;
+  localProjects.value = [...projects.value];
+  state.projectId = selectedEvent.value.projectId;
   state.description = selectedEvent.value.description ?? undefined;
 });
 </script>
@@ -44,7 +51,9 @@ watch(selectedEvent, () => {
     :open="selectedEvent !== undefined"
     :title="selectedEvent?.id ? 'Edit event' : 'Add event'"
     :ui="{ footer: 'justify-end' }"
-    :close="{ onClick: () => cancelEvent() }"
+    :close="{
+      onClick: unselectEvent,
+    }"
   >
     <template #body>
       <UForm
@@ -55,12 +64,12 @@ watch(selectedEvent, () => {
         class="space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Project" name="project">
+        <UFormField label="Project" name="projectId">
           <UInputMenu
-            v-model="state.project"
-            :items="projects"
-            value-key="value"
-            label-key="label"
+            v-model="state.projectId"
+            :items="localProjects"
+            value-key="id"
+            label-key="name"
             :trailing-icon="false"
             class="w-full"
             placeholder="Select a project"
@@ -77,7 +86,7 @@ watch(selectedEvent, () => {
     </template>
 
     <template #footer>
-      <UButton color="neutral" variant="soft" @click="cancelEvent()"
+      <UButton color="neutral" variant="soft" @click="unselectEvent"
         >Cancel</UButton
       >
       <UButton type="submit" @click="form?.submit()">Save</UButton>

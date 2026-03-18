@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import type { Project } from "~/composables/use-projects";
+import type { Project } from "~/types";
 import { StartOfWeekDay } from "~/types";
-
-import slugify from "slugify";
 
 const isOpen = defineModel<boolean>();
 
 const { startOfWeekDay, startOfDay, endOfDay, workDayDuration } = useDate();
-const { projects } = useProjects();
+const { projects, createProject, updateProject, deleteProject } = useProjects();
 
 const localStartOfWeekDay = ref<StartOfWeekDay>(startOfWeekDay.value);
 const localStartOfDay = ref<number>(startOfDay.value);
@@ -27,6 +25,8 @@ const timeOptions = Array.from({ length: 25 }, (_, i) => ({
   value: i * 60,
 }));
 
+let originalProjects: Project[] = [];
+
 function onCancel() {
   localStartOfWeekDay.value = startOfWeekDay.value;
   localStartOfDay.value = startOfDay.value;
@@ -36,13 +36,28 @@ function onCancel() {
   isOpen.value = false;
 }
 
-function onSave() {
+async function onSave() {
   startOfWeekDay.value = localStartOfWeekDay.value;
   startOfDay.value = localStartOfDay.value;
   endOfDay.value = localEndOfDay.value;
   workDayDuration.value = localWorkDayDuration.value * 60;
-  // Filter out any projects with empty values just in case
-  projects.value = localProjects.value.filter((p) => p.value.trim() !== "");
+
+  const newProjects = localProjects.value.filter((p) => !p.id && p.name.trim());
+  const deletedProjects = originalProjects.filter(
+    (op) => !localProjects.value.some((lp) => lp.id === op.id),
+  );
+  const renamedProjects = localProjects.value.filter((lp) => {
+    if (!lp.id) return false;
+    const original = originalProjects.find((op) => op.id === lp.id);
+    return original && original.name !== lp.name && lp.name.trim();
+  });
+
+  await Promise.all([
+    ...newProjects.map((p) => createProject(p.name)),
+    ...deletedProjects.map((p) => deleteProject(p.id)),
+    ...renamedProjects.map((p) => updateProject(p.id, p.name)),
+  ]);
+
   isOpen.value = false;
 }
 
@@ -53,11 +68,12 @@ watch(isOpen, (open) => {
     localEndOfDay.value = endOfDay.value;
     localWorkDayDuration.value = workDayDuration.value / 60;
     localProjects.value = JSON.parse(JSON.stringify(projects.value));
+    originalProjects = JSON.parse(JSON.stringify(projects.value));
   }
 });
 
 async function addProject() {
-  localProjects.value.push({ label: "", value: "" });
+  localProjects.value.push({ id: "", name: "" });
 
   await nextTick();
 
@@ -75,15 +91,10 @@ function removeProject(index: number) {
 
 const isValid = computed(() => localEndOfDay.value > localStartOfDay.value);
 
-function updateProjectLabel(index: number, label: string) {
+function updateProjectName(index: number, name: string) {
   const project = localProjects.value[index];
   if (!project) return;
-  project.label = label;
-  project.value = slugify(label, {
-    replacement: "_",
-    lower: true,
-    strict: true,
-  });
+  project.name = name;
 }
 </script>
 
@@ -149,10 +160,10 @@ function updateProjectLabel(index: number, label: string) {
           >
             <UInput
               ref="inputRefs"
-              :model-value="project.label"
+              :model-value="project.name"
               class="flex-1"
               placeholder="Project name"
-              @update:model-value="(val) => updateProjectLabel(index, val)"
+              @update:model-value="(val) => updateProjectName(index, val)"
             />
             <UButton
               icon="lucide:trash"

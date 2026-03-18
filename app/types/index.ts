@@ -1,13 +1,3 @@
-export enum Day {
-  Sunday,
-  Monday,
-  Tuesday,
-  Wednesday,
-  Thursday,
-  Friday,
-  Saturday,
-}
-
 export enum StartOfWeekDay {
   Saturday = -1,
   Sunday = 0,
@@ -16,10 +6,15 @@ export enum StartOfWeekDay {
 
 export interface Event {
   id: string;
-  day: Day;
+  date: string;
   start: number;
   end: number;
 
-  project: string;
+  projectId: string;
   description: string | null;
+}
+
+export interface Project {
+  id: string;
+  name: string;
 }

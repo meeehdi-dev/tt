@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import type { Day } from "~/types";
-
-const { day } = defineProps<{ day: Day }>();
+const { date } = defineProps<{ date: string }>();
 
 const { events } = useEvents();
 
-const dayEvents = computed(() => events.value.filter((e) => e.day === day));
+const dayEvents = computed(() => events.value.filter((e) => e.date === date));
 
 const dayTime = computed(() =>
   dayEvents.value.reduce((sum, e) => sum + getEventTime(e), 0),
@@ -25,7 +23,7 @@ const dayTimeLabel = computed(() => getTimeLabel(dayTime.value));
           ><div class="flex flex-col gap-1 rounded-xl bg-neutral-900 p-1 pr-2">
             <DayProgressEvent
               v-for="event in dayEvents"
-              :key="`${day}-progress-${event.id}`"
+              :key="`${date}-progress-${event.id}`"
               :event="event"
             />
           </div>

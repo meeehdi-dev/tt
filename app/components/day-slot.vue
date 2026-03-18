@@ -1,28 +1,31 @@
 <script setup lang="ts">
 import type { Event } from "~/types";
+import dayjs from "dayjs";
 
-const { day, minute, currentEvent } = defineProps<{
-  day: number;
+const { date, minute, currentEvent } = defineProps<{
+  date: string;
   minute: number;
   currentEvent: Event | undefined;
 }>();
 
 const emit = defineEmits<{ slotHover: [MouseEvent] }>();
+
+const dayOfWeek = computed(() => dayjs(date).day());
 </script>
 
 <template>
   <div
     :data-minute="minute"
-    :data-day="day"
+    :data-date="date"
     class="cursor-pointer rounded-sm border-y-2 border-neutral-900 transition-colors hover:bg-neutral-700"
     :class="{
       'bg-neutral-700!':
         currentEvent &&
-        day === currentEvent.day &&
+        date === currentEvent.date &&
         minute >= currentEvent.start &&
         minute < currentEvent.end,
-      'bg-neutral-800/50': day > 0 && day < 6, // Monday to Friday
-      'bg-neutral-800/30': day === 0 || day === 6,
+      'bg-neutral-800/50': dayOfWeek > 0 && dayOfWeek < 6,
+      'bg-neutral-800/30': dayOfWeek === 0 || dayOfWeek === 6,
     }"
     @mouseover="emit('slotHover', $event)"
   />

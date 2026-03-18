@@ -1,3 +1,4 @@
+import "dayjs/plugin/isoWeek";
 import { StartOfWeekDay } from "~/types";
 import { createSharedComposable } from "@vueuse/core";
 import dayjs from "dayjs";
@@ -48,7 +49,11 @@ function useDate() {
     currentWeek.value.endOf("week").add(startOfWeekDay.value, "day"),
   );
 
-  const days = computed(() => getDays(startOfWeekDay.value));
+  const days = computed(() =>
+    Array.from({ length: 7 }, (_, i) =>
+      startOfWeek.value.add(i, "day").format("YYYY-MM-DD"),
+    ),
+  );
 
   return {
     currentWeek,

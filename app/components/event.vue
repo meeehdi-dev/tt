@@ -22,7 +22,7 @@ const { x, y } = useMouse();
 const { selectEvent, moveEvent, removeEvent, moveEventStart, moveEventBottom } =
   useEvents();
 
-const { getProjectLabel } = useProjects();
+const { getProjectName } = useProjects();
 
 const state = shallowRef(State.Idle);
 const currentX = shallowRef(0);
@@ -42,26 +42,26 @@ useLongPress({
 
     state.value = State.Dragging;
   },
-  onRelease: () => {
+  onRelease: async () => {
     if (state.value !== State.Dragging) {
       return;
     }
 
     const slotElement = getSlotElementFromElement(eventRef.value!, "top");
 
-    let day = event.day;
+    let date = event.date;
     if (slotElement) {
-      day = Number(slotElement.dataset.day);
+      date = slotElement.dataset.date!;
     } else {
       const bottomSlot = getSlotElementFromElement(eventRef.value!, "bottom");
       if (bottomSlot) {
-        day = Number(bottomSlot.dataset.day);
+        date = bottomSlot.dataset.date!;
       }
     }
 
     const slot = slotElement ? Number(slotElement.dataset.minute) : 0;
 
-    moveEvent(event.id, slot, day);
+    await moveEvent(event.id, slot, date);
 
     state.value = State.Idle;
   },
@@ -158,7 +158,7 @@ const height = computed(() => {
       @mousedown="onGrabTop"
     />
     <div
-      v-if="!event.project"
+      v-if="!event.projectId"
       class="absolute flex h-full w-full items-center justify-center"
     >
       <UIcon name="lucide:loader-circle" class="animate-spin" />
@@ -188,7 +188,7 @@ const height = computed(() => {
       </div>
       <div class="flex flex-col p-1">
         <UBadge class="place-self-start" variant="soft">{{
-          getProjectLabel(event.project)
+          getProjectName(event.projectId)
         }}</UBadge>
         <div class="text-muted text-sm whitespace-pre">
           {{ event.description }}

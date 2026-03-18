@@ -1,6 +1,8 @@
 <script setup lang="ts">
-const { day, dayHeight } = defineProps<{
-  day: number;
+import dayjs from "dayjs";
+
+const { date, dayHeight } = defineProps<{
+  date: string;
   dayHeight: number;
 }>();
 
@@ -15,13 +17,13 @@ const currentDayNowIndicatorTranslate = computed(() =>
       dayHeight,
   ),
 );
+
+const isToday = computed(() => date === dayjs().format("YYYY-MM-DD"));
 </script>
 
 <template>
   <USeparator
-    v-if="
-      day === now.day() && currentTime > startOfDay && currentTime < endOfDay
-    "
+    v-if="isToday && currentTime > startOfDay && currentTime < endOfDay"
     color="primary"
     decorative
     class="pointer-events-none absolute z-10 translate-y-(--translate-y)"

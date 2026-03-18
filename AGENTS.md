@@ -60,6 +60,7 @@ If/when `vitest` is introduced to the repository, tests should be written in a c
 
 1. **Global State:** For reactive global state, define a composable using Nuxt's `useState<Type>('key', () => init)`.
 2. **Data Fetching:** Inside Vue components, rely exclusively on `useAsyncData` or `useFetch` to prevent hydration mismatches. Use `$fetch` for programmatic triggers (e.g., clicking a "Submit" button or inside `server/api/`).
+3. **Never use `createSharedComposable`** for composables that run during SSR. It creates a global singleton that persists across requests on the server, causing cross-request state pollution. Instead, rely on `useState` (request-scoped sharing) and `useAsyncData` (request-scoped deduplication) — both are keyed and automatically shared across components within a single request.
 
 ### Authentication & Routing
 

@@ -3,22 +3,35 @@ import type { Event } from "~/types";
 export default function useEvents() {
   const toast = useToast();
 
-  const events = useState<Event[]>("events", () => []);
   const currentEvent = useState<Event | undefined>("currentEvent");
   const currentEventOrigin = useState<number | undefined>("currentEventOrigin");
   const selectedEvent = useState<Event | undefined>("selectedEvent");
 
-  const { startOfDay, endOfDay } = useDate();
+  const { startOfDay, endOfDay, startOfWeek } = useDate();
+
+  const startDate = computed(() => startOfWeek.value.format("YYYY-MM-DD"));
+
+  const { data: events } = useAsyncData(
+    "events",
+    () =>
+      $fetch("/api/events", {
+        query: {
+          startDate: startDate.value,
+          endDate: startOfWeek.value.add(6, "day").format("YYYY-MM-DD"),
+        },
+      }),
+    { default: () => [] as Event[], watch: [startDate], server: false },
+  );
 
   function hasOverlap(
-    day: number,
+    date: string,
     start: number,
     end: number,
     excludeId?: string,
   ) {
     return events.value.some(
       (e) =>
-        e.id !== excludeId && e.day === day && e.start < end && e.end > start,
+        e.id !== excludeId && e.date === date && e.start < end && e.end > start,
     );
   }
 
@@ -46,7 +59,7 @@ export default function useEvents() {
   function addEvent() {
     if (
       hasOverlap(
-        currentEvent.value!.day,
+        currentEvent.value!.date,
         currentEvent.value!.start,
         currentEvent.value!.end,
       )
@@ -65,17 +78,29 @@ export default function useEvents() {
     currentEventOrigin.value = undefined;
   }
 
-  function removeEvent(eventId: string) {
+  async function removeEvent(eventId: string) {
+    const event = events.value.find((e) => e.id === eventId);
     events.value = events.value.filter((e) => e.id !== eventId);
+
+    if (event?.projectId) {
+      try {
+        await $fetch(`/api/events/${eventId}`, { method: "DELETE" });
+      } catch {
+        toast.add({
+          title: "Failed to delete event",
+          color: "error",
+        });
+      }
+    }
   }
 
-  function moveEvent(eventId: string, minute: number, day?: number) {
+  async function moveEvent(eventId: string, minute: number, date?: string) {
     const event = events.value.find((e) => e.id === eventId);
     if (!event) {
       return;
     }
 
-    const targetDay = day !== undefined ? day : event.day;
+    const targetDate = date !== undefined ? date : event.date;
     const eventLength = event.end - event.start;
 
     let candidateStart: number;
@@ -95,11 +120,11 @@ export default function useEvents() {
       candidateEnd = endMinute;
     }
 
-    if (hasOverlap(targetDay, candidateStart, candidateEnd, eventId)) {
+    if (hasOverlap(targetDate, candidateStart, candidateEnd, eventId)) {
       const blocker = events.value.find(
         (e) =>
           e.id !== eventId &&
-          e.day === targetDay &&
+          e.date === targetDate &&
           e.start < candidateEnd &&
           e.end > candidateStart,
       );
@@ -126,14 +151,26 @@ export default function useEvents() {
         candidateStart = candidateEnd - eventLength;
       }
 
-      if (hasOverlap(targetDay, candidateStart, candidateEnd, eventId)) {
+      if (hasOverlap(targetDate, candidateStart, candidateEnd, eventId)) {
         return;
       }
     }
 
-    event.day = targetDay;
-    event.start = candidateStart;
-    event.end = candidateEnd;
+    if (event.projectId) {
+      try {
+        await $fetch(`/api/events/${eventId}`, {
+          method: "PATCH",
+          body: { date: event.date, start: event.start, end: event.end },
+        });
+
+        event.date = targetDate;
+        event.start = candidateStart;
+        event.end = candidateEnd;
+        events.value = [...events.value];
+      } catch {
+        toast.add({ title: "Failed to update event", color: "error" });
+      }
+    }
   }
 
   function moveEventStart(eventId: string, minute: number) {
@@ -142,7 +179,7 @@ export default function useEvents() {
     const blocker = events.value.find(
       (e) =>
         e.id !== eventId &&
-        e.day === event.day &&
+        e.date === event.date &&
         e.start < event.end &&
         e.end > minute,
     );
@@ -155,6 +192,15 @@ export default function useEvents() {
     }
 
     event.start = minute;
+
+    if (event.projectId) {
+      $fetch(`/api/events/${eventId}`, {
+        method: "PATCH",
+        body: { start: event.start },
+      }).catch(() => {
+        toast.add({ title: "Failed to update event", color: "error" });
+      });
+    }
   }
 
   function moveEventBottom(eventId: string, minute: number) {
@@ -164,7 +210,7 @@ export default function useEvents() {
     const blocker = events.value.find(
       (e) =>
         e.id !== eventId &&
-        e.day === event.day &&
+        e.date === event.date &&
         e.start < candidateEnd &&
         e.end > event.start,
     );
@@ -177,35 +223,85 @@ export default function useEvents() {
     }
 
     event.end = candidateEnd;
+
+    if (event.projectId) {
+      $fetch(`/api/events/${eventId}`, {
+        method: "PATCH",
+        body: { end: event.end },
+      }).catch(() => {
+        toast.add({ title: "Failed to update event", color: "error" });
+      });
+    }
   }
 
-  function createEvent(day: number, minute: number) {
+  function createEvent(date: string, minute: number) {
     currentEvent.value = {
       id: crypto.randomUUID(),
-      day,
+      date,
       start: minute,
       end: minute + SLOT_DURATION,
-      project: "",
+      projectId: "",
       description: null,
     };
     currentEventOrigin.value = minute;
   }
 
-  function saveEvent(
-    eventId: string,
-    data: Pick<Event, "project" | "description">,
-  ) {
-    const event = events.value.find((e) => e.id === eventId)!;
+  async function saveEvent(data: Pick<Event, "projectId" | "description">) {
+    const event = selectedEvent.value!;
 
-    event.project = data.project;
+    const isNew = !event.projectId;
+
+    event.projectId = data.projectId;
     event.description = data.description;
+
+    if (isNew) {
+      try {
+        const created = await $fetch("/api/events", {
+          method: "POST",
+          body: {
+            date: event.date,
+            start: event.start,
+            end: event.end,
+            projectId: data.projectId,
+            description: data.description,
+          },
+        });
+
+        events.value = [
+          ...events.value.filter((e) => e.id !== selectedEvent.value!.id),
+          created!,
+        ];
+      } catch {
+        toast.add({ title: "Failed to save event", color: "error" });
+      }
+    } else {
+      try {
+        await $fetch(`/api/events/${event.id}`, {
+          method: "PATCH",
+          body: {
+            projectId: event.projectId,
+            description: event.description,
+          },
+        });
+
+        events.value = [
+          ...events.value.filter((e) => e.id !== event.id),
+          event,
+        ];
+      } catch {
+        toast.add({ title: "Failed to update event", color: "error" });
+      }
+    }
 
     selectedEvent.value = undefined;
   }
 
-  function cancelEvent() {
-    events.value = events.value.filter((e) => e.id !== selectedEvent.value!.id);
-
+  function unselectEvent() {
+    if (selectedEvent.value && !selectedEvent.value.projectId) {
+      events.value = events.value.filter(
+        (e) => e.id !== selectedEvent.value!.id,
+      );
+    }
     selectedEvent.value = undefined;
   }
 
@@ -219,7 +315,7 @@ export default function useEvents() {
     selectedEvent: readonly(selectedEvent),
 
     createEvent,
-    cancelEvent,
+    unselectEvent,
     addEvent,
     removeEvent,
     selectEvent,

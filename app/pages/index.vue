@@ -23,9 +23,9 @@ useMousePressed({
     }
     const minute = Number(eventTarget.dataset.minute);
 
-    const day = Number(eventTarget.dataset.day);
+    const date = eventTarget.dataset.date!;
 
-    createEvent(day, minute);
+    createEvent(date, minute);
   },
   onReleased: () => {
     if (!currentEvent.value) {
@@ -51,19 +51,19 @@ useMousePressed({
       </div>
       <div ref="week" class="grid h-full w-full grid-cols-7 gap-1">
         <div
-          v-for="day in days"
-          :key="day"
+          v-for="date in days"
+          :key="date"
           class="relative grid h-full rounded-sm"
         >
-          <CurrentTimeIndicator :day="day" :day-height="weekHeight" />
+          <CurrentTimeIndicator :date="date" :day-height="weekHeight" />
           <DaySlot
             v-for="minute in availableSlots.slice(
               startOfDay / SLOT_DURATION,
               endOfDay / SLOT_DURATION,
             )"
-            :id="`slot-${day}-${minute}`"
-            :key="`${day}-${minute}`"
-            :day="day"
+            :id="`slot-${date}-${minute}`"
+            :key="`${date}-${minute}`"
+            :date="date"
             :minute="minute"
             :current-event="currentEvent"
             data-group="slot"
@@ -76,8 +76,8 @@ useMousePressed({
             }"
           >
             <Event
-              v-for="event in events.filter((e) => e.day === day)"
-              :key="`${day}-${event.id}`"
+              v-for="event in events.filter((e) => e.date === date)"
+              :key="`${date}-${event.id}`"
               :event="event"
             />
           </div>
@@ -88,10 +88,9 @@ useMousePressed({
       <div class="-translate-y-4 text-xs">{{ endOfDay / 60 }}:00</div>
       <div class="grid w-full grid-cols-7 gap-1">
         <DayProgress
-          v-for="day in days"
-          :key="`${day}-progress`"
-          :day="day"
-          :events="events"
+          v-for="date in days"
+          :key="`${date}-progress`"
+          :date="date"
         />
       </div>
     </div>
