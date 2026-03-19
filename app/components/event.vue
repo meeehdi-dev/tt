@@ -87,7 +87,7 @@ function onUngrabTop() {
     ? Number(slotElement.dataset.minute)
     : startOfDay.value;
 
-  moveEventStart(event.id, slot);
+  void moveEventStart(event.id, slot);
 
   state.value = State.Idle;
 }
@@ -109,7 +109,7 @@ function onUngrabBottom() {
     ? Number(slotElement.dataset.minute)
     : endOfDay.value - SLOT_DURATION;
 
-  moveEventBottom(event.id, slot);
+  void moveEventBottom(event.id, slot);
 
   state.value = State.Idle;
 }
