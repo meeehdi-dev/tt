@@ -190,7 +190,7 @@ export default function useEvents() {
     }
   }
 
-  function moveEventStart(eventId: string, minute: number) {
+  async function moveEventStart(eventId: string, minute: number) {
     const event = events.value.find((e) => e.id === eventId)!;
 
     const blocker = events.value.find(
@@ -211,16 +211,24 @@ export default function useEvents() {
     event.start = minute;
 
     if (event.projectId) {
-      $fetch(`/api/events/${eventId}`, {
-        method: "PATCH",
-        body: { start: event.start },
-      }).catch(() => {
-        toast.add({ title: "Failed to update event", color: "error" });
-      });
+      try {
+        await $fetch(`/api/events/${eventId}`, {
+          method: "PATCH",
+          body: { start: event.start },
+        });
+        events.value = [...events.value.filter((e) => e.id !== eventId), event];
+      } catch (err) {
+        const error = err as Error;
+        toast.add({
+          title: "Failed to update event",
+          color: "error",
+          description: error.message,
+        });
+      }
     }
   }
 
-  function moveEventBottom(eventId: string, minute: number) {
+  async function moveEventBottom(eventId: string, minute: number) {
     const event = events.value.find((e) => e.id === eventId)!;
     const candidateEnd = minute + SLOT_DURATION;
 
@@ -242,12 +250,20 @@ export default function useEvents() {
     event.end = candidateEnd;
 
     if (event.projectId) {
-      $fetch(`/api/events/${eventId}`, {
-        method: "PATCH",
-        body: { end: event.end },
-      }).catch(() => {
-        toast.add({ title: "Failed to update event", color: "error" });
-      });
+      try {
+        await $fetch(`/api/events/${eventId}`, {
+          method: "PATCH",
+          body: { start: event.start },
+        });
+        events.value = [...events.value.filter((e) => e.id !== eventId), event];
+      } catch (err) {
+        const error = err as Error;
+        toast.add({
+          title: "Failed to update event",
+          color: "error",
+          description: error.message,
+        });
+      }
     }
   }
 
