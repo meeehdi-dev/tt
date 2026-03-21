@@ -14,6 +14,8 @@ const { days, startOfDay, endOfDay } = useDate();
 const { events, currentEvent, onSlotHover, addEvent, createEvent } =
   useEvents();
 
+const isWeekSummaryModalOpen = ref(false);
+
 useMousePressed({
   target: weekRef,
   onPressed: (e) => {
@@ -85,7 +87,16 @@ useMousePressed({
       </div>
     </div>
     <div class="flex min-h-8 w-full gap-1 px-1 pb-1">
-      <div class="-translate-y-4 text-xs">{{ endOfDay / 60 }}:00</div>
+      <div class="flex max-h-8 -translate-y-4 flex-col">
+        <div class="text-xs">{{ endOfDay / 60 }}:00</div>
+        <UButton
+          icon="lucide:sigma"
+          variant="subtle"
+          class="max-h-7.5 justify-center"
+          :disabled="events.length === 0"
+          @click="isWeekSummaryModalOpen = true"
+        />
+      </div>
       <div class="grid w-full grid-cols-7 gap-1">
         <DayProgress
           v-for="date in days"
@@ -95,5 +106,6 @@ useMousePressed({
       </div>
     </div>
     <EventModal />
+    <WeekSummaryModal v-model:open="isWeekSummaryModalOpen" />
   </div>
 </template>
