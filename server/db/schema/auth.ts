@@ -1,12 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-  pgTable,
-  text,
-  timestamp,
-  boolean,
-  index,
-  uuid,
-} from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, index, uuid } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: uuid("id").primaryKey(),

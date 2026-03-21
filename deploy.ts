@@ -10,22 +10,17 @@ interface DeployError {
   message: string;
 }
 
-function isDeployError(
-  data: DeployResponse | DeployError,
-): data is DeployError {
+function isDeployError(data: DeployResponse | DeployError): data is DeployError {
   return (data as DeployError).message !== undefined;
 }
 
 async function main() {
-  const res = await fetch(
-    "https://coolify.kokoro-soft.fr/api/v1/deploy?uuid=dn2cogj9t3q1u4priyvn4acm&force=false",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.COOLIFY_API_TOKEN}`,
-      },
+  const res = await fetch("https://coolify.kokoro-soft.fr/api/v1/deploy?uuid=dn2cogj9t3q1u4priyvn4acm&force=false", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.COOLIFY_API_TOKEN}`,
     },
-  );
+  });
   const data = (await res.json()) as DeployResponse | DeployError;
   if (isDeployError(data)) {
     console.error(data.message);

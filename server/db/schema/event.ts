@@ -1,12 +1,4 @@
-import {
-  date,
-  integer,
-  pgTable,
-  text,
-  timestamp,
-  unique,
-  uuid,
-} from "drizzle-orm/pg-core";
+import { date, integer, pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
 export const event = pgTable("event", {

@@ -46,17 +46,11 @@ export function getSlotElementFromElement(target: HTMLElement, anchor: Anchor) {
 
   const slotElementRect = slotElement.getBoundingClientRect();
   if (anchor === "top") {
-    if (
-      y > slotElementRect.y + slotElementRect.height / 2 &&
-      slotElement.nextElementSibling
-    ) {
+    if (y > slotElementRect.y + slotElementRect.height / 2 && slotElement.nextElementSibling) {
       slotElement = slotElement.nextElementSibling as HTMLElement;
     }
   } else if (anchor === "bottom") {
-    if (
-      y < slotElementRect.y + slotElementRect.height / 2 &&
-      slotElement.previousElementSibling
-    ) {
+    if (y < slotElementRect.y + slotElementRect.height / 2 && slotElement.previousElementSibling) {
       slotElement = slotElement.previousElementSibling as HTMLElement;
     }
   }
@@ -84,7 +78,6 @@ export function getSlotHeight() {
   }
   const computedStyle = getComputedStyle(slot);
   return (
-    slot.getBoundingClientRect().height -
-    Number(computedStyle.borderTopWidth.slice(0, -2)) * 2 // NOTE: ignore borders
+    slot.getBoundingClientRect().height - Number(computedStyle.borderTopWidth.slice(0, -2)) * 2 // NOTE: ignore borders
   );
 }

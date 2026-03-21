@@ -7,11 +7,7 @@ interface useMousePressedProps {
   onReleased: (event: MouseEvent) => void;
 }
 
-export default function useMousePressed({
-  target,
-  onPressed,
-  onReleased,
-}: useMousePressedProps) {
+export default function useMousePressed({ target, onPressed, onReleased }: useMousePressedProps) {
   function onMouseDown(e: MouseEvent) {
     onPressed(e);
   }

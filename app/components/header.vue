@@ -38,8 +38,7 @@ const items = ref<DropdownMenuItem[]>([
         class="ml-10 py-1"
         size="sm"
         :color="currentWeek.isoWeek() === now.isoWeek() ? 'primary' : 'neutral'"
-        @click="resetCurrentWeek"
-      />
+        @click="resetCurrentWeek" />
     </div>
     <div class="flex justify-center">
       <WeekIndicator />
@@ -51,22 +50,17 @@ const items = ref<DropdownMenuItem[]>([
           variant="soft"
           size="sm"
           :avatar="
-            session.isPending
-              ? undefined
-              : session.data!.user.image
-                ? { src: session.data!.user.image }
-                : undefined
+            session.isPending ? undefined
+            : session.data!.user.image ? { src: session.data!.user.image }
+            : undefined
           "
           :icon="
-            session.isPending
-              ? 'lucide:loader-circle'
-              : session.data!.user.image
-                ? undefined
-                : 'lucide:user'
+            session.isPending ? 'lucide:loader-circle'
+            : session.data!.user.image ? undefined
+            : 'lucide:user'
           "
           :label="session.isPending ? undefined : session.data?.user.name"
-          :loading="session.isPending"
-        />
+          :loading="session.isPending" />
       </UDropdownMenu>
 
       <UButton
@@ -76,8 +70,7 @@ const items = ref<DropdownMenuItem[]>([
         size="sm"
         href="https://github.com/meeehdi-dev/tt"
         target="_blank"
-        rel="noopener noreferrer"
-      />
+        rel="noopener noreferrer" />
     </div>
 
     <SettingsModal v-model="isSettingsModalOpen" />

@@ -19,8 +19,7 @@ const eventRef = useTemplateRef("event");
 
 const { x, y } = useMouse();
 
-const { selectEvent, moveEvent, removeEvent, moveEventStart, moveEventBottom } =
-  useEvents();
+const { selectEvent, moveEvent, removeEvent, moveEventStart, moveEventBottom } = useEvents();
 
 const { getProjectName } = useProjects();
 
@@ -83,9 +82,7 @@ function onUngrabTop() {
   }
 
   const slotElement = getSlotElementFromElement(eventRef.value!, "top");
-  const slot = slotElement
-    ? Number(slotElement.dataset.minute)
-    : startOfDay.value;
+  const slot = slotElement ? Number(slotElement.dataset.minute) : startOfDay.value;
 
   void moveEventStart(event.id, slot);
 
@@ -105,9 +102,7 @@ function onUngrabBottom() {
   }
 
   const slotElement = getSlotElementFromElement(eventRef.value!, "bottom");
-  const slot = slotElement
-    ? Number(slotElement.dataset.minute)
-    : endOfDay.value - SLOT_DURATION;
+  const slot = slotElement ? Number(slotElement.dataset.minute) : endOfDay.value - SLOT_DURATION;
 
   void moveEventBottom(event.id, slot);
 
@@ -118,21 +113,21 @@ useEventListener("mouseup", onUngrabTop);
 useEventListener("mouseup", onUngrabBottom);
 
 const translate = computed(() => {
-  return state.value === State.GrabbingTop
-    ? `0px ${Math.min(maxY.value, y.value - currentY.value)}px`
-    : state.value === State.Dragging
-      ? `${x.value - currentX.value}px ${y.value - currentY.value}px`
-      : undefined;
+  return (
+    state.value === State.GrabbingTop ? `0px ${Math.min(maxY.value, y.value - currentY.value)}px`
+    : state.value === State.Dragging ? `${x.value - currentX.value}px ${y.value - currentY.value}px`
+    : undefined
+  );
 });
 
 const height = computed(() => {
   const slotHeight = getSlotHeight();
 
-  return state.value === State.GrabbingTop
-    ? `${Math.max(slotHeight, currentHeight.value + currentY.value - y.value)}px`
-    : state.value === State.GrabbingBottom
-      ? `${Math.max(slotHeight, currentHeight.value + y.value - currentY.value)}px`
-      : undefined;
+  return (
+    state.value === State.GrabbingTop ? `${Math.max(slotHeight, currentHeight.value + currentY.value - y.value)}px`
+    : state.value === State.GrabbingBottom ? `${Math.max(slotHeight, currentHeight.value + y.value - currentY.value)}px`
+    : undefined
+  );
 });
 </script>
 
@@ -141,8 +136,7 @@ const height = computed(() => {
     ref="event"
     class="outline-primary pointer-events-auto relative row-span-(--row-span) row-start-(--row-start) overflow-hidden rounded-sm bg-neutral-800 outline-0 transition-[outline] select-none"
     :class="{
-      'shadow-primary-500 z-20 shadow-[0_0_8px] outline-1':
-        state === State.Dragging,
+      'shadow-primary-500 z-20 shadow-[0_0_8px] outline-1': state === State.Dragging,
     }"
     :style="{
       '--row-start': (event.start - startOfDay) / SLOT_DURATION + 1,
@@ -151,53 +145,33 @@ const height = computed(() => {
       height,
     }"
     :data-start="event.start"
-    :data-end="event.end"
-  >
+    :data-end="event.end">
     <div
       class="hover:to-primary/50 absolute top-0 h-2 w-full cursor-n-resize rounded-t-sm bg-linear-to-t from-transparent to-transparent transition-colors"
-      @mousedown="onGrabTop"
-    />
-    <div
-      v-if="!event.projectId"
-      class="absolute flex h-full w-full items-center justify-center"
-    >
+      @mousedown="onGrabTop" />
+    <div v-if="!event.projectId" class="absolute flex h-full w-full items-center justify-center">
       <UIcon name="lucide:loader-circle" class="animate-spin" />
     </div>
     <div v-else>
       <div class="absolute right-0 m-1">
-        <UButton
-          icon="lucide:edit"
-          size="xs"
-          variant="ghost"
-          color="secondary"
-          @click="selectEvent(event.id)"
-        />
+        <UButton icon="lucide:edit" size="xs" variant="ghost" color="secondary" @click="selectEvent(event.id)" />
         <UPopover :content="{ side: 'top' }" arrow>
           <UButton icon="lucide:x" size="xs" variant="ghost" color="error" />
 
           <template #content>
-            <UButton
-              label="Confirm"
-              icon="lucide:x"
-              variant="link"
-              color="error"
-              @click="removeEvent(event.id)"
-            />
+            <UButton label="Confirm" icon="lucide:x" variant="link" color="error" @click="removeEvent(event.id)" />
           </template>
         </UPopover>
       </div>
       <div class="flex flex-col p-1">
-        <UBadge class="place-self-start" variant="soft">{{
-          getProjectName(event.projectId)
-        }}</UBadge>
+        <UBadge class="place-self-start" variant="soft">{{ getProjectName(event.projectId) }}</UBadge>
         <div class="text-muted text-sm whitespace-pre">
           {{ event.description }}
         </div>
       </div>
       <div
         class="hover:to-primary/50 absolute bottom-0 h-2 w-full cursor-s-resize rounded-b-sm bg-linear-to-b from-transparent to-transparent transition-colors"
-        @mousedown="onGrabBottom"
-      />
+        @mousedown="onGrabBottom" />
     </div>
   </div>
 </template>

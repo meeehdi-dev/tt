@@ -43,9 +43,7 @@ async function onSave() {
   workDayDuration.value = localWorkDayDuration.value * 60;
 
   const newProjects = localProjects.value.filter((p) => !p.id && p.name.trim());
-  const deletedProjects = originalProjects.filter(
-    (op) => !localProjects.value.some((lp) => lp.id === op.id),
-  );
+  const deletedProjects = originalProjects.filter((op) => !localProjects.value.some((lp) => lp.id === op.id));
   const renamedProjects = localProjects.value.filter((lp) => {
     if (!lp.id) return false;
     const original = originalProjects.find((op) => op.id === lp.id);
@@ -99,46 +97,20 @@ function updateProjectName(index: number, name: string) {
 </script>
 
 <template>
-  <UModal
-    v-model:open="isOpen"
-    title="Settings"
-    :ui="{ footer: 'justify-end' }"
-    :close="{ onClick: onCancel }"
-  >
+  <UModal v-model:open="isOpen" title="Settings" :ui="{ footer: 'justify-end' }" :close="{ onClick: onCancel }">
     <template #body>
       <UForm class="space-y-4">
         <UFormField label="Start of the week">
-          <USelect
-            v-model="localStartOfWeekDay"
-            :items="startOfWeekOptions"
-            class="w-full"
-          />
+          <USelect v-model="localStartOfWeekDay" :items="startOfWeekOptions" class="w-full" />
         </UFormField>
 
-        <UFormField
-          label="Start/End time"
-          :ui="{ container: 'flex gap-2' }"
-          :error="!isValid"
-        >
-          <USelect
-            v-model="localStartOfDay"
-            :items="timeOptions.slice(0, -1)"
-            class="w-full"
-          />
-          <USelect
-            v-model="localEndOfDay"
-            :items="timeOptions.slice(1)"
-            class="w-full"
-          />
+        <UFormField label="Start/End time" :ui="{ container: 'flex gap-2' }" :error="!isValid">
+          <USelect v-model="localStartOfDay" :items="timeOptions.slice(0, -1)" class="w-full" />
+          <USelect v-model="localEndOfDay" :items="timeOptions.slice(1)" class="w-full" />
         </UFormField>
 
         <UFormField label="Work day duration">
-          <UInputNumber
-            v-model="localWorkDayDuration"
-            class="w-full"
-            :min="1"
-            :max="24"
-          />
+          <UInputNumber v-model="localWorkDayDuration" class="w-full" :min="1" :max="24" />
         </UFormField>
 
         <USeparator />
@@ -147,46 +119,23 @@ function updateProjectName(index: number, name: string) {
           <div class="flex items-center justify-between">
             <span class="text-sm font-medium">Projects</span>
           </div>
-          <div
-            v-if="localProjects.length === 0"
-            class="text-sm text-neutral-500"
-          >
-            No projects added yet.
-          </div>
-          <div
-            v-for="(project, index) in localProjects"
-            :key="index"
-            class="flex items-center gap-2"
-          >
+          <div v-if="localProjects.length === 0" class="text-sm text-neutral-500">No projects added yet.</div>
+          <div v-for="(project, index) in localProjects" :key="index" class="flex items-center gap-2">
             <UInput
               ref="inputRefs"
               :model-value="project.name"
               class="flex-1"
               placeholder="Project name"
-              @update:model-value="(val) => updateProjectName(index, val)"
-            />
-            <UButton
-              icon="lucide:trash"
-              size="xs"
-              color="error"
-              variant="ghost"
-              @click="removeProject(index)"
-            />
+              @update:model-value="(val) => updateProjectName(index, val)" />
+            <UButton icon="lucide:trash" size="xs" color="error" variant="ghost" @click="removeProject(index)" />
           </div>
-          <UButton
-            icon="lucide:plus"
-            variant="soft"
-            label="Add a project"
-            @click="addProject"
-          />
+          <UButton icon="lucide:plus" variant="soft" label="Add a project" @click="addProject" />
         </div>
       </UForm>
     </template>
 
     <template #footer>
-      <UButton color="neutral" variant="soft" @click="onCancel">
-        Cancel
-      </UButton>
+      <UButton color="neutral" variant="soft" @click="onCancel"> Cancel </UButton>
       <UButton :disabled="!isValid" @click="onSave"> Save </UButton>
     </template>
   </UModal>

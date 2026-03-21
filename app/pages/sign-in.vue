@@ -23,8 +23,7 @@ const providers = [
         title="Welcome back"
         description="Sign in to your account to continue"
         icon="i-lucide-lock"
-        :providers="providers"
-      />
+        :providers="providers" />
     </UPageCard>
   </div>
 </template>

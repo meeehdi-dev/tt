@@ -53,17 +53,9 @@ watch(selectedEvent, () => {
     :ui="{ footer: 'justify-end' }"
     :close="{
       onClick: unselectEvent,
-    }"
-  >
+    }">
     <template #body>
-      <UForm
-        ref="form"
-        :schema="schema"
-        :state="state"
-        :validate-on="['change']"
-        class="space-y-4"
-        @submit="onSubmit"
-      >
+      <UForm ref="form" :schema="schema" :state="state" :validate-on="['change']" class="space-y-4" @submit="onSubmit">
         <UFormField label="Project" name="projectId">
           <UInputMenu
             v-model="state.projectId"
@@ -72,23 +64,16 @@ watch(selectedEvent, () => {
             label-key="name"
             :trailing-icon="false"
             class="w-full"
-            placeholder="Select a project"
-          />
+            placeholder="Select a project" />
         </UFormField>
         <UFormField label="Description" name="description">
-          <UTextarea
-            v-model="state.description"
-            class="w-full"
-            placeholder="What did you work on?"
-          />
+          <UTextarea v-model="state.description" class="w-full" placeholder="What did you work on?" />
         </UFormField>
       </UForm>
     </template>
 
     <template #footer>
-      <UButton color="neutral" variant="soft" @click="unselectEvent"
-        >Cancel</UButton
-      >
+      <UButton color="neutral" variant="soft" @click="unselectEvent">Cancel</UButton>
       <UButton type="submit" @click="form?.submit()">Save</UButton>
     </template>
   </UModal>

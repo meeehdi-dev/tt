@@ -9,11 +9,7 @@ interface UseLongPressProps {
 
 const DISTANCE_THRESHOLD = 10;
 
-export default function useLongPress({
-  target,
-  onLongPress,
-  onRelease,
-}: UseLongPressProps) {
+export default function useLongPress({ target, onLongPress, onRelease }: UseLongPressProps) {
   const longPressTimeout = shallowRef(0);
   const isLongPress = shallowRef(false);
 
@@ -22,10 +18,7 @@ export default function useLongPress({
   const initialY = shallowRef(0);
 
   function getDistanceFromInitial() {
-    return Math.sqrt(
-      Math.pow(x.value - initialX.value, 2) +
-        Math.pow(y.value - initialY.value, 2),
-    );
+    return Math.sqrt(Math.pow(x.value - initialX.value, 2) + Math.pow(y.value - initialY.value, 2));
   }
 
   function onMouseUp(e: MouseEvent) {

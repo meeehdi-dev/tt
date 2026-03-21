@@ -42,17 +42,11 @@ function useDate() {
     currentWeek.value = currentWeek.value.add(1, "week");
   }
 
-  const startOfWeek = computed(() =>
-    currentWeek.value.startOf("week").add(startOfWeekDay.value, "day"),
-  );
-  const endOfWeek = computed(() =>
-    currentWeek.value.endOf("week").add(startOfWeekDay.value, "day"),
-  );
+  const startOfWeek = computed(() => currentWeek.value.startOf("week").add(startOfWeekDay.value, "day"));
+  const endOfWeek = computed(() => currentWeek.value.endOf("week").add(startOfWeekDay.value, "day"));
 
   const days = computed(() =>
-    Array.from({ length: 7 }, (_, i) =>
-      startOfWeek.value.add(i, "day").format("YYYY-MM-DD"),
-    ),
+    Array.from({ length: 7 }, (_, i) => startOfWeek.value.add(i, "day").format("YYYY-MM-DD")),
   );
 
   return {

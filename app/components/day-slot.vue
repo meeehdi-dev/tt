@@ -20,13 +20,9 @@ const dayOfWeek = computed(() => dayjs(date).day());
     class="cursor-pointer rounded-sm border-y-2 border-neutral-900 transition-colors hover:bg-neutral-700"
     :class="{
       'bg-neutral-700!':
-        currentEvent &&
-        date === currentEvent.date &&
-        minute >= currentEvent.start &&
-        minute < currentEvent.end,
+        currentEvent && date === currentEvent.date && minute >= currentEvent.start && minute < currentEvent.end,
       'bg-neutral-800/50': dayOfWeek > 0 && dayOfWeek < 6,
       'bg-neutral-800/30': dayOfWeek === 0 || dayOfWeek === 6,
     }"
-    @mouseover="emit('slotHover', $event)"
-  />
+    @mouseover="emit('slotHover', $event)" />
 </template>

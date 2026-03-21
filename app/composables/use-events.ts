@@ -40,16 +40,8 @@ export default function useEvents() {
     },
   );
 
-  function hasOverlap(
-    date: string,
-    start: number,
-    end: number,
-    excludeId?: string,
-  ) {
-    return events.value.some(
-      (e) =>
-        e.id !== excludeId && e.date === date && e.start < end && e.end > start,
-    );
+  function hasOverlap(date: string, start: number, end: number, excludeId?: string) {
+    return events.value.some((e) => e.id !== excludeId && e.date === date && e.start < end && e.end > start);
   }
 
   function onSlotHover(e: MouseEvent) {
@@ -74,13 +66,7 @@ export default function useEvents() {
   }
 
   function addEvent() {
-    if (
-      hasOverlap(
-        currentEvent.value!.date,
-        currentEvent.value!.start,
-        currentEvent.value!.end,
-      )
-    ) {
+    if (hasOverlap(currentEvent.value!.date, currentEvent.value!.start, currentEvent.value!.end)) {
       toast.add({
         title: "Unable to create event",
         description: "An event already exists in that timespan",
@@ -139,11 +125,7 @@ export default function useEvents() {
 
     if (hasOverlap(targetDate, candidateStart, candidateEnd, eventId)) {
       const blocker = events.value.find(
-        (e) =>
-          e.id !== eventId &&
-          e.date === targetDate &&
-          e.start < candidateEnd &&
-          e.end > candidateStart,
+        (e) => e.id !== eventId && e.date === targetDate && e.start < candidateEnd && e.end > candidateStart,
       );
 
       if (!blocker) return;
@@ -194,11 +176,7 @@ export default function useEvents() {
     const event = events.value.find((e) => e.id === eventId)!;
 
     const blocker = events.value.find(
-      (e) =>
-        e.id !== eventId &&
-        e.date === event.date &&
-        e.start < event.end &&
-        e.end > minute,
+      (e) => e.id !== eventId && e.date === event.date && e.start < event.end && e.end > minute,
     );
 
     if (blocker) {
@@ -233,11 +211,7 @@ export default function useEvents() {
     const candidateEnd = minute + SLOT_DURATION;
 
     const blocker = events.value.find(
-      (e) =>
-        e.id !== eventId &&
-        e.date === event.date &&
-        e.start < candidateEnd &&
-        e.end > event.start,
+      (e) => e.id !== eventId && e.date === event.date && e.start < candidateEnd && e.end > event.start,
     );
 
     if (blocker) {
@@ -300,10 +274,7 @@ export default function useEvents() {
           },
         });
 
-        events.value = [
-          ...events.value.filter((e) => e.id !== selectedEvent.value!.id),
-          created!,
-        ];
+        events.value = [...events.value.filter((e) => e.id !== selectedEvent.value!.id), created!];
       } catch {
         toast.add({ title: "Failed to save event", color: "error" });
       }
@@ -317,10 +288,7 @@ export default function useEvents() {
           },
         });
 
-        events.value = [
-          ...events.value.filter((e) => e.id !== event.id),
-          event,
-        ];
+        events.value = [...events.value.filter((e) => e.id !== event.id), event];
       } catch {
         toast.add({ title: "Failed to update event", color: "error" });
       }
@@ -331,9 +299,7 @@ export default function useEvents() {
 
   function unselectEvent() {
     if (selectedEvent.value && !selectedEvent.value.projectId) {
-      events.value = events.value.filter(
-        (e) => e.id !== selectedEvent.value!.id,
-      );
+      events.value = events.value.filter((e) => e.id !== selectedEvent.value!.id);
     }
     selectedEvent.value = undefined;
   }

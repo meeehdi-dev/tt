@@ -17,20 +17,14 @@ const projectTotals = computed(() => {
     .sort((a, b) => b.time - a.time);
 });
 
-const totalTime = computed(() =>
-  projectTotals.value.reduce((sum, p) => sum + p.time, 0),
-);
+const totalTime = computed(() => projectTotals.value.reduce((sum, p) => sum + p.time, 0));
 </script>
 
 <template>
   <UModal v-model:open="isOpen" title="Week Summary">
     <template #body>
       <div class="flex flex-col gap-2">
-        <div
-          v-for="project in projectTotals"
-          :key="project.projectId"
-          class="flex items-center justify-between gap-2"
-        >
+        <div v-for="project in projectTotals" :key="project.projectId" class="flex items-center justify-between gap-2">
           <UBadge variant="soft">
             {{ getProjectName(project.projectId) }}
           </UBadge>
