@@ -36,7 +36,6 @@ const totalTime = computed(() =>
           </UBadge>
           <span class="text-sm">
             {{ getTimeLabel(project.time) }}
-            hrs
           </span>
         </div>
         <USeparator class="my-2" />
@@ -44,7 +43,6 @@ const totalTime = computed(() =>
           <span class="text-sm">Total</span>
           <span class="text-sm">
             {{ getTimeLabel(totalTime) }}
-            hrs
           </span>
         </div>
       </div>

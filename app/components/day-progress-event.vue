@@ -15,7 +15,6 @@ const eventTime = computed(() => getEventTime(event));
     </UBadge>
     <span class="text-sm">
       {{ getTimeLabel(eventTime) }}
-      hrs
     </span>
   </div>
 </template>
