@@ -134,7 +134,7 @@ const height = computed(() => {
 <template>
   <div
     ref="event"
-    class="outline-primary pointer-events-auto relative row-span-(--row-span) row-start-(--row-start) overflow-hidden rounded-sm bg-neutral-800 outline-0 transition-[outline] select-none"
+    class="outline-primary group pointer-events-auto relative row-span-(--row-span) row-start-(--row-start) overflow-hidden rounded-sm bg-neutral-800 outline-0 transition-[outline] select-none"
     :class="{
       'shadow-primary-500 z-20 shadow-[0_0_8px] outline-1': state === State.Dragging,
     }"
@@ -145,7 +145,8 @@ const height = computed(() => {
       height,
     }"
     :data-start="event.start"
-    :data-end="event.end">
+    :data-end="event.end"
+    @dblclick="selectEvent(event.id)">
     <div
       class="hover:to-primary/50 absolute top-0 h-2 w-full cursor-n-resize rounded-t-sm bg-linear-to-t from-transparent to-transparent transition-colors"
       @mousedown="onGrabTop" />
@@ -153,16 +154,20 @@ const height = computed(() => {
       <UIcon name="lucide:loader-circle" class="animate-spin" />
     </div>
     <div v-else>
-      <div class="absolute right-0 m-1">
-        <UButton icon="lucide:edit" size="xs" variant="ghost" color="secondary" @click="selectEvent(event.id)" />
-        <UPopover :content="{ side: 'top' }" arrow>
-          <UButton icon="lucide:x" size="xs" variant="ghost" color="error" />
+      <UPopover
+        :content="{ side: 'right' }"
+        class="absolute right-0 m-1 opacity-0 transition-opacity group-hover:opacity-100">
+        <UButton icon="lucide:x" size="xs" variant="ghost" color="error" />
 
-          <template #content>
-            <UButton label="Confirm" icon="lucide:x" variant="link" color="error" @click="removeEvent(event.id)" />
-          </template>
-        </UPopover>
-      </div>
+        <template #content>
+          <UButton
+            label="Remove event?"
+            icon="lucide:trash"
+            variant="soft"
+            color="error"
+            @click="removeEvent(event.id)" />
+        </template>
+      </UPopover>
       <div class="flex flex-col p-1">
         <UBadge class="place-self-start" variant="soft">{{ getProjectName(event.projectId) }}</UBadge>
         <div class="text-muted text-sm whitespace-pre">

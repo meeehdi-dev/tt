@@ -11,7 +11,7 @@ const dayTime = computed(() => dayEvents.value.reduce((sum, e) => sum + getEvent
 <template>
   <div class="relative flex h-full overflow-hidden rounded-sm bg-neutral-800">
     <div class="absolute top-1/2 left-1/2 flex items-center justify-center">
-      <UPopover mode="hover" arrow>
+      <UPopover mode="hover" :ui="{ content: dayTime <= 0 ? 'hidden' : undefined }">
         <UBadge class="absolute text-xs" variant="soft" icon="lucide:clock">
           <span class="whitespace-nowrap">{{ getTimeLabel(dayTime) }}</span>
         </UBadge>
