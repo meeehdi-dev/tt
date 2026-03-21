@@ -10,8 +10,9 @@ const providers: ButtonProps[] = [
   {
     label: "GitHub",
     icon: "lucide:github",
-    onClick: () => {
-      void authClient.signIn.social({ provider: "github", callbackURL: "/" });
+    loadingAuto: true,
+    onClick: async () => {
+      await authClient.signIn.social({ provider: "github", callbackURL: "/" });
     },
     color: "primary",
     variant: "soft",

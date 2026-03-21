@@ -22,8 +22,13 @@ const items = ref<DropdownMenuItem[]>([
     label: "Sign out",
     color: "error",
     onSelect: async () => {
-      await authClient.signOut();
-      void navigateTo("/sign-in");
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: async () => {
+            await navigateTo("/sign-in");
+          },
+        },
+      });
     },
   },
 ]);

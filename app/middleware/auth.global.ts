@@ -6,8 +6,4 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (!session.value && to.path !== "/sign-in") {
     return navigateTo("/sign-in");
   }
-
-  if (session.value && to.path === "/sign-in") {
-    return navigateTo("/");
-  }
 });
