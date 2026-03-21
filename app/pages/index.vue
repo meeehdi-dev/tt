@@ -76,7 +76,7 @@ useMousePressed({
         <div class="text-xs">{{ endOfDay / 60 }}:00</div>
         <UButton
           icon="lucide:sigma"
-          variant="subtle"
+          variant="soft"
           class="max-h-7.5 justify-center"
           :disabled="events.length === 0"
           @click="isWeekSummaryModalOpen = true" />

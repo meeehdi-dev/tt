@@ -17,6 +17,7 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@inspira-ui/plugins": "^0.0.2",
     "@nuxt/eslint": "1.15.2",
     "@nuxt/ui": "4.5.1",
     "@vueuse/core": "^14.2.1",

@@ -29,6 +29,6 @@ const isToday = computed(() => date === dayjs().format("YYYY-MM-DD"));
     :ui="{
       container: 'm-0',
     }">
-    <UBadge :label="now.format('HH:mm:ss')" color="primary" size="sm" variant="subtle" />
+    <UBadge :label="now.format('HH:mm:ss')" color="primary" size="sm" variant="soft" />
   </USeparator>
 </template>
