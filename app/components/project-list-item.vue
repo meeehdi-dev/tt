@@ -8,7 +8,6 @@ const emit = defineEmits<{
 }>();
 
 const { getProjectEventsCount } = useProjects();
-const inputRef = useTemplateRef("inputRef");
 
 const isChecking = ref(false);
 const eventsCount = ref(0);
@@ -31,19 +30,11 @@ async function handleDeleteClick() {
     isPopoverOpen.value = true;
   }
 }
-
-defineExpose({
-  inputRef: computed(() => inputRef.value),
-  focus: () => {
-    inputRef.value?.inputRef?.focus();
-  },
-});
 </script>
 
 <template>
   <div class="flex items-center gap-2">
     <UInput
-      ref="inputRef"
       :model-value="modelValue"
       class="flex-1"
       placeholder="Project name"

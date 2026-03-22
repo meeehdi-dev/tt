@@ -33,7 +33,7 @@ const localProjects = computed(() => {
   const activeProjects = projects.value.filter((p) => !p.deletedAt);
 
   if (selectedEvent.value && selectedEvent.value.projectId) {
-    const project = projects.value.find((p) => p.id === selectedEvent.value?.projectId);
+    const project = projects.value.find((p) => p.id === selectedEvent.value!.projectId);
     if (project && project.deletedAt) {
       return [...activeProjects, { ...project, name: `${project.name} (Archived)` }];
     }

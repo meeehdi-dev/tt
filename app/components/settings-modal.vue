@@ -12,7 +12,6 @@ const localStartOfDay = ref<number>(startOfDay.value);
 const localEndOfDay = ref<number>(endOfDay.value);
 const localWorkDayDuration = ref<number>(workDayDuration.value / 60);
 const localProjects = ref<Project[]>([]);
-const inputRefs = ref<Array<{ focus: () => void } | null>>([]);
 
 const startOfWeekOptions = [
   { label: "Saturday", value: StartOfWeekDay.Saturday },
@@ -72,15 +71,6 @@ watch(isOpen, (open) => {
 
 async function addProject() {
   localProjects.value.push({ id: "", name: "" });
-
-  await nextTick();
-
-  const newIndex = localProjects.value.length - 1;
-  const lastInputComponent = inputRefs.value[newIndex];
-
-  if (lastInputComponent) {
-    lastInputComponent.focus();
-  }
 }
 
 async function removeProject(index: number) {
@@ -90,8 +80,7 @@ async function removeProject(index: number) {
 const isValid = computed(() => localEndOfDay.value > localStartOfDay.value);
 
 function updateProjectName(index: number, name: string) {
-  const project = localProjects.value[index];
-  if (!project) return;
+  const project = localProjects.value[index]!;
   project.name = name;
 }
 </script>
@@ -122,7 +111,6 @@ function updateProjectName(index: number, name: string) {
           <div v-if="localProjects.length === 0" class="text-sm text-neutral-500">No projects added yet.</div>
           <div v-for="(project, index) in localProjects" :key="index">
             <ProjectListItem
-              ref="inputRefs"
               :project="project"
               :model-value="project.name"
               @update:model-value="(val) => updateProjectName(index, val)"
