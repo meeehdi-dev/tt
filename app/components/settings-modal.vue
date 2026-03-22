@@ -12,7 +12,6 @@ const localStartOfDay = ref<number>(startOfDay.value);
 const localEndOfDay = ref<number>(endOfDay.value);
 const localWorkDayDuration = ref<number>(workDayDuration.value / 60);
 const localProjects = ref<Project[]>([]);
-const inputRefs = ref<Array<{ inputRef: HTMLInputElement } | null>>([]);
 
 const startOfWeekOptions = [
   { label: "Saturday", value: StartOfWeekDay.Saturday },
@@ -65,33 +64,23 @@ watch(isOpen, (open) => {
     localStartOfDay.value = startOfDay.value;
     localEndOfDay.value = endOfDay.value;
     localWorkDayDuration.value = workDayDuration.value / 60;
-    localProjects.value = JSON.parse(JSON.stringify(projects.value));
-    originalProjects = JSON.parse(JSON.stringify(projects.value));
+    localProjects.value = JSON.parse(JSON.stringify(projects.value.filter((p) => !p.deletedAt)));
+    originalProjects = JSON.parse(JSON.stringify(projects.value.filter((p) => !p.deletedAt)));
   }
 });
 
 async function addProject() {
   localProjects.value.push({ id: "", name: "" });
-
-  await nextTick();
-
-  const newIndex = localProjects.value.length - 1;
-  const lastInputComponent = inputRefs.value[newIndex];
-
-  if (lastInputComponent?.inputRef) {
-    lastInputComponent.inputRef.focus();
-  }
 }
 
-function removeProject(index: number) {
+async function removeProject(index: number) {
   localProjects.value.splice(index, 1);
 }
 
 const isValid = computed(() => localEndOfDay.value > localStartOfDay.value);
 
 function updateProjectName(index: number, name: string) {
-  const project = localProjects.value[index];
-  if (!project) return;
+  const project = localProjects.value[index]!;
   project.name = name;
 }
 </script>
@@ -120,14 +109,12 @@ function updateProjectName(index: number, name: string) {
             <span class="text-sm font-medium">Projects</span>
           </div>
           <div v-if="localProjects.length === 0" class="text-sm text-neutral-500">No projects added yet.</div>
-          <div v-for="(project, index) in localProjects" :key="index" class="flex items-center gap-2">
-            <UInput
-              ref="inputRefs"
+          <div v-for="(project, index) in localProjects" :key="index">
+            <ProjectListItem
+              :project="project"
               :model-value="project.name"
-              class="flex-1"
-              placeholder="Project name"
-              @update:model-value="(val) => updateProjectName(index, val)" />
-            <UButton icon="lucide:trash" size="xs" color="error" variant="ghost" @click="removeProject(index)" />
+              @update:model-value="(val) => updateProjectName(index, val)"
+              @delete="removeProject(index)" />
           </div>
           <UButton icon="lucide:plus" variant="soft" label="Add a project" @click="addProject" />
         </div>

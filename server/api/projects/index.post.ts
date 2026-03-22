@@ -19,7 +19,11 @@ export default defineEventHandler(async (event) => {
       name: body.name,
       userId: session.user.id,
     })
-    .returning({ id: project.id, name: project.name });
+    .returning({
+      id: project.id,
+      name: project.name,
+      deletedAt: project.deletedAt,
+    });
 
   return created;
 });

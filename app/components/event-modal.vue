@@ -29,18 +29,24 @@ async function onSubmit(e: FormSubmitEvent<Schema>) {
 
 const { projects } = useProjects();
 
-const localProjects = ref([...projects.value]);
+const localProjects = computed(() => {
+  const activeProjects = projects.value.filter((p) => !p.deletedAt);
 
-watch(projects, () => {
-  localProjects.value = [...projects.value];
+  if (selectedEvent.value && selectedEvent.value.projectId) {
+    const project = projects.value.find((p) => p.id === selectedEvent.value!.projectId);
+    if (project && project.deletedAt) {
+      return [...activeProjects, { ...project, name: `${project.name} (Archived)` }];
+    }
+  }
+  return activeProjects;
 });
 
 watch(selectedEvent, () => {
   if (!selectedEvent.value) {
+    state.projectId = "";
+    state.description = undefined;
     return;
   }
-
-  localProjects.value = [...projects.value];
   state.projectId = selectedEvent.value.projectId;
   state.description = selectedEvent.value.description ?? undefined;
 });
