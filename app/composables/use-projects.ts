@@ -16,6 +16,16 @@ export default function useProjects() {
     return projects.value.find((p) => p.id === id)?.name ?? id;
   }
 
+  function isProjectDeleted(id: string) {
+    const project = projects.value.find((p) => p.id === id);
+    return !!project?.deletedAt;
+  }
+
+  async function getProjectEventsCount(id: string) {
+    const response = await $fetch<{ count: number }>(`/api/projects/${id}/events/count`);
+    return response.count;
+  }
+
   async function createProject(name: string) {
     const created = await $fetch("/api/projects", {
       method: "POST",
@@ -30,11 +40,26 @@ export default function useProjects() {
       body: { name },
     });
 
-    projects.value = [...projects.value.filter((e) => e.id !== id), { id, name }];
+    projects.value = [
+      ...projects.value.filter((e) => e.id !== id),
+      {
+        id,
+        name,
+        deletedAt: projects.value.find((p) => p.id === id)?.deletedAt,
+      },
+    ];
   }
 
   async function deleteProject(id: string) {
-    await $fetch(`/api/projects/${id}`, { method: "DELETE" });
+    const response = await $fetch<{ softDeleted: boolean }>(`/api/projects/${id}`, { method: "DELETE" });
+    if (response.softDeleted) {
+      const project = projects.value.find((p) => p.id === id);
+      if (project) {
+        project.deletedAt = new Date().toISOString();
+      }
+    } else {
+      projects.value = projects.value.filter((p) => p.id !== id);
+    }
   }
 
   return {
@@ -44,5 +69,7 @@ export default function useProjects() {
     updateProject,
     deleteProject,
     getProjectName,
+    isProjectDeleted,
+    getProjectEventsCount,
   };
 }

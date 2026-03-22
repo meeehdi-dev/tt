@@ -33,6 +33,7 @@ export const project = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date())
       .notNull(),
+    deletedAt: timestamp("deleted_at"),
   },
   (t) => [unique().on(t.name, t.userId)],
 );

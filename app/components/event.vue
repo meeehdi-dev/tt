@@ -21,7 +21,7 @@ const { x, y } = useMouse();
 
 const { selectEvent, moveEvent, removeEvent, moveEventStart, moveEventBottom } = useEvents();
 
-const { getProjectName } = useProjects();
+const { getProjectName, isProjectDeleted } = useProjects();
 
 const state = shallowRef(State.Idle);
 const currentX = shallowRef(0);
@@ -169,7 +169,9 @@ const height = computed(() => {
         </template>
       </UPopover>
       <div class="flex flex-col p-1">
-        <UBadge class="place-self-start" variant="soft">{{ getProjectName(event.projectId) }}</UBadge>
+        <UBadge class="place-self-start" variant="soft" :class="{ 'opacity-50': isProjectDeleted(event.projectId) }">
+          {{ getProjectName(event.projectId) }}
+        </UBadge>
         <div class="text-muted text-sm whitespace-pre">
           {{ event.description }}
         </div>
