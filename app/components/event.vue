@@ -172,9 +172,11 @@ const height = computed(() => {
         <UBadge class="place-self-start" variant="soft" :class="{ 'opacity-50': isProjectDeleted(event.projectId) }">
           {{ getProjectName(event.projectId) }}
         </UBadge>
-        <div class="text-muted text-sm whitespace-pre">
-          {{ event.description }}
-        </div>
+        <UEditor
+          :model-value="event.description || ''"
+          :editable="false"
+          content-type="markdown"
+          :ui="{ base: 'sm:px-0' }" />
       </div>
       <div
         class="hover:to-primary/50 absolute bottom-0 h-2 w-full cursor-s-resize rounded-b-sm bg-linear-to-b from-transparent to-transparent transition-colors"

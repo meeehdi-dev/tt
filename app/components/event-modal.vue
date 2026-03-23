@@ -1,10 +1,45 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from "@nuxt/ui";
+import type { EditorToolbarItem, FormSubmitEvent } from "@nuxt/ui";
 import { z } from "zod";
 
 const form = useTemplateRef("form");
 
 const { selectedEvent, unselectEvent, saveEvent } = useEvents();
+
+// NOTE: StarterKit provides basic formatting (bold, italic, strikethrough, lists).
+// Advanced features like links, images, or code block syntax highlighting may require installing external plugins.
+const bubbleToolbarItems: EditorToolbarItem[][] = [
+  [
+    {
+      kind: "mark",
+      mark: "bold",
+      icon: "lucide:bold",
+      tooltip: { text: "Bold" },
+    },
+    {
+      kind: "mark",
+      mark: "italic",
+      icon: "lucide:italic",
+      tooltip: { text: "Italic" },
+    },
+    {
+      kind: "mark",
+      mark: "strike",
+      icon: "lucide:strikethrough",
+      tooltip: { text: "Strikethrough" },
+    },
+    {
+      kind: "bulletList",
+      icon: "lucide:list",
+      tooltip: { text: "Bullet List" },
+    },
+    {
+      kind: "orderedList",
+      icon: "lucide:list-ordered",
+      tooltip: { text: "Ordered List" },
+    },
+  ],
+];
 
 const schema = z.object({
   projectId: z.string().min(1),
@@ -91,7 +126,16 @@ defineShortcuts({
             placeholder="Select a project" />
         </UFormField>
         <UFormField label="Description" name="description">
-          <UTextarea v-model="state.description" class="w-full" placeholder="What did you work on?" />
+          <UEditor
+            v-slot="{ editor }"
+            v-model="state.description"
+            content-type="markdown"
+            :ui="{
+              root: 'ring-accented w-full rounded-md ring ring-inset',
+              base: 'sm:px-2.5 sm:py-1.5',
+            }">
+            <UEditorToolbar :editor="editor" :items="bubbleToolbarItems" layout="bubble" />
+          </UEditor>
         </UFormField>
       </UForm>
     </template>
