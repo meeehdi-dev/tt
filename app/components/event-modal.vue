@@ -50,6 +50,24 @@ watch(selectedEvent, () => {
   state.projectId = selectedEvent.value.projectId;
   state.description = selectedEvent.value.description ?? undefined;
 });
+
+defineShortcuts({
+  meta_enter: {
+    usingInput: true,
+    handler: () => {
+      if (selectedEvent.value !== undefined) {
+        form.value?.submit();
+      }
+    },
+  },
+  escape: {
+    handler: () => {
+      if (selectedEvent.value !== undefined) {
+        unselectEvent();
+      }
+    },
+  },
+});
 </script>
 
 <template>
@@ -80,7 +98,15 @@ watch(selectedEvent, () => {
 
     <template #footer>
       <UButton color="neutral" variant="soft" @click="unselectEvent">Cancel</UButton>
-      <UButton type="submit" @click="form?.submit()">Save</UButton>
+      <UButton type="submit" @click="form?.submit()">
+        Save
+        <template #trailing>
+          <div class="ml-2 flex items-center gap-0.5">
+            <UKbd value="meta" variant="subtle" />
+            <UKbd value="enter" variant="subtle" />
+          </div>
+        </template>
+      </UButton>
     </template>
   </UModal>
 </template>
