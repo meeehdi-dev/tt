@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import type { Event } from "~/types";
-
-const { event } = defineProps<{ event: Event }>();
+const { projectId, time } = defineProps<{ projectId: string; time: number }>();
 
 const { getProjectName } = useProjects();
-
-const eventTime = computed(() => getEventTime(event));
 </script>
 
 <template>
   <div class="flex items-center gap-2">
     <UBadge variant="soft">
-      {{ getProjectName(event.projectId) }}
+      {{ getProjectName(projectId) }}
     </UBadge>
     <span class="text-sm">
-      {{ getTimeLabel(eventTime) }}
+      {{ getTimeLabel(time) }}
     </span>
   </div>
 </template>

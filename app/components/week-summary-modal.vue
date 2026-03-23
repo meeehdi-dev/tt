@@ -4,18 +4,7 @@ const isOpen = defineModel<boolean>("open");
 const { events } = useEvents();
 const { getProjectName } = useProjects();
 
-const projectTotals = computed(() => {
-  const totals = new Map<string, number>();
-
-  for (const event of events.value) {
-    const duration = getEventTime(event);
-    totals.set(event.projectId, (totals.get(event.projectId) || 0) + duration);
-  }
-
-  return Array.from(totals.entries())
-    .map(([projectId, time]) => ({ projectId, time }))
-    .sort((a, b) => b.time - a.time);
-});
+const projectTotals = computed(() => groupEventsByProject(events.value));
 
 const totalTime = computed(() => projectTotals.value.reduce((sum, p) => sum + p.time, 0));
 </script>

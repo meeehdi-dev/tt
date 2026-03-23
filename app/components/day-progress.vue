@@ -4,6 +4,7 @@ const { date } = defineProps<{ date: string }>();
 const { events } = useEvents();
 
 const dayEvents = computed(() => events.value.filter((e) => e.date === date));
+const groupedEvents = computed(() => groupEventsByProject(dayEvents.value));
 
 const dayTime = computed(() => dayEvents.value.reduce((sum, e) => sum + getEventTime(e), 0));
 </script>
@@ -17,7 +18,11 @@ const dayTime = computed(() => dayEvents.value.reduce((sum, e) => sum + getEvent
         </UBadge>
         <template #content>
           <div class="flex flex-col gap-1 rounded-xl bg-neutral-900 p-1 pr-2">
-            <DayProgressEvent v-for="event in dayEvents" :key="`${date}-progress-${event.id}`" :event="event" />
+            <DayProgressEvent
+              v-for="group in groupedEvents"
+              :key="`${date}-progress-${group.projectId}`"
+              :project-id="group.projectId"
+              :time="group.time" />
           </div>
         </template>
       </UPopover>

@@ -71,6 +71,19 @@ export function getEventTime(event: Event) {
   return event.end - event.start;
 }
 
+export function groupEventsByProject(events: Event[]) {
+  const totals = new Map<string, number>();
+
+  for (const event of events) {
+    const duration = getEventTime(event);
+    totals.set(event.projectId, (totals.get(event.projectId) || 0) + duration);
+  }
+
+  return Array.from(totals.entries())
+    .map(([projectId, time]) => ({ projectId, time }))
+    .sort((a, b) => b.time - a.time);
+}
+
 export function getSlotHeight() {
   const slot = document.querySelector<HTMLElement>("[data-group='slot']")!;
   if (!slot) {
