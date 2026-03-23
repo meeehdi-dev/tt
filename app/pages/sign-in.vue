@@ -35,7 +35,7 @@ const providers: ButtonProps[] = [
       <UAuthForm
         title="Welcome back"
         description="Sign in to your account to continue"
-        icon="i-lucide-lock"
+        icon="lucide:lock"
         :ui="{ leadingIcon: 'text-primary-400' }"
         :providers="providers" />
     </UPageCard>
