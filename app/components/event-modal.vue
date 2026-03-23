@@ -98,15 +98,15 @@ defineShortcuts({
 
     <template #footer>
       <UButton color="neutral" variant="soft" @click="unselectEvent">Cancel</UButton>
-      <UButton type="submit" @click="form?.submit()">
-        Save
-        <template #trailing>
-          <div class="ml-2 flex items-center gap-0.5">
-            <UKbd value="meta" variant="subtle" />
-            <UKbd value="enter" variant="subtle" />
+      <UPopover mode="hover">
+        <UButton type="submit" @click="form?.submit()"> Save </UButton>
+        <template #content>
+          <div class="flex items-center gap-0.5 p-0.5">
+            <UKbd value="meta" variant="soft" />
+            <UKbd value="enter" variant="soft" />
           </div>
         </template>
-      </UButton>
+      </UPopover>
     </template>
   </UModal>
 </template>
