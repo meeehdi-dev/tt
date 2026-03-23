@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { formatPeriodLabel, getEndOfWeek, getStartOfWeek } from "~/utils/date";
+import { getColorForId } from "~/utils/colors";
 
 const isOpen = defineModel<boolean>("open");
 const { currentWeek } = useDate();
@@ -41,16 +42,22 @@ function nextPeriod() {
 }
 
 const startDate = computed(() => {
-  if (selectedTab.value === Tab.Week) return getStartOfWeek(currentDate.value, startOfWeekDay.value);
+  if (selectedTab.value === Tab.Week) {
+    return getStartOfWeek(currentDate.value, startOfWeekDay.value);
+  }
+
   return currentDate.value.startOf(selectedTab.value);
 });
 const endDate = computed(() => {
-  if (selectedTab.value === Tab.Week) return getEndOfWeek(currentDate.value, startOfWeekDay.value);
+  if (selectedTab.value === Tab.Week) {
+    return getEndOfWeek(currentDate.value, startOfWeekDay.value);
+  }
+
   return currentDate.value.endOf(selectedTab.value);
 });
 
 const { data: events, status } = useAsyncData(
-  "summary-events",
+  () => `summary-events-${startDate.value.toISOString()}-${endDate.value.toISOString()}`,
   () =>
     $fetch("/api/events", {
       query: {
@@ -61,11 +68,21 @@ const { data: events, status } = useAsyncData(
   {
     watch: [startDate, endDate],
     default: () => [],
+    server: false,
   },
 );
 
 const projectTotals = computed(() => groupEventsByProject(events.value));
 const totalTime = computed(() => projectTotals.value.reduce((sum, p) => sum + p.time, 0));
+
+const chartData = computed(() =>
+  projectTotals.value.map((p) => ({
+    id: p.projectId,
+    label: getProjectName(p.projectId),
+    value: p.time,
+    color: getColorForId(p.projectId),
+  })),
+);
 </script>
 
 <template>
@@ -81,40 +98,41 @@ const totalTime = computed(() => projectTotals.value.reduce((sum, p) => sum + p.
         </div>
       </div>
 
-      <div class="mt-4 grid grid-cols-2 gap-6">
-        <div
-          class="flex min-h-50 items-center justify-center rounded-lg border border-dashed border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
-          <span class="text-sm text-gray-500">Pie Chart Placeholder</span>
-        </div>
+      <div v-if="projectTotals.length > 0" class="grid min-h-60 grid-cols-2 items-center gap-6">
+        <PieChart :data="chartData" :total="totalTime" />
 
         <div class="flex flex-col gap-2">
           <div v-if="status === 'pending'" class="text-sm text-gray-500">
             <UIcon name="lucide:loader-circle" class="animate-spin" />
           </div>
-          <template v-else>
-            <div v-if="projectTotals.length === 0" class="flex flex-col items-center gap-2">
-              <UIcon name="lucide:circle-off" />
-              No project on this period
+          <div v-else class="flex flex-col gap-2">
+            <div v-for="project in projectTotals" :key="project.projectId" class="flex items-center justify-between">
+              <UBadge variant="soft" class="flex items-center gap-1.5 text-sm">
+                <div
+                  class="size-2.5 rounded-full"
+                  :style="{
+                    backgroundColor: getColorForId(project.projectId),
+                  }" />
+
+                {{ getProjectName(project.projectId) }}
+              </UBadge>
+              <span class="text-sm">
+                {{ getTimeLabel(project.time) }}
+              </span>
             </div>
-            <div v-else class="flex flex-col gap-2">
-              <div v-for="project in projectTotals" :key="project.projectId" class="flex justify-between">
-                <UBadge variant="soft">
-                  {{ getProjectName(project.projectId) }}
-                </UBadge>
-                <span class="text-sm">
-                  {{ getTimeLabel(project.time) }}
-                </span>
-              </div>
-              <USeparator class="my-2" />
-              <div class="flex items-center justify-between font-bold">
-                <span class="text-sm">Total</span>
-                <span class="text-sm">
-                  {{ getTimeLabel(totalTime) }}
-                </span>
-              </div>
+            <USeparator class="my-2" />
+            <div class="flex items-center justify-between font-bold">
+              <span class="text-sm">Total</span>
+              <span class="text-sm">
+                {{ getTimeLabel(totalTime) }}
+              </span>
             </div>
-          </template>
+          </div>
         </div>
+      </div>
+      <div v-else class="text-muted flex min-h-60 flex-col items-center justify-center gap-2">
+        <UIcon name="lucide:circle-off" />
+        No data on this period
       </div>
     </template>
   </UModal>
