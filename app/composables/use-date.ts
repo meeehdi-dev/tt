@@ -2,6 +2,7 @@ import "dayjs/plugin/isoWeek";
 import { StartOfWeekDay } from "~/types";
 import { createSharedComposable } from "@vueuse/core";
 import dayjs from "dayjs";
+import { getStartOfWeek, getEndOfWeek } from "~/utils/date";
 
 function useDate() {
   const startOfWeekDay = useCookie<StartOfWeekDay>("startOfWeekDay", {
@@ -42,12 +43,8 @@ function useDate() {
     currentWeek.value = currentWeek.value.add(1, "week");
   }
 
-  const startOfWeek = computed(() => {
-    const currentDay = currentWeek.value.day();
-    const daysToSubtract = (currentDay - startOfWeekDay.value + 7) % 7;
-    return currentWeek.value.subtract(daysToSubtract, "day").startOf("day");
-  });
-  const endOfWeek = computed(() => startOfWeek.value.add(6, "day").endOf("day"));
+  const startOfWeek = computed(() => getStartOfWeek(currentWeek.value, startOfWeekDay.value));
+  const endOfWeek = computed(() => getEndOfWeek(currentWeek.value, startOfWeekDay.value));
 
   const days = computed(() =>
     Array.from({ length: 7 }, (_, i) => startOfWeek.value.add(i, "day").format("YYYY-MM-DD")),

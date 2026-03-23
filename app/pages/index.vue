@@ -13,7 +13,7 @@ const { days, startOfDay, endOfDay } = useDate();
 
 const { events, currentEvent, onSlotHover, addEvent, createEvent } = useEvents();
 
-const isWeekSummaryModalOpen = ref(false);
+const isSummaryModalOpen = ref(false);
 
 useMousePressed({
   target: weekRef,
@@ -79,13 +79,13 @@ useMousePressed({
           variant="soft"
           class="max-h-7.5 justify-center"
           :disabled="events.length === 0"
-          @click="isWeekSummaryModalOpen = true" />
+          @click="isSummaryModalOpen = true" />
       </div>
       <div class="grid w-full grid-cols-7 gap-1">
         <DayProgress v-for="date in days" :key="`${date}-progress`" :date="date" />
       </div>
     </div>
     <EventModal />
-    <WeekSummaryModal v-model:open="isWeekSummaryModalOpen" />
+    <SummaryModal v-model:open="isSummaryModalOpen" />
   </div>
 </template>
