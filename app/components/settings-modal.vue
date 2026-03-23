@@ -2,16 +2,40 @@
 import type { Project } from "~/types";
 import { StartOfWeekDay } from "~/types";
 
+enum SettingsTab {
+  General = "general",
+  Projects = "projects",
+}
+
 const isOpen = defineModel<boolean>();
 
 const { startOfWeekDay, startOfDay, endOfDay, workDayDuration } = useDate();
 const { projects, createProject, updateProject, deleteProject } = useProjects();
+
+const activeDbProjectsCount = computed(() => {
+  return projects.value.filter((p) => !p.deletedAt).length;
+});
+
+const tabItems = computed(() => [
+  {
+    label: "General",
+    value: SettingsTab.General,
+    icon: "lucide:calendar",
+  },
+  {
+    label: "Projects",
+    value: SettingsTab.Projects,
+    icon: "lucide:folder",
+    badge: activeDbProjectsCount.value,
+  },
+]);
 
 const localStartOfWeekDay = ref<StartOfWeekDay>(startOfWeekDay.value);
 const localStartOfDay = ref<number>(startOfDay.value);
 const localEndOfDay = ref<number>(endOfDay.value);
 const localWorkDayDuration = ref<number>(workDayDuration.value / 60);
 const localProjects = ref<Project[]>([]);
+const activeTab = ref(SettingsTab.General);
 
 const startOfWeekOptions = [
   { label: "Saturday", value: StartOfWeekDay.Saturday },
@@ -89,35 +113,36 @@ function updateProjectName(index: number, name: string) {
   <UModal v-model:open="isOpen" title="Settings" :ui="{ footer: 'justify-end' }" :close="{ onClick: onCancel }">
     <template #body>
       <UForm class="space-y-4">
-        <UFormField label="Start of the week">
-          <USelect v-model="localStartOfWeekDay" :items="startOfWeekOptions" class="w-full" />
-        </UFormField>
+        <UTabs v-model="activeTab" :items="tabItems" class="w-full">
+          <template #content="{ item }">
+            <div v-if="item.value === SettingsTab.General" class="space-y-4 pt-4">
+              <UFormField label="Start of the week">
+                <USelect v-model="localStartOfWeekDay" :items="startOfWeekOptions" class="w-full" />
+              </UFormField>
 
-        <UFormField label="Start/End time" :ui="{ container: 'flex gap-2' }" :error="!isValid">
-          <USelect v-model="localStartOfDay" :items="timeOptions.slice(0, -1)" class="w-full" />
-          <USelect v-model="localEndOfDay" :items="timeOptions.slice(1)" class="w-full" />
-        </UFormField>
+              <UFormField label="Start/End time" :ui="{ container: 'flex gap-2' }" :error="!isValid">
+                <USelect v-model="localStartOfDay" :items="timeOptions.slice(0, -1)" class="w-full" />
+                <USelect v-model="localEndOfDay" :items="timeOptions.slice(1)" class="w-full" />
+              </UFormField>
 
-        <UFormField label="Work day duration">
-          <UInputNumber v-model="localWorkDayDuration" class="w-full" :min="1" :max="24" />
-        </UFormField>
+              <UFormField label="Work day duration">
+                <UInputNumber v-model="localWorkDayDuration" class="w-full" :min="1" :max="24" />
+              </UFormField>
+            </div>
 
-        <USeparator />
-
-        <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-sm font-medium">Projects</span>
-          </div>
-          <div v-if="localProjects.length === 0" class="text-sm text-neutral-500">No projects added yet.</div>
-          <div v-for="(project, index) in localProjects" :key="index">
-            <ProjectListItem
-              :project="project"
-              :model-value="project.name"
-              @update:model-value="(val) => updateProjectName(index, val)"
-              @delete="removeProject(index)" />
-          </div>
-          <UButton icon="lucide:plus" variant="soft" label="Add a project" @click="addProject" />
-        </div>
+            <div v-else-if="item.value === SettingsTab.Projects" class="space-y-4 pt-4">
+              <div v-if="localProjects.length === 0" class="text-sm text-neutral-500">No projects added yet.</div>
+              <div v-for="(project, index) in localProjects" :key="index">
+                <ProjectListItem
+                  :project="project"
+                  :model-value="project.name"
+                  @update:model-value="(val) => updateProjectName(index, val)"
+                  @delete="removeProject(index)" />
+              </div>
+              <UButton icon="lucide:plus" variant="soft" label="Add a project" @click="addProject" />
+            </div>
+          </template>
+        </UTabs>
       </UForm>
     </template>
 
