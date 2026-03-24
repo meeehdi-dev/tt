@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const db = useDb();
 
   const projects = await db
-    .select({ id: project.id, name: project.name, deletedAt: project.deletedAt })
+    .select({ id: project.id, name: project.name, color: project.color, deletedAt: project.deletedAt })
     .from(project)
     .where(eq(project.userId, session.user.id));
 

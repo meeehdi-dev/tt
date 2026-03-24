@@ -25,6 +25,7 @@ export const project = pgTable(
   {
     id: uuid("id").primaryKey(),
     name: text("name").notNull(),
+    color: text("color").notNull().default("#f59e0b"),
     userId: uuid("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),

@@ -17,5 +17,6 @@ export interface Event {
 export interface Project {
   id: string;
   name: string;
+  color: string;
   deletedAt?: string | null;
 }

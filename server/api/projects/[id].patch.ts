@@ -5,6 +5,7 @@ import { project } from "~~/server/db/schema/event";
 
 const schema = z.object({
   name: z.string().min(1),
+  color: z.string().min(1),
 });
 
 export default defineEventHandler(async (event) => {
@@ -15,9 +16,9 @@ export default defineEventHandler(async (event) => {
 
   const [updated] = await db
     .update(project)
-    .set({ name: body.name })
+    .set({ name: body.name, color: body.color })
     .where(and(eq(project.id, id), eq(project.userId, session.user.id)))
-    .returning({ id: project.id, name: project.name });
+    .returning({ id: project.id, name: project.name, color: project.color });
 
   if (!updated) {
     throw createError({ statusCode: 404, statusMessage: "Project not found" });

@@ -5,6 +5,7 @@ import { project } from "~~/server/db/schema/event";
 
 const schema = z.object({
   name: z.string().min(1),
+  color: z.string().min(1),
 });
 
 export default defineEventHandler(async (event) => {
@@ -17,11 +18,13 @@ export default defineEventHandler(async (event) => {
     .values({
       id: uuidv7(),
       name: body.name,
+      color: body.color,
       userId: session.user.id,
     })
     .returning({
       id: project.id,
       name: project.name,
+      color: project.color,
       deletedAt: project.deletedAt,
     });
 

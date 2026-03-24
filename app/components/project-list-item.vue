@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { Project } from "~/types";
 
-const props = defineProps<{ project: Project; modelValue: string }>();
+const props = defineProps<{ project: Project; modelValue: string; color: string }>();
 const emit = defineEmits<{
   (e: "update:modelValue", val: string): void;
+  (e: "update:color", val: string): void;
   (e: "delete"): void;
 }>();
 
@@ -34,6 +35,7 @@ async function handleDeleteClick() {
 
 <template>
   <div class="flex items-center gap-2">
+    <ColorPicker :model-value="color" @update:model-value="(val) => emit('update:color', val)" />
     <UInput
       :model-value="modelValue"
       class="flex-1"

@@ -1,33 +1,21 @@
 /**
- * Utility for mapping a string ID to a consistent hex color from a curated palette.
- * This ensures that a project consistently renders with the same color,
- * providing a stable visual identifier for the user.
+ * Returns a contrast color (black or white) for a given hex background color.
+ * If the color is transparent (low alpha), returns undefined (to use default text color).
  */
+export function getContrastColor(hex: string): string | undefined {
+  if (!hex.startsWith("#")) return undefined;
 
-const PALETTE = [
-  "#3b82f6", // blue-500
-  "#10b981", // emerald-500
-  "#f59e0b", // amber-500
-  "#ef4444", // red-500
-  "#8b5cf6", // violet-500
-  "#ec4899", // pink-500
-  "#6366f1", // indigo-500
-  "#f97316", // orange-500
-];
-
-/**
- * Deterministically maps an ID to a color from the palette.
- * @param id The project ID string.
- * @returns A hex color string.
- */
-export function getColorForId(id: string): string {
-  // Simple hash function to turn a string into a number
-  let hash = 0;
-  for (let i = 0; i < id.length; i++) {
-    hash = id.charCodeAt(i) + ((hash << 5) - hash);
+  // Handle #RRGGBBAA (9 chars) or #RGBA (5 chars)
+  if (hex.length === 5 || hex.length === 9) {
+    const alpha = hex.length === 5 ? parseInt(hex.slice(4, 5), 16) / 15 : parseInt(hex.slice(7, 9), 16) / 255;
+    if (alpha < 0.5) return undefined;
   }
 
-  // Use absolute value and modulo to pick a palette index
-  const index = Math.abs(hash) % PALETTE.length;
-  return PALETTE[index]!;
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+  return yiq >= 128 ? "#000000" : "#ffffff";
 }

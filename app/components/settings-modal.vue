@@ -67,16 +67,16 @@ async function onSave() {
 
   const newProjects = localProjects.value.filter((p) => !p.id && p.name.trim());
   const deletedProjects = originalProjects.filter((op) => !localProjects.value.some((lp) => lp.id === op.id));
-  const renamedProjects = localProjects.value.filter((lp) => {
+  const changedProjects = localProjects.value.filter((lp) => {
     if (!lp.id) return false;
     const original = originalProjects.find((op) => op.id === lp.id);
-    return original && original.name !== lp.name && lp.name.trim();
+    return original && (original.name !== lp.name || original.color !== lp.color) && lp.name.trim();
   });
 
   await Promise.all([
-    ...newProjects.map((p) => createProject(p.name)),
+    ...newProjects.map((p) => createProject(p.name, p.color)),
     ...deletedProjects.map((p) => deleteProject(p.id)),
-    ...renamedProjects.map((p) => updateProject(p.id, p.name)),
+    ...changedProjects.map((p) => updateProject(p.id, p.name, p.color)),
   ]);
 
   isOpen.value = false;
@@ -94,7 +94,7 @@ watch(isOpen, (open) => {
 });
 
 async function addProject() {
-  localProjects.value.push({ id: "", name: "" });
+  localProjects.value.push({ id: "", name: "", color: "#f59e0b" });
 }
 
 async function removeProject(index: number) {
@@ -106,6 +106,11 @@ const isValid = computed(() => localEndOfDay.value > localStartOfDay.value);
 function updateProjectName(index: number, name: string) {
   const project = localProjects.value[index]!;
   project.name = name;
+}
+
+function updateProjectColor(index: number, color: string) {
+  const project = localProjects.value[index]!;
+  project.color = color;
 }
 </script>
 
@@ -136,7 +141,9 @@ function updateProjectName(index: number, name: string) {
                 <ProjectListItem
                   :project="project"
                   :model-value="project.name"
+                  :color="project.color"
                   @update:model-value="(val) => updateProjectName(index, val)"
+                  @update:color="(val) => updateProjectColor(index, val)"
                   @delete="removeProject(index)" />
               </div>
               <UButton icon="lucide:plus" variant="soft" label="Add a project" @click="addProject" />

@@ -16,6 +16,10 @@ export default function useProjects() {
     return projects.value.find((p) => p.id === id)?.name ?? id;
   }
 
+  function getProjectColor(id: string) {
+    return projects.value.find((p) => p.id === id)?.color ?? "#f59e0b";
+  }
+
   function isProjectDeleted(id: string) {
     const project = projects.value.find((p) => p.id === id);
     return !!project?.deletedAt;
@@ -26,18 +30,18 @@ export default function useProjects() {
     return response.count;
   }
 
-  async function createProject(name: string) {
+  async function createProject(name: string, color: string) {
     const created = await $fetch("/api/projects", {
       method: "POST",
-      body: { name: name },
+      body: { name, color },
     });
     projects.value.push(created!);
   }
 
-  async function updateProject(id: string, name: string) {
+  async function updateProject(id: string, name: string, color: string) {
     await $fetch(`/api/projects/${id}`, {
       method: "PATCH",
-      body: { name },
+      body: { name, color },
     });
 
     projects.value = [
@@ -45,6 +49,7 @@ export default function useProjects() {
       {
         id,
         name,
+        color,
         deletedAt: projects.value.find((p) => p.id === id)?.deletedAt,
       },
     ];
@@ -69,6 +74,7 @@ export default function useProjects() {
     updateProject,
     deleteProject,
     getProjectName,
+    getProjectColor,
     isProjectDeleted,
     getProjectEventsCount,
   };

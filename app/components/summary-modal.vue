@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { formatPeriodLabel, getEndOfWeek, getStartOfWeek } from "~/utils/date";
-import { getColorForId } from "~/utils/colors";
 
 const isOpen = defineModel<boolean>("open");
 const { currentWeek } = useDate();
@@ -30,7 +29,7 @@ watch(
   { immediate: true },
 );
 
-const { getProjectName } = useProjects();
+const { getProjectName, getProjectColor } = useProjects();
 const { startOfWeekDay } = useDate();
 
 function previousPeriod() {
@@ -80,7 +79,7 @@ const chartData = computed(() =>
     id: p.projectId,
     label: getProjectName(p.projectId),
     value: p.time,
-    color: getColorForId(p.projectId),
+    color: getProjectColor(p.projectId),
   })),
 );
 </script>
@@ -111,7 +110,7 @@ const chartData = computed(() =>
                 <div
                   class="size-2.5 rounded-full"
                   :style="{
-                    backgroundColor: getColorForId(project.projectId),
+                    backgroundColor: getProjectColor(project.projectId),
                   }" />
 
                 {{ getProjectName(project.projectId) }}
