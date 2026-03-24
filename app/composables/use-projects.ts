@@ -35,9 +35,6 @@ export default function useProjects() {
       method: "POST",
       body: { name, color },
     });
-    if (!created) {
-      return;
-    }
     projects.value = [
       ...projects.value,
       {

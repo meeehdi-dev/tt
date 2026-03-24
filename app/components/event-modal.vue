@@ -62,7 +62,7 @@ async function onSubmit(e: FormSubmitEvent<Schema>) {
   state.description = undefined;
 }
 
-const { projects, refresh } = useProjects();
+const { projects } = useProjects();
 
 const localProjects = computed(() => {
   const activeProjects = projects.value.filter((p) => !p.deletedAt);

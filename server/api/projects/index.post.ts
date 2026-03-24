@@ -49,5 +49,5 @@ export default defineEventHandler(async (event) => {
       deletedAt: project.deletedAt,
     });
 
-  return created;
+  return created!;
 });
