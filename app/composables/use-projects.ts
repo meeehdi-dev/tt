@@ -26,15 +26,18 @@ export default function useProjects() {
   }
 
   async function getProjectEventsCount(id: string) {
-    const response = await $fetch<{ count: number }>(`/api/projects/${id}/events/count`);
+    const response = await $fetch(`/api/projects/${id}/events/count`);
     return response.count;
   }
 
   async function createProject(name: string, color: string) {
-    const created = await $fetch<Project>("/api/projects", {
+    const created = await $fetch("/api/projects", {
       method: "POST",
       body: { name, color },
     });
+    if (!created) {
+      return;
+    }
     projects.value = [
       ...projects.value,
       {
@@ -63,7 +66,7 @@ export default function useProjects() {
   }
 
   async function deleteProject(id: string) {
-    const response = await $fetch<{ softDeleted: boolean }>(`/api/projects/${id}`, { method: "DELETE" });
+    const response = await $fetch(`/api/projects/${id}`, { method: "DELETE" });
     if (response.softDeleted) {
       projects.value = projects.value.map((p) => (p.id === id ? { ...p, deletedAt: new Date().toISOString() } : p));
     } else {
@@ -72,7 +75,7 @@ export default function useProjects() {
   }
 
   async function restoreProject(id: string, name: string, color: string) {
-    const restored = await $fetch<Project>(`/api/projects/${id}`, {
+    const restored = await $fetch(`/api/projects/${id}`, {
       method: "PATCH",
       body: { name, color, deletedAt: null },
     });
