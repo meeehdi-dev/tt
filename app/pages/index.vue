@@ -78,7 +78,6 @@ useMousePressed({
           icon="lucide:sigma"
           variant="soft"
           class="max-h-7.5 justify-center"
-          :disabled="events.length === 0"
           @click="isSummaryModalOpen = true" />
       </div>
       <div class="grid w-full grid-cols-7 gap-1">
