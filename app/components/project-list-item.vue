@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { Project } from "~/types";
 
-const props = defineProps<{ project: Project; modelValue: string; color: string }>();
+const props = defineProps<{
+  project: Project;
+  modelValue: string;
+  color: string;
+}>();
 const emit = defineEmits<{
-  (e: "update:modelValue", val: string): void;
-  (e: "update:color", val: string): void;
+  (e: "update:modelValue" | "update:color", val: string): void;
   (e: "delete"): void;
 }>();
 
