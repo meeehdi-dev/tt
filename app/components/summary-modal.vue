@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { formatPeriodLabel, getEndOfWeek, getStartOfWeek } from "~/utils/date";
-
 const isOpen = defineModel<boolean>("open");
 const { currentWeek } = useDate();
 

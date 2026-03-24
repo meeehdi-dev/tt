@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { getSlicePath } from "~/utils/chart";
-
 interface PieSlice {
   id: string;
   label: string;

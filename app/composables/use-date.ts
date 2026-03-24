@@ -1,5 +1,4 @@
 import "dayjs/plugin/isoWeek";
-import { getEndOfWeek, getStartOfWeek } from "~/utils/date";
 import { StartOfWeekDay } from "~/types";
 import { createSharedComposable } from "@vueuse/core";
 import dayjs from "dayjs";
