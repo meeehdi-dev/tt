@@ -5,6 +5,7 @@ const props = defineProps<{
   project: Project;
   modelValue: string;
   color: string;
+  hideDelete?: boolean;
 }>();
 const emit = defineEmits<{
   (e: "update:modelValue" | "update:color", val: string): void;
@@ -44,7 +45,7 @@ async function handleDeleteClick() {
       class="flex-1"
       placeholder="Project name"
       @update:model-value="(val) => emit('update:modelValue', val)" />
-    <UPopover v-model:open="isPopoverOpen">
+    <UPopover v-if="!hideDelete" v-model:open="isPopoverOpen">
       <UButton
         icon="lucide:trash"
         size="xs"

@@ -62,7 +62,7 @@ async function onSubmit(e: FormSubmitEvent<Schema>) {
   state.description = undefined;
 }
 
-const { projects } = useProjects();
+const { projects, refresh } = useProjects();
 
 const localProjects = computed(() => {
   const activeProjects = projects.value.filter((p) => !p.deletedAt);
@@ -75,6 +75,13 @@ const localProjects = computed(() => {
   }
   return activeProjects;
 });
+
+const isQuickAddModalOpen = ref(false);
+
+async function onProjectQuickAdded(projectId: string) {
+  await nextTick();
+  state.projectId = projectId;
+}
 
 watch(selectedEvent, () => {
   if (!selectedEvent.value) {
@@ -116,14 +123,17 @@ defineShortcuts({
     <template #body>
       <UForm ref="form" :schema="schema" :state="state" :validate-on="['change']" class="space-y-4" @submit="onSubmit">
         <UFormField label="Project" name="projectId">
-          <UInputMenu
-            v-model="state.projectId"
-            :items="localProjects"
-            value-key="id"
-            label-key="name"
-            :trailing-icon="false"
-            class="w-full"
-            placeholder="Select a project" />
+          <div class="flex w-full items-center gap-2">
+            <UInputMenu
+              v-model="state.projectId"
+              :items="localProjects"
+              value-key="id"
+              label-key="name"
+              :trailing-icon="false"
+              class="flex-1"
+              placeholder="Select a project" />
+            <UButton icon="lucide:plus" variant="soft" color="neutral" @click="isQuickAddModalOpen = true" />
+          </div>
         </UFormField>
         <UFormField label="Description" name="description">
           <UEditor
@@ -138,6 +148,7 @@ defineShortcuts({
           </UEditor>
         </UFormField>
       </UForm>
+      <QuickAddProjectModal v-model:open="isQuickAddModalOpen" @saved="onProjectQuickAdded" />
     </template>
 
     <template #footer>

@@ -228,13 +228,11 @@ function updateProjectColor(index: number, color: string) {
     </template>
   </UModal>
 
-  <UModal v-model:open="isConfirmModalOpen" title="Project Already Exists" :ui="{ footer: 'justify-end' }">
-    <template #body>
-      <p class="text-sm">{{ confirmModalMessage }}</p>
-    </template>
-    <template #footer>
-      <UButton color="neutral" variant="soft" @click="onConfirm(false)">Cancel</UButton>
-      <UButton color="primary" @click="onConfirm(true)">Restore Project</UButton>
-    </template>
-  </UModal>
+  <ConfirmModal
+    v-model:open="isConfirmModalOpen"
+    title="Project Already Exists"
+    :message="confirmModalMessage"
+    confirm-text="Restore Project"
+    @confirm="onConfirm(true)"
+    @cancel="onConfirm(false)" />
 </template>

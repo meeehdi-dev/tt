@@ -3,7 +3,7 @@ import type { Project } from "~/types";
 export default function useProjects() {
   const nuxtApp = useNuxtApp();
 
-  const { data: projects } = useAsyncData("projects", () => $fetch("/api/projects"), {
+  const { data: projects, refresh } = useAsyncData("projects", () => $fetch("/api/projects"), {
     default: () => [] as Project[],
     server: false,
     dedupe: "defer",
@@ -31,11 +31,18 @@ export default function useProjects() {
   }
 
   async function createProject(name: string, color: string) {
-    const created = await $fetch("/api/projects", {
+    const created = await $fetch<Project>("/api/projects", {
       method: "POST",
       body: { name, color },
     });
-    projects.value.push(created!);
+    projects.value = [
+      ...projects.value,
+      {
+        ...created,
+        deletedAt: created.deletedAt ?? null,
+      },
+    ];
+    return created;
   }
 
   async function updateProject(id: string, name: string, color: string) {
@@ -50,7 +57,7 @@ export default function useProjects() {
         id,
         name,
         color,
-        deletedAt: projects.value.find((p) => p.id === id)?.deletedAt,
+        deletedAt: projects.value.find((p) => p.id === id)?.deletedAt ?? null,
       },
     ];
   }
@@ -58,25 +65,30 @@ export default function useProjects() {
   async function deleteProject(id: string) {
     const response = await $fetch<{ softDeleted: boolean }>(`/api/projects/${id}`, { method: "DELETE" });
     if (response.softDeleted) {
-      const project = projects.value.find((p) => p.id === id);
-      if (project) {
-        project.deletedAt = new Date().toISOString();
-      }
+      projects.value = projects.value.map((p) => (p.id === id ? { ...p, deletedAt: new Date().toISOString() } : p));
     } else {
       projects.value = projects.value.filter((p) => p.id !== id);
     }
   }
 
   async function restoreProject(id: string, name: string, color: string) {
-    const restored = await $fetch(`/api/projects/${id}`, {
+    const restored = await $fetch<Project>(`/api/projects/${id}`, {
       method: "PATCH",
       body: { name, color, deletedAt: null },
     });
-    projects.value.push(restored!);
+    projects.value = [
+      ...projects.value,
+      {
+        ...restored,
+        deletedAt: restored.deletedAt ?? null,
+      },
+    ];
+    return restored;
   }
 
   return {
     projects: readonly(projects),
+    refresh,
 
     createProject,
     updateProject,
