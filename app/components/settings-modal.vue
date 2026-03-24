@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { FetchError } from "ofetch";
 import type { Project } from "~/types";
 import { StartOfWeekDay } from "~/types";
 
@@ -9,11 +10,28 @@ enum SettingsTab {
 
 const isOpen = defineModel<boolean>();
 
+const toast = useToast();
 const { startOfWeekDay, startOfDay, endOfDay, workDayDuration } = useDate();
-const { projects, createProject, updateProject, deleteProject } = useProjects();
+const { projects, createProject, updateProject, deleteProject, restoreProject } = useProjects();
+const isConfirmModalOpen = ref(false);
+const confirmModalMessage = ref("");
+let confirmResolve: ((value: boolean) => void) | null = null;
+
+function askConfirmation(message: string): Promise<boolean> {
+  confirmModalMessage.value = message;
+  isConfirmModalOpen.value = true;
+  return new Promise((resolve) => {
+    confirmResolve = resolve;
+  });
+}
+
+function onConfirm(choice: boolean) {
+  isConfirmModalOpen.value = false;
+  if (confirmResolve) confirmResolve(choice);
+}
 
 const activeDbProjectsCount = computed(() => {
-  return projects.value.filter((p) => !p.deletedAt).length;
+  return localProjects.value.filter((p) => p.name.trim().length > 0).length;
 });
 
 const tabItems = computed(() => [
@@ -73,11 +91,62 @@ async function onSave() {
     return original && (original.name !== lp.name || original.color !== lp.color) && lp.name.trim();
   });
 
-  await Promise.all([
-    ...newProjects.map((p) => createProject(p.name, p.color)),
-    ...deletedProjects.map((p) => deleteProject(p.id)),
-    ...changedProjects.map((p) => updateProject(p.id, p.name, p.color)),
-  ]);
+  for (const p of newProjects) {
+    try {
+      await createProject(p.name, p.color);
+    } catch (err) {
+      const error = err as FetchError;
+      if (error.response?.status === 409) {
+        const archivedId = error.response._data.data.archivedId;
+        const userWantsToRestore = await askConfirmation(
+          `An archived project named "${p.name}" already exists. Would you like to restore it?`,
+        );
+
+        if (userWantsToRestore) {
+          await restoreProject(archivedId, p.name, p.color);
+        } else {
+          return;
+        }
+      } else {
+        toast.add({
+          title: "Error",
+          description: error.response?._data?.statusMessage || "Failed to create project",
+          color: "error",
+        });
+        return;
+      }
+    }
+  }
+
+  for (const p of changedProjects) {
+    try {
+      await updateProject(p.id, p.name, p.color);
+    } catch (err) {
+      const error = err as FetchError;
+      if (error.response?.status === 409) {
+        const archivedId = error.response._data.data.archivedId;
+        const userWantsToRestore = await askConfirmation(
+          `An archived project named "${p.name}" already exists. Would you like to restore it?`,
+        );
+
+        if (userWantsToRestore) {
+          await restoreProject(archivedId, p.name, p.color);
+          await deleteProject(p.id);
+        } else {
+          return;
+        }
+      } else {
+        toast.add({
+          title: "Error",
+          description: error.response?._data?.statusMessage || "Failed to update project",
+          color: "error",
+        });
+        return;
+      }
+    }
+  }
+
+  await Promise.all(deletedProjects.map((p) => deleteProject(p.id)));
 
   isOpen.value = false;
 }
@@ -156,6 +225,16 @@ function updateProjectColor(index: number, color: string) {
     <template #footer>
       <UButton color="neutral" variant="soft" @click="onCancel"> Cancel </UButton>
       <UButton :disabled="!isValid" @click="onSave"> Save </UButton>
+    </template>
+  </UModal>
+
+  <UModal v-model:open="isConfirmModalOpen" title="Project Already Exists" :ui="{ footer: 'justify-end' }">
+    <template #body>
+      <p class="text-sm">{{ confirmModalMessage }}</p>
+    </template>
+    <template #footer>
+      <UButton color="neutral" variant="soft" @click="onConfirm(false)">Cancel</UButton>
+      <UButton color="primary" @click="onConfirm(true)">Restore Project</UButton>
     </template>
   </UModal>
 </template>

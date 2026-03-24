@@ -67,12 +67,21 @@ export default function useProjects() {
     }
   }
 
+  async function restoreProject(id: string, name: string, color: string) {
+    const restored = await $fetch(`/api/projects/${id}`, {
+      method: "PATCH",
+      body: { name, color, deletedAt: null },
+    });
+    projects.value.push(restored!);
+  }
+
   return {
     projects: readonly(projects),
 
     createProject,
     updateProject,
     deleteProject,
+    restoreProject,
     getProjectName,
     getProjectColor,
     isProjectDeleted,
