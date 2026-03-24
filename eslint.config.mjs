@@ -10,11 +10,13 @@ export default withNuxt(prettierConfig, {
     },
   },
   rules: {
-    "sort-imports": "error",
-    "prettier/prettier": "error",
     "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/no-empty-object-type": "off",
+
+    "import/order": "error",
+
+    "prettier/prettier": "error",
 
     "vue/multi-word-component-names": "off",
-    "@typescript-eslint/no-empty-object-type": "off",
   },
 });

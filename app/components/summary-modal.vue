@@ -54,7 +54,6 @@ const endDate = computed(() => {
 });
 
 const { data: events, status } = useAsyncData(
-  () => `summary-events-${startDate.value.toISOString()}-${endDate.value.toISOString()}`,
   () =>
     $fetch("/api/events", {
       query: {

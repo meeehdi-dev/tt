@@ -93,6 +93,15 @@ watch(selectedEvent, () => {
   state.description = selectedEvent.value.description ?? undefined;
 });
 
+const isModalOpen = computed({
+  get: () => selectedEvent.value !== undefined,
+  set: (val) => {
+    if (!val) {
+      unselectEvent();
+    }
+  },
+});
+
 defineShortcuts({
   meta_enter: {
     usingInput: true,
@@ -114,12 +123,9 @@ defineShortcuts({
 
 <template>
   <UModal
-    :open="selectedEvent !== undefined"
+    v-model:open="isModalOpen"
     :title="selectedEvent?.id ? 'Edit event' : 'Add event'"
-    :ui="{ footer: 'justify-end' }"
-    :close="{
-      onClick: unselectEvent,
-    }">
+    :ui="{ footer: 'justify-end' }">
     <template #body>
       <UForm ref="form" :schema="schema" :state="state" :validate-on="['change']" class="space-y-4" @submit="onSubmit">
         <UFormField label="Project" name="projectId">

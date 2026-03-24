@@ -1,6 +1,6 @@
-import type { Event } from "~/types";
 import dayjs from "dayjs";
 import isoWeek from "dayjs/plugin/isoWeek";
+import type { Event } from "~/types";
 
 dayjs.extend(isoWeek);
 

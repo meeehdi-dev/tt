@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Event } from "~/types";
 import dayjs from "dayjs";
+import type { Event } from "~/types";
 
 const { date, minute, currentEvent } = defineProps<{
   date: string;

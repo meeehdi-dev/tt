@@ -227,7 +227,7 @@ export default function useEvents() {
       try {
         await $fetch(`/api/events/${eventId}`, {
           method: "PATCH",
-          body: { start: event.start },
+          body: { end: event.end },
         });
         events.value = [...events.value.filter((e) => e.id !== eventId), event];
       } catch (err) {

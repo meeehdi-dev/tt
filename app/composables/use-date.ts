@@ -1,9 +1,10 @@
 import "dayjs/plugin/isoWeek";
-import { StartOfWeekDay } from "~/types";
-import { createSharedComposable } from "@vueuse/core";
-import dayjs from "dayjs";
 
-function useDate() {
+import dayjs, { type Dayjs } from "dayjs";
+
+import { StartOfWeekDay } from "~/types";
+
+export default function useDate() {
   const startOfWeekDay = useCookie<StartOfWeekDay>("startOfWeekDay", {
     default: () => StartOfWeekDay.Monday,
   });
@@ -17,17 +18,31 @@ function useDate() {
     default: () => 8 * 60,
   });
 
-  const currentWeek = ref(dayjs());
-  const now = ref(dayjs());
+  const currentWeekStr = useState<string>("currentWeek", () => dayjs().toISOString());
+  const nowStr = useState<string>("now", () => dayjs().toISOString());
 
-  let nowTimeout = 0;
+  const currentWeek = computed<Dayjs>({
+    get: () => dayjs(currentWeekStr.value),
+    set: (val) => {
+      currentWeekStr.value = val.toISOString();
+    },
+  });
+
+  const now = computed<Dayjs>({
+    get: () => dayjs(nowStr.value),
+    set: (val) => {
+      nowStr.value = val.toISOString();
+    },
+  });
+
+  let nowInterval: number | undefined;
   onMounted(() => {
-    nowTimeout = window.setInterval(() => {
+    nowInterval = window.setInterval(() => {
       now.value = dayjs();
     }, 1000);
   });
   onUnmounted(() => {
-    clearInterval(nowTimeout);
+    if (nowInterval) clearInterval(nowInterval);
   });
 
   function resetCurrentWeek() {
@@ -65,7 +80,3 @@ function useDate() {
     setNextWeek,
   };
 }
-
-const useSharedDate = createSharedComposable(useDate);
-
-export default useSharedDate;

@@ -65,7 +65,7 @@ If/when `vitest` is introduced to the repository, tests should be written in a c
 ### Authentication & Routing
 
 1. **Route Guards:** Use Nuxt route middleware (`app/middleware/`) for protecting routes. Global middleware (e.g., `auth.global.ts`) automatically applies to all navigations.
-2. **Auth State:** Rely on cookies (via Nuxt's `useCookie()`) rather than `localStorage` for authentication tokens. This prevents UI flashing and hydration mismatches during Server-Side Rendering (SSR). Currently, authentication is mocked via a `fake_jwt` cookie using the `useAuth` composable.
+2. **Auth State:** Rely on `better-auth/vue` for authentication, using `authClient.useSession()` for checking session states and logging in/out. Do not manually manipulate tokens or rely on `localStorage`.
 
 ### Typing & Validation
 
@@ -96,3 +96,6 @@ If/when `vitest` is introduced to the repository, tests should be written in a c
 ## 4. Cursor / Copilot Rules
 
 _(Note: No `.cursorrules`, `.cursor/rules/`, or `.github/copilot-instructions.md` context exist natively in this repo. If introduced later, consider them extensions to the foundations established in this file.)_
+
+## 5. Agent Directives
+- **Always review and update `AGENTS.md` whenever working on architectural modifications, library usage, or codebase conventions to keep it serving as the source of truth.**
