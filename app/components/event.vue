@@ -183,7 +183,9 @@ const height = computed(() => {
           :model-value="event.description || ''"
           :editable="false"
           content-type="markdown"
-          :ui="{ base: 'sm:px-0' }" />
+          :ui="{
+            base: 'sm:px-0 *:my-1 [&_p]:text-base [&_pre]:px-2 [&_pre]:py-1 [&_pre]:bg-neutral-900/50 [&_code]:bg-neutral-900/50',
+          }" />
       </div>
       <div
         class="hover:to-primary/50 absolute bottom-0 h-2 w-full cursor-s-resize rounded-b-sm bg-linear-to-b from-transparent to-transparent transition-colors"
