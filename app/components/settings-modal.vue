@@ -3,12 +3,12 @@ import type { FetchError } from "ofetch";
 import type { Project } from "~/types";
 import { StartOfWeekDay } from "~/types";
 
+const { isSettingsModalOpen, open, close } = useModal();
+
 enum SettingsTab {
   General = "general",
   Projects = "projects",
 }
-
-const isOpen = defineModel<boolean>();
 
 const toast = useToast();
 const { startOfWeekDay, startOfDay, endOfDay, workDayDuration } = useDate();
@@ -74,7 +74,7 @@ function onCancel() {
   localEndOfDay.value = endOfDay.value;
   localWorkDayDuration.value = workDayDuration.value / 60;
   localProjects.value = JSON.parse(JSON.stringify(projects.value));
-  isOpen.value = false;
+  close();
 }
 
 async function onSave() {
@@ -148,10 +148,10 @@ async function onSave() {
 
   await Promise.all(deletedProjects.map((p) => deleteProject(p.id)));
 
-  isOpen.value = false;
+  close();
 }
 
-watch(isOpen, (open) => {
+watch(isSettingsModalOpen, (open) => {
   if (open) {
     localStartOfWeekDay.value = startOfWeekDay.value;
     localStartOfDay.value = startOfDay.value;
@@ -185,27 +185,30 @@ function updateProjectColor(index: number, color: string) {
 defineShortcuts({
   s: {
     handler: () => {
-      isOpen.value = true;
-      activeTab.value = SettingsTab.General;
+      if (open(ModalKey.Settings)) {
+        activeTab.value = SettingsTab.General;
+      }
     },
   },
   p: {
     handler: () => {
-      isOpen.value = true;
-      activeTab.value = SettingsTab.Projects;
-    },
-  },
-  escape: {
-    usingInput: true,
-    handler: () => {
-      isOpen.value = false;
+      if (open(ModalKey.Settings)) {
+        activeTab.value = SettingsTab.Projects;
+      }
     },
   },
 });
 </script>
 
 <template>
-  <UModal v-model:open="isOpen" title="Settings" :ui="{ footer: 'justify-end' }" :close="{ onClick: onCancel }">
+  <UModal
+    :open="isSettingsModalOpen"
+    title="Settings"
+    :dismissible="false"
+    :ui="{ footer: 'justify-end' }"
+    :close="{ onClick: onCancel }"
+    @close:prevent="onCancel"
+  >
     <template #body>
       <UForm class="space-y-4">
         <UTabs v-model="activeTab" :items="tabItems" class="w-full">

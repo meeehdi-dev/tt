@@ -2,6 +2,8 @@
 const isOpen = defineModel<boolean>("open");
 const { currentWeek } = useDate();
 
+const { open, isSummaryModalOpen, close } = useModal();
+
 enum Tab {
   Week = "week",
   Month = "month",
@@ -83,19 +85,14 @@ const chartData = computed(() =>
 defineShortcuts({
   r: {
     handler: () => {
-      isOpen.value = true;
-    },
-  },
-  escape: {
-    handler: () => {
-      isOpen.value = false;
+      open(ModalKey.Summary);
     },
   },
 });
 </script>
 
 <template>
-  <UModal v-model:open="isOpen" title="Summary">
+  <UModal :open="isSummaryModalOpen" title="Summary" :dismissible="false" @close:prevent="close">
     <template #body>
       <div class="flex flex-col gap-4">
         <UTabs v-model="selectedTab" :items="tabs" />
