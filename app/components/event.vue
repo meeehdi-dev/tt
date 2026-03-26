@@ -146,17 +146,20 @@ const height = computed(() => {
     }"
     :data-start="event.start"
     :data-end="event.end"
-    @dblclick="selectEvent(event.id)">
+    @dblclick="selectEvent(event.id)"
+  >
     <div
       class="hover:to-primary/50 absolute top-0 h-2 w-full cursor-n-resize rounded-t-sm bg-linear-to-t from-transparent to-transparent transition-colors"
-      @mousedown="onGrabTop" />
+      @mousedown="onGrabTop"
+    />
     <div v-if="!event.projectId" class="absolute flex h-full w-full items-center justify-center">
       <UIcon name="lucide:loader-circle" class="animate-spin" />
     </div>
     <div v-else>
       <UPopover
         :content="{ side: 'right' }"
-        class="absolute right-0 m-1 opacity-0 transition-opacity group-hover:opacity-100">
+        class="absolute right-0 m-1 opacity-0 transition-opacity group-hover:opacity-100"
+      >
         <UButton icon="lucide:x" size="xs" variant="ghost" color="error" />
 
         <template #content>
@@ -165,7 +168,8 @@ const height = computed(() => {
             icon="lucide:trash"
             variant="soft"
             color="error"
-            @click="removeEvent(event.id)" />
+            @click="removeEvent(event.id)"
+          />
         </template>
       </UPopover>
       <div class="flex flex-col p-1">
@@ -176,7 +180,8 @@ const height = computed(() => {
           :style="{
             backgroundColor: getProjectColor(event.projectId),
             color: getContrastColor(getProjectColor(event.projectId)),
-          }">
+          }"
+        >
           {{ getProjectName(event.projectId) }}
         </UBadge>
         <UEditor
@@ -185,11 +190,13 @@ const height = computed(() => {
           content-type="markdown"
           :ui="{
             base: 'sm:px-0 *:my-1 [&_p]:text-base [&_pre]:px-2 [&_pre]:py-1 [&_pre]:bg-neutral-900/50 [&_code]:bg-neutral-900/50',
-          }" />
+          }"
+        />
       </div>
       <div
         class="hover:to-primary/50 absolute bottom-0 h-2 w-full cursor-s-resize rounded-b-sm bg-linear-to-b from-transparent to-transparent transition-colors"
-        @mousedown="onGrabBottom" />
+        @mousedown="onGrabBottom"
+      />
     </div>
   </div>
 </template>

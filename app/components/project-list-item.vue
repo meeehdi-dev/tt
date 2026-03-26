@@ -44,7 +44,8 @@ async function handleDeleteClick() {
       :model-value="modelValue"
       class="flex-1"
       placeholder="Project name"
-      @update:model-value="(val) => emit('update:modelValue', val)" />
+      @update:model-value="(val) => emit('update:modelValue', val)"
+    />
     <UPopover v-if="!hideDelete" v-model:open="isPopoverOpen">
       <UButton
         icon="lucide:trash"
@@ -52,7 +53,8 @@ async function handleDeleteClick() {
         color="error"
         variant="ghost"
         :loading="isChecking"
-        @click="handleDeleteClick" />
+        @click="handleDeleteClick"
+      />
       <template v-if="eventsCount > 0" #content>
         <div class="flex flex-col gap-2 p-2">
           <span>This project has {{ eventsCount }} event(s) linked to it.<br />Do you want to keep going?</span>

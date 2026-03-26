@@ -125,7 +125,8 @@ defineShortcuts({
   <UModal
     v-model:open="isModalOpen"
     :title="selectedEvent?.id ? 'Edit event' : 'Add event'"
-    :ui="{ footer: 'justify-end' }">
+    :ui="{ footer: 'justify-end' }"
+  >
     <template #body>
       <UForm ref="form" :schema="schema" :state="state" :validate-on="['change']" class="space-y-4" @submit="onSubmit">
         <UFormField label="Project" name="projectId">
@@ -138,7 +139,8 @@ defineShortcuts({
               label-key="name"
               :trailing-icon="false"
               class="flex-1"
-              placeholder="Select a project" />
+              placeholder="Select a project"
+            />
             <UButton icon="lucide:plus" variant="soft" color="neutral" @click="isQuickAddModalOpen = true" />
           </div>
         </UFormField>
@@ -151,7 +153,8 @@ defineShortcuts({
             :ui="{
               root: 'ring-accented w-full rounded-md ring ring-inset',
               base: 'sm:px-2.5 sm:py-1.5',
-            }">
+            }"
+          >
             <UEditorToolbar :editor="editor" :items="bubbleToolbarItems" layout="bubble" />
           </UEditor>
         </UFormField>

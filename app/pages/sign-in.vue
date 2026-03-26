@@ -29,7 +29,8 @@ const providers: ButtonProps[] = [
         :grid-gap="8"
         color="#ffba00"
         :max-opacity="1.0"
-        :flicker-chance="0.01" />
+        :flicker-chance="0.01"
+      />
     </div>
     <UPageCard class="w-full max-w-md">
       <UAuthForm
@@ -37,7 +38,8 @@ const providers: ButtonProps[] = [
         description="Sign in to your account to continue"
         icon="lucide:lock"
         :ui="{ leadingIcon: 'text-primary-400' }"
-        :providers="providers" />
+        :providers="providers"
+      />
     </UPageCard>
   </div>
 </template>

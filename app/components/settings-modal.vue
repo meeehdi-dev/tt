@@ -213,7 +213,8 @@ function updateProjectColor(index: number, color: string) {
                   :color="project.color"
                   @update:model-value="(val) => updateProjectName(index, val)"
                   @update:color="(val) => updateProjectColor(index, val)"
-                  @delete="removeProject(index)" />
+                  @delete="removeProject(index)"
+                />
               </div>
               <UButton icon="lucide:plus" variant="soft" label="Add a project" @click="addProject" />
             </div>
@@ -234,5 +235,6 @@ function updateProjectColor(index: number, color: string) {
     :message="confirmModalMessage"
     confirm-text="Restore Project"
     @confirm="onConfirm(true)"
-    @cancel="onConfirm(false)" />
+    @cancel="onConfirm(false)"
+  />
 </template>

@@ -65,7 +65,8 @@ async function onSave() {
         :project="state"
         :color="state.color"
         hide-delete
-        @update:color="(val) => (state.color = val)" />
+        @update:color="(val) => (state.color = val)"
+      />
     </template>
     <template #footer>
       <UButton color="neutral" variant="soft" @click="isOpen = false">Cancel</UButton>
@@ -79,5 +80,6 @@ async function onSave() {
     :message="confirmMessage"
     confirm-text="Restore Project"
     @confirm="handleConfirm"
-    @cancel="handleCancel" />
+    @cancel="handleCancel"
+  />
 </template>

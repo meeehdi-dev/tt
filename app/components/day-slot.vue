@@ -24,5 +24,6 @@ const dayOfWeek = computed(() => dayjs(date).day());
       'bg-neutral-800/50': dayOfWeek > 0 && dayOfWeek < 6,
       'bg-neutral-800/30': dayOfWeek === 0 || dayOfWeek === 6,
     }"
-    @mouseover="emit('slotHover', $event)" />
+    @mouseover="emit('slotHover', $event)"
+  />
 </template>

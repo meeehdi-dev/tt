@@ -46,7 +46,8 @@ useMousePressed({
         class="grid h-full grid-rows-(--grid-rows)"
         :style="{
           '--grid-rows': `repeat(${endOfDay / 60 - startOfDay / 60}, minmax(0, 1fr))`,
-        }">
+        }"
+      >
         <TimeIndicator />
       </div>
       <div ref="week" class="grid h-full w-full grid-cols-7 gap-1">
@@ -60,12 +61,14 @@ useMousePressed({
             :minute="minute"
             :current-event="currentEvent"
             data-group="slot"
-            @slot-hover="onSlotHover" />
+            @slot-hover="onSlotHover"
+          />
           <div
             class="pointer-events-none absolute grid h-full w-full grid-rows-(--grid-rows) gap-1"
             :style="{
               '--grid-rows': `repeat(${endOfDay / SLOT_DURATION - startOfDay / SLOT_DURATION}, minmax(0, 1fr))`,
-            }">
+            }"
+          >
             <Event v-for="event in events.filter((e) => e.date === date)" :key="`${date}-${event.id}`" :event="event" />
           </div>
         </div>
@@ -78,7 +81,8 @@ useMousePressed({
           icon="lucide:sigma"
           variant="soft"
           class="max-h-7.5 justify-center"
-          @click="isSummaryModalOpen = true" />
+          @click="isSummaryModalOpen = true"
+        />
       </div>
       <div class="grid w-full grid-cols-7 gap-1">
         <DayProgress v-for="date in days" :key="`${date}-progress`" :date="date" />

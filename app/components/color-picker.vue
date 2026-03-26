@@ -31,7 +31,8 @@ function selectSwatch(c: string) {
             :key="swatch"
             class="size-6 cursor-pointer rounded-sm"
             :style="{ backgroundColor: swatch }"
-            @click="selectSwatch(swatch)" />
+            @click="selectSwatch(swatch)"
+          />
         </div>
         <USeparator />
         <UColorPicker v-model="color" />

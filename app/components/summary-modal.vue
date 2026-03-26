@@ -108,7 +108,8 @@ const chartData = computed(() =>
                   class="size-2.5 rounded-full"
                   :style="{
                     backgroundColor: getProjectColor(project.projectId),
-                  }" />
+                  }"
+                />
 
                 {{ getProjectName(project.projectId) }}
               </UBadge>

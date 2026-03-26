@@ -22,7 +22,8 @@ const dayTime = computed(() => dayEvents.value.reduce((sum, e) => sum + getEvent
               v-for="group in groupedEvents"
               :key="`${date}-progress-${group.projectId}`"
               :project-id="group.projectId"
-              :time="group.time" />
+              :time="group.time"
+            />
           </div>
         </template>
       </UPopover>

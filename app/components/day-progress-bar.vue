@@ -17,10 +17,12 @@ const overtimeProgress = computed(() =>
     class="h-full w-(--day-progress) bg-neutral-700 transition-[width]"
     :style="{
       '--day-progress': dayProgress - overtimeProgress + '%',
-    }" />
+    }"
+  />
   <div
     class="bg-primary-500/30 h-full w-(--overtime-progress) transition-[width]"
     :style="{
       '--overtime-progress': overtimeProgress + '%',
-    }" />
+    }"
+  />
 </template>
