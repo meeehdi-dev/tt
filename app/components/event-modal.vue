@@ -2,6 +2,8 @@
 import type { EditorToolbarItem, FormSubmitEvent } from "@nuxt/ui";
 import { z } from "zod";
 
+const { open, close, isEventModalOpen } = useModal();
+
 const form = useTemplateRef("form");
 
 const { selectedEvent, unselectEvent, saveEvent } = useEvents();
@@ -87,20 +89,17 @@ watch(selectedEvent, () => {
   if (!selectedEvent.value) {
     state.projectId = "";
     state.description = undefined;
+    close();
     return;
   }
   state.projectId = selectedEvent.value.projectId;
   state.description = selectedEvent.value.description ?? undefined;
+  open(ModalKey.Event);
 });
 
-const isModalOpen = computed({
-  get: () => selectedEvent.value !== undefined,
-  set: (val) => {
-    if (!val) {
-      unselectEvent();
-    }
-  },
-});
+function onClose() {
+  unselectEvent();
+}
 
 defineShortcuts({
   meta_enter: {
@@ -111,22 +110,17 @@ defineShortcuts({
       }
     },
   },
-  escape: {
-    usingInput: true,
-    handler: () => {
-      if (selectedEvent.value !== undefined) {
-        unselectEvent();
-      }
-    },
-  },
 });
 </script>
 
 <template>
   <UModal
-    v-model:open="isModalOpen"
+    :open="isEventModalOpen"
     :title="selectedEvent?.id ? 'Edit event' : 'Add event'"
     :ui="{ footer: 'justify-end' }"
+    :close="{ onClick: onClose }"
+    :dismissible="false"
+    @close:prevent="onClose"
   >
     <template #body>
       <UForm ref="form" :schema="schema" :state="state" :validate-on="['change']" class="space-y-4" @submit="onSubmit">

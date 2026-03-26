@@ -28,10 +28,12 @@ export default function useModal() {
 
   const isSettingsModalOpen = computed(() => isOpen.value === ModalKey.Settings);
   const isSummaryModalOpen = computed(() => isOpen.value === ModalKey.Summary);
+  const isEventModalOpen = computed(() => isOpen.value === ModalKey.Event);
 
   return {
     isSettingsModalOpen,
     isSummaryModalOpen,
+    isEventModalOpen,
 
     open,
     close,
