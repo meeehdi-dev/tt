@@ -1,5 +1,20 @@
 <script setup lang="ts">
 const { currentWeek, setPreviousWeek, setNextWeek, startOfWeekDay } = useDate();
+
+defineShortcuts({
+  h: {
+    handler: setPreviousWeek,
+  },
+  arrowleft: {
+    handler: setPreviousWeek,
+  },
+  l: {
+    handler: setNextWeek,
+  },
+  arrowright: {
+    handler: setNextWeek,
+  },
+});
 </script>
 
 <template>

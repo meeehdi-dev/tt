@@ -181,6 +181,27 @@ function updateProjectColor(index: number, color: string) {
   const project = localProjects.value[index]!;
   project.color = color;
 }
+
+defineShortcuts({
+  s: {
+    handler: () => {
+      isOpen.value = true;
+      activeTab.value = SettingsTab.General;
+    },
+  },
+  p: {
+    handler: () => {
+      isOpen.value = true;
+      activeTab.value = SettingsTab.Projects;
+    },
+  },
+  escape: {
+    usingInput: true,
+    handler: () => {
+      isOpen.value = false;
+    },
+  },
+});
 </script>
 
 <template>

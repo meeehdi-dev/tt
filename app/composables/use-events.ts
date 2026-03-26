@@ -82,18 +82,15 @@ export default function useEvents() {
   }
 
   async function removeEvent(eventId: string) {
-    const event = events.value.find((e) => e.id === eventId);
     events.value = events.value.filter((e) => e.id !== eventId);
 
-    if (event?.projectId) {
-      try {
-        await $fetch(`/api/events/${eventId}`, { method: "DELETE" });
-      } catch {
-        toast.add({
-          title: "Failed to delete event",
-          color: "error",
-        });
-      }
+    try {
+      await $fetch(`/api/events/${eventId}`, { method: "DELETE" });
+    } catch {
+      toast.add({
+        title: "Failed to delete event",
+        color: "error",
+      });
     }
   }
 
@@ -155,20 +152,18 @@ export default function useEvents() {
       }
     }
 
-    if (event.projectId) {
-      try {
-        const updated = await $fetch(`/api/events/${eventId}`, {
-          method: "PATCH",
-          body: { date: targetDate, start: candidateStart, end: candidateEnd },
-        });
+    try {
+      const updated = await $fetch(`/api/events/${eventId}`, {
+        method: "PATCH",
+        body: { date: targetDate, start: candidateStart, end: candidateEnd },
+      });
 
-        event.date = updated.date;
-        event.start = updated.start;
-        event.end = updated.end;
-        events.value = [...events.value];
-      } catch {
-        toast.add({ title: "Failed to update event", color: "error" });
-      }
+      event.date = updated.date;
+      event.start = updated.start;
+      event.end = updated.end;
+      events.value = [...events.value];
+    } catch {
+      toast.add({ title: "Failed to update event", color: "error" });
     }
   }
 
@@ -188,21 +183,19 @@ export default function useEvents() {
 
     event.start = minute;
 
-    if (event.projectId) {
-      try {
-        await $fetch(`/api/events/${eventId}`, {
-          method: "PATCH",
-          body: { start: event.start },
-        });
-        events.value = [...events.value.filter((e) => e.id !== eventId), event];
-      } catch (err) {
-        const error = err as Error;
-        toast.add({
-          title: "Failed to update event",
-          color: "error",
-          description: error.message,
-        });
-      }
+    try {
+      await $fetch(`/api/events/${eventId}`, {
+        method: "PATCH",
+        body: { start: event.start },
+      });
+      events.value = [...events.value.filter((e) => e.id !== eventId), event];
+    } catch (err) {
+      const error = err as Error;
+      toast.add({
+        title: "Failed to update event",
+        color: "error",
+        description: error.message,
+      });
     }
   }
 
@@ -223,21 +216,19 @@ export default function useEvents() {
 
     event.end = candidateEnd;
 
-    if (event.projectId) {
-      try {
-        await $fetch(`/api/events/${eventId}`, {
-          method: "PATCH",
-          body: { end: event.end },
-        });
-        events.value = [...events.value.filter((e) => e.id !== eventId), event];
-      } catch (err) {
-        const error = err as Error;
-        toast.add({
-          title: "Failed to update event",
-          color: "error",
-          description: error.message,
-        });
-      }
+    try {
+      await $fetch(`/api/events/${eventId}`, {
+        method: "PATCH",
+        body: { end: event.end },
+      });
+      events.value = [...events.value.filter((e) => e.id !== eventId), event];
+    } catch (err) {
+      const error = err as Error;
+      toast.add({
+        title: "Failed to update event",
+        color: "error",
+        description: error.message,
+      });
     }
   }
 
@@ -298,7 +289,7 @@ export default function useEvents() {
   }
 
   function unselectEvent() {
-    if (selectedEvent.value && !selectedEvent.value.projectId) {
+    if (selectedEvent.value && selectedEvent.value.id === "") {
       events.value = events.value.filter((e) => e.id !== selectedEvent.value!.id);
     }
     selectedEvent.value = undefined;

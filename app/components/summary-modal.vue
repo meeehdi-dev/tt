@@ -79,6 +79,19 @@ const chartData = computed(() =>
     color: getProjectColor(p.projectId),
   })),
 );
+
+defineShortcuts({
+  r: {
+    handler: () => {
+      isOpen.value = true;
+    },
+  },
+  escape: {
+    handler: () => {
+      isOpen.value = false;
+    },
+  },
+});
 </script>
 
 <template>

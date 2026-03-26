@@ -32,6 +32,26 @@ const items = ref<DropdownMenuItem[]>([
     },
   },
 ]);
+
+defineShortcuts({
+  g: {
+    handler: () => {
+      window.open("https://github.com/meeehdi-dev/tt", "_blank");
+    },
+  },
+  arrowup: {
+    handler: resetCurrentWeek,
+  },
+  arrowdown: {
+    handler: resetCurrentWeek,
+  },
+  j: {
+    handler: resetCurrentWeek,
+  },
+  k: {
+    handler: resetCurrentWeek,
+  },
+});
 </script>
 
 <template>

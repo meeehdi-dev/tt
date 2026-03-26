@@ -112,6 +112,7 @@ defineShortcuts({
     },
   },
   escape: {
+    usingInput: true,
     handler: () => {
       if (selectedEvent.value !== undefined) {
         unselectEvent();
