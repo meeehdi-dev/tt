@@ -6,6 +6,8 @@ const { open, close, isEventModalOpen } = useModal();
 
 const form = useTemplateRef("form");
 
+const label = ref("");
+
 const { selectedEvent, unselectEvent, saveEvent } = useEvents();
 
 // NOTE: StarterKit provides basic formatting (bold, italic, strikethrough, lists).
@@ -75,6 +77,7 @@ const localProjects = computed(() => {
       return [...activeProjects, { ...project, name: `${project.name} (Archived)` }];
     }
   }
+
   return activeProjects;
 });
 
@@ -125,19 +128,23 @@ defineShortcuts({
     <template #body>
       <UForm ref="form" :schema="schema" :state="state" :validate-on="['change']" class="space-y-4" @submit="onSubmit">
         <UFormField label="Project" name="projectId">
-          <div class="flex w-full items-center gap-2">
-            <UInputMenu
-              v-model="state.projectId"
-              :items="localProjects"
-              :autofocus="selectedEvent?.id === ''"
-              value-key="id"
-              label-key="name"
-              :trailing-icon="false"
-              class="flex-1"
-              placeholder="Select a project"
-            />
-            <UButton icon="lucide:plus" variant="soft" color="neutral" @click="isQuickAddModalOpen = true" />
-          </div>
+          <UInputMenu
+            v-model="state.projectId"
+            create-item
+            :items="localProjects"
+            :autofocus="selectedEvent?.id === ''"
+            value-key="id"
+            label-key="name"
+            :trailing-icon="false"
+            class="w-full"
+            placeholder="Select a project"
+            @create="
+              (item) => {
+                isQuickAddModalOpen = true;
+                label = item;
+              }
+            "
+          />
         </UFormField>
         <UFormField label="Description" name="description">
           <UEditor
@@ -154,7 +161,7 @@ defineShortcuts({
           </UEditor>
         </UFormField>
       </UForm>
-      <QuickAddProjectModal v-model:open="isQuickAddModalOpen" @saved="onProjectQuickAdded" />
+      <QuickAddProjectModal v-model:open="isQuickAddModalOpen" :label="label" @saved="onProjectQuickAdded" />
     </template>
 
     <template #footer>

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import type { FetchError } from "ofetch";
+
+const { label } = defineProps<{ label: string }>();
+
 const isOpen = defineModel<boolean>("open", { default: false });
 const emit = defineEmits<{ (e: "saved", projectId: string): void }>();
 const { createProject, restoreProject } = useProjects();
@@ -9,6 +12,15 @@ const state = ref({ id: "", name: "", color: "#f59e0b" });
 const isConfirmModalOpen = ref(false);
 const confirmMessage = ref("");
 let confirmResolve: ((value: boolean) => void) | null = null;
+
+watch(isOpen, (open) => {
+  // NOTE: reset on open
+  if (open) {
+    state.value.id = "";
+    state.value.name = label;
+    state.value.color = "#f59e0b";
+  }
+});
 
 async function askConfirmation(message: string) {
   confirmMessage.value = message;
