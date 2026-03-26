@@ -72,8 +72,8 @@ export default function useEvents() {
         description: "An event already exists in that timespan",
         color: "error",
       });
-    } else {
-      events.value.push(currentEvent.value!);
+    } else if (currentEvent.value) {
+      events.value.push(currentEvent.value);
       selectedEvent.value = currentEvent.value;
     }
 
@@ -243,7 +243,7 @@ export default function useEvents() {
 
   function createEvent(date: string, minute: number) {
     currentEvent.value = {
-      id: crypto.randomUUID(),
+      id: "",
       date,
       start: minute,
       end: minute + SLOT_DURATION,
@@ -256,7 +256,7 @@ export default function useEvents() {
   async function saveEvent(data: Pick<Event, "projectId" | "description">) {
     const event = selectedEvent.value!;
 
-    const isNew = !event.projectId;
+    const isNew = event.id === "";
 
     event.projectId = data.projectId;
     event.description = data.description;

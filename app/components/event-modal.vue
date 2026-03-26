@@ -133,6 +133,7 @@ defineShortcuts({
             <UInputMenu
               v-model="state.projectId"
               :items="localProjects"
+              :autofocus="selectedEvent?.id === ''"
               value-key="id"
               label-key="name"
               :trailing-icon="false"
@@ -145,6 +146,7 @@ defineShortcuts({
           <UEditor
             v-slot="{ editor }"
             v-model="state.description"
+            :autofocus="selectedEvent?.id !== ''"
             content-type="markdown"
             :ui="{
               root: 'ring-accented w-full rounded-md ring ring-inset',
