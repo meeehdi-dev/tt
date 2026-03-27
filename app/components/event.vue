@@ -189,7 +189,7 @@ const height = computed(() => {
           :editable="false"
           content-type="markdown"
           :ui="{
-            base: 'sm:px-0 *:my-1 [&_p]:text-base [&_pre]:px-2 [&_pre]:py-1 [&_pre]:bg-neutral-900/50 [&_code]:bg-neutral-900/50',
+            base: 'sm:px-0 *:my-1 [&_p]:text-sm [&_pre]:px-2 [&_pre]:py-1 [&_pre]:bg-neutral-900/50 [&_code]:bg-neutral-900/50',
           }"
         />
       </div>
