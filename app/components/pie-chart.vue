@@ -37,6 +37,10 @@ const slices = computed(() => {
     };
   });
 });
+
+function getSliceTimeLabel(slice: PieSlice) {
+  return getTimeLabel(slice.value);
+}
 </script>
 
 <template>
@@ -48,7 +52,7 @@ const slices = computed(() => {
     <g v-for="slice in slices" :id="`project-slice-${slice.id}`" :key="slice.id">
       <path :d="slice.path" :fill="slice.color" />
       <!-- Native accessibility tooltip on hover -->
-      <title>{{ slice.label }}: {{ getTimeLabel(slice.value) }}</title>
+      <title>{{ slice.label }}: {{ getSliceTimeLabel(slice) }}</title>
     </g>
   </svg>
 </template>

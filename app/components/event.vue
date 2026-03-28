@@ -129,6 +129,11 @@ const height = computed(() => {
     : undefined
   );
 });
+
+const rowStart = computed(() => (event.start - startOfDay.value) / SLOT_DURATION + 1);
+const rowSpan = computed(() => (event.end - event.start) / SLOT_DURATION);
+
+const eventContrastColor = computed(() => getContrastColor(getProjectColor(event.projectId)));
 </script>
 
 <template>
@@ -139,8 +144,8 @@ const height = computed(() => {
       'shadow-primary-500 z-20 shadow-[0_0_8px] outline-1': state === State.Dragging,
     }"
     :style="{
-      '--row-start': (event.start - startOfDay) / SLOT_DURATION + 1,
-      '--row-span': (event.end - event.start) / SLOT_DURATION,
+      '--row-start': rowStart,
+      '--row-span': rowSpan,
       translate,
       height,
     }"
@@ -179,7 +184,7 @@ const height = computed(() => {
           :class="{ 'opacity-50': isProjectDeleted(event.projectId) }"
           :style="{
             backgroundColor: getProjectColor(event.projectId),
-            color: getContrastColor(getProjectColor(event.projectId)),
+            color: eventContrastColor,
           }"
         >
           {{ getProjectName(event.projectId) }}

@@ -15,13 +15,15 @@ defineShortcuts({
     handler: setNextWeek,
   },
 });
+
+const periodLabel = computed(() => formatPeriodLabel(currentWeek.value, "week", startOfWeekDay.value));
 </script>
 
 <template>
   <div class="flex items-center gap-2">
     <UButton icon="lucide:chevron-left" variant="soft" size="sm" @click="setPreviousWeek()" />
     <span class="text-muted text-sm">
-      {{ formatPeriodLabel(currentWeek, "week", startOfWeekDay) }}
+      {{ periodLabel }}
     </span>
     <UButton icon="lucide:chevron-right" variant="soft" size="sm" @click="setNextWeek" />
   </div>

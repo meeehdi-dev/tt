@@ -2,6 +2,8 @@
 const { projectId, time } = defineProps<{ projectId: string; time: number }>();
 
 const { getProjectName } = useProjects();
+
+const projectTimeLabel = computed(() => getTimeLabel(time));
 </script>
 
 <template>
@@ -10,7 +12,7 @@ const { getProjectName } = useProjects();
       {{ getProjectName(projectId) }}
     </UBadge>
     <span class="text-sm">
-      {{ getTimeLabel(time) }}
+      {{ projectTimeLabel }}
     </span>
   </div>
 </template>

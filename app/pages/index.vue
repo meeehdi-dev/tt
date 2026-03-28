@@ -13,7 +13,7 @@ const { days, startOfDay, endOfDay } = useDate();
 
 const { events, currentEvent, onSlotHover, addEvent, createEvent } = useEvents();
 
-const isSummaryModalOpen = ref(false);
+const { open } = useModal();
 
 useMousePressed({
   target: weekRef,
@@ -36,6 +36,15 @@ useMousePressed({
     addEvent();
   },
 });
+
+function openSummaryModal() {
+  open(ModalKey.Summary);
+}
+
+const minutes = computed(() => availableSlots.slice(startOfDay.value / SLOT_DURATION, endOfDay.value / SLOT_DURATION));
+const gridRows = computed(
+  () => `repeat(${endOfDay.value / SLOT_DURATION - startOfDay.value / SLOT_DURATION}, minmax(0, 1fr))`,
+);
 </script>
 
 <template>
@@ -54,7 +63,7 @@ useMousePressed({
         <div v-for="date in days" :key="date" class="relative grid h-full rounded-sm">
           <CurrentTimeIndicator :date="date" :day-height="weekHeight" />
           <DaySlot
-            v-for="minute in availableSlots.slice(startOfDay / SLOT_DURATION, endOfDay / SLOT_DURATION)"
+            v-for="minute in minutes"
             :id="`slot-${date}-${minute}`"
             :key="`${date}-${minute}`"
             :date="date"
@@ -66,7 +75,7 @@ useMousePressed({
           <div
             class="pointer-events-none absolute grid h-full w-full grid-rows-(--grid-rows) gap-1"
             :style="{
-              '--grid-rows': `repeat(${endOfDay / SLOT_DURATION - startOfDay / SLOT_DURATION}, minmax(0, 1fr))`,
+              '--grid-rows': gridRows,
             }"
           >
             <Event v-for="event in events.filter((e) => e.date === date)" :key="`${date}-${event.id}`" :event="event" />
@@ -77,18 +86,13 @@ useMousePressed({
     <div class="flex min-h-8 w-full gap-1 px-1 pb-1">
       <div class="flex max-h-8 -translate-y-4 flex-col">
         <div class="text-xs">{{ endOfDay / 60 }}:00</div>
-        <UButton
-          icon="lucide:sigma"
-          variant="soft"
-          class="max-h-7.5 justify-center"
-          @click="isSummaryModalOpen = true"
-        />
+        <UButton icon="lucide:sigma" variant="soft" class="max-h-7.5 justify-center" @click="openSummaryModal" />
       </div>
       <div class="grid w-full grid-cols-7 gap-1">
         <DayProgress v-for="date in days" :key="`${date}-progress`" :date="date" />
       </div>
     </div>
     <EventModal />
-    <SummaryModal v-model:open="isSummaryModalOpen" />
+    <SummaryModal />
   </div>
 </template>

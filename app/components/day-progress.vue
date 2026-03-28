@@ -7,6 +7,8 @@ const dayEvents = computed(() => events.value.filter((e) => e.date === date));
 const groupedEvents = computed(() => groupEventsByProject(dayEvents.value));
 
 const dayTime = computed(() => dayEvents.value.reduce((sum, e) => sum + getEventTime(e), 0));
+
+const dayTimeLabel = computed(() => getTimeLabel(dayTime.value));
 </script>
 
 <template>
@@ -14,7 +16,7 @@ const dayTime = computed(() => dayEvents.value.reduce((sum, e) => sum + getEvent
     <div class="absolute top-1/2 left-1/2 flex items-center justify-center">
       <UPopover mode="hover" :ui="{ content: dayTime <= 0 ? 'hidden' : undefined }">
         <UBadge class="absolute text-xs" variant="soft" icon="lucide:clock">
-          <span class="whitespace-nowrap">{{ getTimeLabel(dayTime) }}</span>
+          <span class="whitespace-nowrap">{{ dayTimeLabel }}</span>
         </UBadge>
         <template #content>
           <div class="flex flex-col gap-1 rounded-xl bg-neutral-900 p-1 pr-2">

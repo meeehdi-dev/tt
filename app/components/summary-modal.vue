@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const isOpen = defineModel<boolean>("open");
 const { currentWeek } = useDate();
 
 const { open, isSummaryModalOpen, close } = useModal();
@@ -20,7 +19,7 @@ const selectedTab = ref(tabs[0]!.value);
 const currentDate = ref(currentWeek.value);
 
 watch(
-  isOpen,
+  isSummaryModalOpen,
   (open) => {
     if (open) {
       currentDate.value = currentWeek.value;
@@ -89,6 +88,14 @@ defineShortcuts({
     },
   },
 });
+
+const periodLabel = computed(() => formatPeriodLabel(currentDate.value, selectedTab.value, startOfWeekDay.value));
+
+function getProjectTimeLabel(project: (typeof projectTotals.value)[0]) {
+  return getTimeLabel(project.time);
+}
+
+const totalTimeLabel = computed(() => getTimeLabel(totalTime.value));
 </script>
 
 <template>
@@ -99,7 +106,7 @@ defineShortcuts({
 
         <div class="flex items-center justify-between">
           <UButton icon="lucide:chevron-left" variant="soft" @click="previousPeriod" />
-          <span class="text-sm font-medium">{{ formatPeriodLabel(currentDate, selectedTab, startOfWeekDay) }}</span>
+          <span class="text-sm font-medium">{{ periodLabel }}</span>
           <UButton icon="lucide:chevron-right" variant="soft" @click="nextPeriod" />
         </div>
       </div>
@@ -124,14 +131,14 @@ defineShortcuts({
                 {{ getProjectName(project.projectId) }}
               </UBadge>
               <span class="text-sm">
-                {{ getTimeLabel(project.time) }}
+                {{ getProjectTimeLabel(project) }}
               </span>
             </div>
             <USeparator class="my-2" />
             <div class="flex items-center justify-between font-bold">
               <span class="text-sm">Total</span>
               <span class="text-sm">
-                {{ getTimeLabel(totalTime) }}
+                {{ totalTimeLabel }}
               </span>
             </div>
           </div>
