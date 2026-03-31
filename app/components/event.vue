@@ -76,7 +76,7 @@ function onGrabTop() {
 
   state.value = State.GrabbingTop;
 }
-function onUngrabTop() {
+async function onUngrabTop() {
   if (state.value !== State.GrabbingTop) {
     return;
   }
@@ -84,7 +84,7 @@ function onUngrabTop() {
   const slotElement = getSlotElementFromElement(eventRef.value!, "top");
   const slot = slotElement ? Number(slotElement.dataset.minute) : startOfDay.value;
 
-  void moveEventStart(event.id, slot);
+  await moveEventStart(event.id, slot);
 
   state.value = State.Idle;
 }
@@ -96,7 +96,7 @@ function onGrabBottom() {
 
   state.value = State.GrabbingBottom;
 }
-function onUngrabBottom() {
+async function onUngrabBottom() {
   if (state.value !== State.GrabbingBottom) {
     return;
   }
@@ -104,7 +104,7 @@ function onUngrabBottom() {
   const slotElement = getSlotElementFromElement(eventRef.value!, "bottom");
   const slot = slotElement ? Number(slotElement.dataset.minute) : endOfDay.value - SLOT_DURATION;
 
-  void moveEventBottom(event.id, slot);
+  await moveEventBottom(event.id, slot);
 
   state.value = State.Idle;
 }

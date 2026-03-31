@@ -153,15 +153,12 @@ export default function useEvents() {
     }
 
     try {
-      const updated = await $fetch(`/api/events/${eventId}`, {
+      const updated = await $fetch<Event>(`/api/events/${eventId}`, {
         method: "PATCH",
         body: { date: targetDate, start: candidateStart, end: candidateEnd },
       });
 
-      event.date = updated.date;
-      event.start = updated.start;
-      event.end = updated.end;
-      events.value = [...events.value];
+      events.value = events.value.map((e) => (e.id === eventId ? updated : e));
     } catch {
       toast.add({ title: "Failed to update event", color: "error" });
     }
@@ -174,21 +171,21 @@ export default function useEvents() {
       (e) => e.id !== eventId && e.date === event.date && e.start < event.end && e.end > minute,
     );
 
+    let start = minute;
     if (blocker) {
       if (blocker.end < event.end) {
-        event.start = blocker.end;
+        start = blocker.end;
+      } else {
+        return;
       }
-      return;
     }
 
-    event.start = minute;
-
     try {
-      await $fetch(`/api/events/${eventId}`, {
+      const updated = await $fetch<Event>(`/api/events/${eventId}`, {
         method: "PATCH",
-        body: { start: event.start },
+        body: { start },
       });
-      events.value = [...events.value.filter((e) => e.id !== eventId), event];
+      events.value = events.value.map((e) => (e.id === eventId ? updated : e));
     } catch (err) {
       const error = err as Error;
       toast.add({
@@ -207,21 +204,21 @@ export default function useEvents() {
       (e) => e.id !== eventId && e.date === event.date && e.start < candidateEnd && e.end > event.start,
     );
 
+    let end = candidateEnd;
     if (blocker) {
       if (blocker.start > event.start) {
-        event.end = blocker.start;
+        end = blocker.start;
+      } else {
+        return;
       }
-      return;
     }
 
-    event.end = candidateEnd;
-
     try {
-      await $fetch(`/api/events/${eventId}`, {
+      const updated = await $fetch<Event>(`/api/events/${eventId}`, {
         method: "PATCH",
-        body: { end: event.end },
+        body: { end },
       });
-      events.value = [...events.value.filter((e) => e.id !== eventId), event];
+      events.value = events.value.map((e) => (e.id === eventId ? updated : e));
     } catch (err) {
       const error = err as Error;
       toast.add({
@@ -246,15 +243,11 @@ export default function useEvents() {
 
   async function saveEvent(data: Pick<Event, "projectId" | "description">) {
     const event = selectedEvent.value!;
-
     const isNew = event.id === "";
-
-    event.projectId = data.projectId;
-    event.description = data.description;
 
     if (isNew) {
       try {
-        const created = await $fetch("/api/events", {
+        const created = await $fetch<Event>("/api/events", {
           method: "POST",
           body: {
             date: event.date,
@@ -265,21 +258,21 @@ export default function useEvents() {
           },
         });
 
-        events.value = [...events.value.filter((e) => e.id !== selectedEvent.value!.id), created!];
+        events.value = [...events.value.filter((e) => e.id !== ""), created];
       } catch {
         toast.add({ title: "Failed to save event", color: "error" });
       }
     } else {
       try {
-        await $fetch(`/api/events/${event.id}`, {
+        const updated = await $fetch<Event>(`/api/events/${event.id}`, {
           method: "PATCH",
           body: {
-            projectId: event.projectId,
-            description: event.description,
+            projectId: data.projectId,
+            description: data.description,
           },
         });
 
-        events.value = [...events.value.filter((e) => e.id !== event.id), event];
+        events.value = events.value.map((e) => (e.id === event.id ? updated : e));
       } catch {
         toast.add({ title: "Failed to update event", color: "error" });
       }
