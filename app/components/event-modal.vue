@@ -104,16 +104,11 @@ function onClose() {
   unselectEvent();
 }
 
-defineShortcuts({
-  meta_enter: {
-    usingInput: true,
-    handler: () => {
-      if (selectedEvent.value !== undefined) {
-        form.value?.submit();
-      }
-    },
-  },
-});
+function submit() {
+  if (selectedEvent.value !== undefined) {
+    form.value?.submit();
+  }
+}
 </script>
 
 <template>
@@ -126,7 +121,15 @@ defineShortcuts({
     @close:prevent="onClose"
   >
     <template #body>
-      <UForm ref="form" :schema="schema" :state="state" :validate-on="['change']" class="space-y-4" @submit="onSubmit">
+      <UForm
+        ref="form"
+        :schema="schema"
+        :state="state"
+        :validate-on="['change']"
+        class="space-y-4"
+        @submit="onSubmit"
+        @keydown.capture.meta.enter.prevent="submit"
+      >
         <UFormField label="Project" name="projectId">
           <UInputMenu
             v-model="state.projectId"
