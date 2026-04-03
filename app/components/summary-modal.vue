@@ -99,7 +99,13 @@ const totalTimeLabel = computed(() => getTimeLabel(totalTime.value));
 </script>
 
 <template>
-  <UModal :open="isSummaryModalOpen" title="Summary" :dismissible="false" @close:prevent="close">
+  <UModal
+    :open="isSummaryModalOpen"
+    title="Summary"
+    :dismissible="false"
+    :close="{ onClick: close }"
+    @close:prevent="close"
+  >
     <template #body>
       <div class="flex flex-col gap-4">
         <UTabs v-model="selectedTab" :items="tabs" />
