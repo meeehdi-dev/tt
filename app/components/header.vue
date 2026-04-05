@@ -6,15 +6,13 @@ const session = authClient.useSession();
 
 const { currentWeek, now, resetCurrentWeek } = useDate();
 
-const isSettingsModalOpen = ref(false);
-
 const items = ref<DropdownMenuItem[]>([
   {
     icon: "lucide:cog",
     label: "Settings",
     color: "secondary",
     onSelect: () => {
-      isSettingsModalOpen.value = true;
+      open(ModalKey.Settings);
     },
   },
   {
@@ -101,6 +99,6 @@ defineShortcuts({
       />
     </div>
 
-    <SettingsModal v-model="isSettingsModalOpen" />
+    <SettingsModal />
   </div>
 </template>
