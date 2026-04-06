@@ -1,75 +1,70 @@
-# Nuxt Minimal Starter
+# tt
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A sleek, keyboard-centric weekly time-tracking and calendar application built for speed. `tt` helps you block time,
+manage projects, and analyze your productivity seamlessly.
 
-## Setup
+## Features
 
-Make sure to install dependencies:
+- **Weekly Time Blocking:** Click and drag on the calendar grid to create time slots and log events quickly.
+- **Project Management:** Categorize your time with custom color-coded projects.
+- **Productivity Insights:** View daily progress indicators and summarize your time spent per project using charts.
+- **Highly Customizable:** Adjust your start/end of the day, work day duration, and your preferred start day of the
+  week.
+- **Keyboard First:** Fully navigable via keyboard shortcuts for minimal friction.
+- **Secure & Synced:** Authenticated sessions with database synchronization.
+
+## Keybinds
+
+| Keybind              | Action                               |
+| -------------------- | ------------------------------------ |
+| `h` / `←`            | Navigate to the previous week        |
+| `l` / `→`            | Navigate to the next week            |
+| `↑` / `↓`            | Reset calendar to the current week   |
+| `r`                  | Open the Summary/Reports modal       |
+| `s`                  | Open Settings (General tab)          |
+| `p`                  | Open Settings (Projects tab)         |
+| `g`                  | Open the project's GitHub repository |
+| `Esc`                | Close the active modal               |
+| `Cmd/Ctrl` + `Enter` | Save/Submit the current event        |
+
+## Technical Details
+
+Built with a modern, type-safe stack:
+
+- **Framework:** [Nuxt 4](https://nuxt.com/) (Vue 3, Composition API)
+- **UI & Styling:** [Tailwind CSS v4](https://tailwindcss.com/) & [Nuxt UI v4](https://ui.nuxt.com/)
+- **State & Utils:** [@vueuse/core](https://vueuse.org/) & Nuxt standard composables
+- **Database:** PostgreSQL via [Drizzle ORM](https://orm.drizzle.team/)
+- **Authentication:** [Better Auth](https://better-auth.com/)
+- **Runtime Validation:** [Zod](https://zod.dev/)
+- **Package Manager:** [Bun](https://bun.sh/)
+
+## Local Development
+
+This project uses [Bun](https://bun.sh/) as its package manager.
+
+**1. Install dependencies**
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
 bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+**2. Database Setup** Generate and run migrations:
 
 ```bash
-# npm
-npm run dev
+bun run db:generate
+bun run db:migrate
+```
 
-# pnpm
-pnpm dev
+**3. Start the Development Server** Start the development server on `http://localhost:3000`:
 
-# yarn
-yarn dev
-
-# bun
+```bash
 bun run dev
 ```
 
-## Production
-
-Build the application for production:
+**4. Build for Production**
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
 bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
 bun run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
