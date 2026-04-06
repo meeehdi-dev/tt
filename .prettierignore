@@ -1,4 +1,5 @@
 .github
 AGENTS.md
+CHANGELOG.md
 
 server/db/migrations/
