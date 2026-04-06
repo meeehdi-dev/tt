@@ -39,5 +39,6 @@
     "drizzle-kit": "^0.31.10",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2"
-  }
+  },
+  "version": "1.10.0"
 }
