@@ -2,6 +2,13 @@ on:
   release:
     types: [published]
   workflow_call:
+    secrets:
+      COOLIFY_API_TOKEN:
+        required: true
+      COOLIFY_API_URL:
+        required: true
+      COOLIFY_APP_UUID:
+        required: true
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
