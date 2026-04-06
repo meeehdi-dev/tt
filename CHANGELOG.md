@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0](https://github.com/meeehdi-dev/tt/compare/v1.10.1...v2.0.0) (2026-04-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* v2
+
+### Features
+
+* v2 ([0a0a13b](https://github.com/meeehdi-dev/tt/commit/0a0a13b3ff74d3e6558c338ab6993ff6255a8640))
+
+
+### Bug Fixes
+
+* **ci:** bring back the required env vars ([8238d5f](https://github.com/meeehdi-dev/tt/commit/8238d5f172b6f5ea0722ebbe1572d10d0e771d9d))
+
 ## [1.10.1](https://github.com/meeehdi-dev/tt/compare/v1.10.0...v1.10.1) (2026-04-06)
 
 
