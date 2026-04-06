@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/meeehdi-dev/tt/compare/v2.0.0...v2.0.1) (2026-04-06)
+
+
+### Bug Fixes
+
+* **ci:** add environment when notifying coolify ([987d925](https://github.com/meeehdi-dev/tt/commit/987d92590dc8e3f5227f1b0c9b6a7cf0d5d07f11))
+* **ci:** environment name typo ([94d7120](https://github.com/meeehdi-dev/tt/commit/94d7120b63c84de312b2742a25d47f239b5e96d2))
+
 ## [2.0.0](https://github.com/meeehdi-dev/tt/compare/v1.10.1...v2.0.0) (2026-04-06)
 
 
