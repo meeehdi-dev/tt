@@ -21,4 +21,4 @@ COPY --from=build --chown=bun:bun /app/server/db/migrations /app/server/db/migra
 
 USER bun
 EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "--bun", "run", "/app/server/index.mjs" ]
+ENTRYPOINT [ "bun", "run", "/app/server/index.mjs" ]
