@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.1](https://github.com/meeehdi-dev/tt/compare/v1.10.0...v1.10.1) (2026-04-06)
+
+
+### Bug Fixes
+
+* **ci:** allow calls between actions + remove names ([7e85437](https://github.com/meeehdi-dev/tt/commit/7e85437c2c344f945a53b761af8415dad57414db))
+* **prettier:** ignore changelog ([ead7e17](https://github.com/meeehdi-dev/tt/commit/ead7e17af2529d430c11e41053f27dd4af41d8d5))
+
 ## [1.10.0](https://github.com/meeehdi-dev/tt/compare/v1.9.0...v1.10.0) (2026-04-06)
 
 
