@@ -21,7 +21,7 @@
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/ui": "^4.6.1",
     "@vueuse/core": "^14.2.1",
-    "better-auth": "^1.5.6",
+    "better-auth": "^1.6.2",
     "dayjs": "^1.11.20",
     "dotenv": "^17.4.1",
     "drizzle-orm": "^0.45.2",
@@ -32,11 +32,11 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.101",
+    "@iconify-json/lucide": "^1.2.102",
     "@types/pg": "^8.20.0",
     "@vue/eslint-config-prettier": "^10.2.0",
     "drizzle-kit": "^0.31.10",
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.2",
     "prettier-plugin-tailwindcss": "^0.7.2"
   },
   "version": "2.0.1"
