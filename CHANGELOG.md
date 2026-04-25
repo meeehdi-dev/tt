@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.1.0](https://github.com/meeehdi-dev/tt/compare/v2.0.1...v2.1.0) (2026-04-25)
+
+
+### Features
+
+* **event:** add duration badge ([eac78f1](https://github.com/meeehdi-dev/tt/commit/eac78f18ffd0bc1b0cd158fb321251440932474e))
+
+
+### Bug Fixes
+
+* remove vue ([de2a0e1](https://github.com/meeehdi-dev/tt/commit/de2a0e131b90de421ba8af32219c6926557d9e01))
+
 ## [2.0.1](https://github.com/meeehdi-dev/tt/compare/v2.0.0...v2.0.1) (2026-04-06)
 
 
