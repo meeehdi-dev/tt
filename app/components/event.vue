@@ -134,6 +134,7 @@ const rowStart = computed(() => (event.start - startOfDay.value) / SLOT_DURATION
 const rowSpan = computed(() => (event.end - event.start) / SLOT_DURATION);
 
 const eventContrastColor = computed(() => getContrastColor(getProjectColor(event.projectId)));
+const eventDurationLabel = computed(() => getTimeLabel(getEventTime(event)));
 </script>
 
 <template>
@@ -161,6 +162,14 @@ const eventContrastColor = computed(() => getContrastColor(getProjectColor(event
       <UIcon name="lucide:loader-circle" class="animate-spin" />
     </div>
     <div v-else>
+      <UBadge
+        class="pointer-events-none absolute top-1 right-1 text-xs transition-opacity group-hover:opacity-0"
+        variant="soft"
+        color="primary"
+        icon="lucide:clock"
+      >
+        <span class="whitespace-nowrap">{{ eventDurationLabel }}</span>
+      </UBadge>
       <UPopover
         :content="{ side: 'right' }"
         class="absolute right-0 m-1 opacity-0 transition-opacity group-hover:opacity-100"
