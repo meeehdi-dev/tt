@@ -19,7 +19,7 @@
   "dependencies": {
     "@inspira-ui/plugins": "^0.0.2",
     "@nuxt/eslint": "^1.15.2",
-    "@nuxt/ui": "^4.6.1",
+    "@nuxt/ui": "^4.7.0",
     "@vueuse/core": "^14.2.1",
     "better-auth": "^1.6.9",
     "dayjs": "^1.11.20",
@@ -32,7 +32,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.103",
+    "@iconify-json/lucide": "^1.2.104",
     "@types/pg": "^8.20.0",
     "@vue/eslint-config-prettier": "^10.2.0",
     "drizzle-kit": "^0.31.10",
