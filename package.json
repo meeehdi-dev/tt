@@ -19,25 +19,25 @@
   "dependencies": {
     "@inspira-ui/plugins": "^0.0.2",
     "@nuxt/eslint": "^1.15.2",
-    "@nuxt/ui": "^4.6.1",
-    "@vueuse/core": "^14.2.1",
-    "better-auth": "^1.6.9",
+    "@nuxt/ui": "^4.7.1",
+    "@vueuse/core": "^14.3.0",
+    "better-auth": "^1.6.10",
     "dayjs": "^1.11.20",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
-    "nuxt": "^4.4.2",
+    "nuxt": "^4.4.5",
     "pg": "^8.20.0",
-    "tailwindcss": "^4.2.4",
+    "tailwindcss": "^4.3.0",
     "uuid": "^14.0.0",
-    "zod": "^4.3.6"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.103",
+    "@iconify-json/lucide": "^1.2.106",
     "@types/pg": "^8.20.0",
     "@vue/eslint-config-prettier": "^10.2.0",
     "drizzle-kit": "^0.31.10",
     "prettier": "^3.8.3",
-    "prettier-plugin-tailwindcss": "^0.7.3"
+    "prettier-plugin-tailwindcss": "^0.8.0"
   },
   "version": "2.0.1"
 }
