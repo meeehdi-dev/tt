@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/meeehdi-dev/tt/compare/v2.1.0...v2.1.1) (2026-05-12)
+
+
+### Bug Fixes
+
+* bring back vue ([4a58a72](https://github.com/meeehdi-dev/tt/commit/4a58a72eaa7dea7fbfa1722ac0310d539eced1a8))
+
 ## [2.1.0](https://github.com/meeehdi-dev/tt/compare/v2.0.1...v2.1.0) (2026-05-12)
 
 
