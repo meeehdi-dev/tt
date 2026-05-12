@@ -58,13 +58,16 @@ export function getSlotElementFromElement(target: HTMLElement, anchor: Anchor) {
   return slotElement;
 }
 
-const TIME_LABEL_SUFFIX = " hrs";
+const TIME_LABEL_SUFFIX = " hr";
+function getTimeLabelSuffix(time: number) {
+  return TIME_LABEL_SUFFIX + (time > 60 ? "s" : "");
+}
 export function getTimeLabel(time: number) {
   const hours = (time / 60).toFixed(1);
   if (hours.endsWith(".0")) {
-    return hours.slice(0, -2) + TIME_LABEL_SUFFIX;
+    return hours.slice(0, -2) + getTimeLabelSuffix(time);
   }
-  return hours + TIME_LABEL_SUFFIX;
+  return hours + getTimeLabelSuffix(time);
 }
 
 export function getEventTime(event: Event) {
