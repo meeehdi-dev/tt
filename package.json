@@ -21,7 +21,7 @@
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/ui": "^4.7.1",
     "@vueuse/core": "^14.3.0",
-    "better-auth": "^1.6.10",
+    "better-auth": "^1.6.11",
     "dayjs": "^1.11.20",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
@@ -33,7 +33,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.106",
+    "@iconify-json/lucide": "^1.2.107",
     "@types/pg": "^8.20.0",
     "@vue/eslint-config-prettier": "^10.2.0",
     "drizzle-kit": "^0.31.10",
