@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://github.com/meeehdi-dev/tt/compare/v2.2.0...v2.3.0) (2026-05-21)
+
+
+### Features
+
+* **day:** different color for current day ([40e79d5](https://github.com/meeehdi-dev/tt/commit/40e79d5646f910352a94a5504fbb94a4337d0e21))
+
+
+### Bug Fixes
+
+* **docker:** set pnpm env vars before corepack enable ([ab9a581](https://github.com/meeehdi-dev/tt/commit/ab9a5818a238ea546f2a99177c15ba1cf5150aeb))
+
 ## [2.2.0](https://github.com/meeehdi-dev/tt/compare/v2.1.1...v2.2.0) (2026-05-21)
 
 
