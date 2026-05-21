@@ -8,6 +8,8 @@ const { date, minute, currentEvent } = defineProps<{
   currentEvent: Event | undefined;
 }>();
 
+const currentDay = computed(() => date === dayjs().format("YYYY-MM-DD"));
+
 const emit = defineEmits<{ slotHover: [MouseEvent] }>();
 
 const dayOfWeek = computed(() => dayjs(date).day());
@@ -21,8 +23,11 @@ const dayOfWeek = computed(() => dayjs(date).day());
     :class="{
       'bg-neutral-700!':
         currentEvent && date === currentEvent.date && minute >= currentEvent.start && minute < currentEvent.end,
-      'bg-neutral-800/50': dayOfWeek > 0 && dayOfWeek < 6,
-      'bg-neutral-800/30': dayOfWeek === 0 || dayOfWeek === 6,
+
+      'bg-neutral-800/50': !currentDay && dayOfWeek > 0 && dayOfWeek < 6,
+      'bg-neutral-800/30': !currentDay && (dayOfWeek === 0 || dayOfWeek === 6),
+
+      'bg-primary-100/10': currentDay,
     }"
     @mouseover="emit('slotHover', $event)"
   />
