@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.2](https://github.com/meeehdi-dev/tt/compare/v2.3.1...v2.3.2) (2026-05-21)
+
+
+### Bug Fixes
+
+* **docker:** use node to run server ([2492f2b](https://github.com/meeehdi-dev/tt/commit/2492f2b88e3624340df845179eec4fb2accd2855))
+
 ## [2.3.1](https://github.com/meeehdi-dev/tt/compare/v2.3.0...v2.3.1) (2026-05-21)
 
 
