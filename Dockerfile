@@ -24,4 +24,4 @@ COPY --from=build /app/server/db/migrations /app/server/db/migrations
 
 EXPOSE 3000/tcp
 
-ENTRYPOINT [ "pnpm", "run", "/app/server/index.mjs" ]
+ENTRYPOINT [ "node", "/app/server/index.mjs" ]
