@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.2.0](https://github.com/meeehdi-dev/tt/compare/v2.1.1...v2.2.0) (2026-05-21)
+
+
+### Features
+
+* move to devcontainer and pnpm and node 24 ([9b703e4](https://github.com/meeehdi-dev/tt/commit/9b703e47aeff24650e569b973ea658c91a368a07))
+
+
+### Bug Fixes
+
+* **ci:** add typecheck + dep for build ([0f0a6ba](https://github.com/meeehdi-dev/tt/commit/0f0a6bacba930f9ca2866a966c4f2006ce76f6e2))
+* **ci:** deduce pnpm version from package ([277294d](https://github.com/meeehdi-dev/tt/commit/277294d9b56f726b252f535e1c25aa2804fb426d))
+* **ci:** define node version and pnpm cache ([3e7c387](https://github.com/meeehdi-dev/tt/commit/3e7c387a6207191cffd394a46fcde257bcaf5b81))
+* **ci:** explicitly install pnpm ([f070354](https://github.com/meeehdi-dev/tt/commit/f070354db82726352a837e628cdc195971296fa6))
+* **ci:** force pnpm version 11 ([a8b7947](https://github.com/meeehdi-dev/tt/commit/a8b7947898f744e21387136c6a0e6056c948cf30))
+* **ci:** matrix node version and use pnpm version from package ([ff8ee8d](https://github.com/meeehdi-dev/tt/commit/ff8ee8da7f16d8480cce7ef9021dc371ae6ead93))
+* **ci:** remove matrix ([055907a](https://github.com/meeehdi-dev/tt/commit/055907a98bd5d7c370df3af29b44472c1aedc3ae))
+* **ci:** use node action instead of pnpm ([69c2b86](https://github.com/meeehdi-dev/tt/commit/69c2b86ab01dcaa07cdf7ac90dd375c8fad5e3fb))
+* **dependabot:** cooldown ([df93565](https://github.com/meeehdi-dev/tt/commit/df93565737fab848165e6588ed0d3a82b6d4d7f8))
+* eslint ([7582933](https://github.com/meeehdi-dev/tt/commit/7582933aee242d8296eff253c8fae5950e9a2a7d))
+* **eslint:** add deps and update scripts ([fcfd136](https://github.com/meeehdi-dev/tt/commit/fcfd13698d0945d2399e5bae3517d054e9a7543d))
+* **prettier:** ignore pnpm files ([47f80fb](https://github.com/meeehdi-dev/tt/commit/47f80fb219736b3b5c5f96c7160f57429d9d179f))
+* update lock ([2f5e75f](https://github.com/meeehdi-dev/tt/commit/2f5e75f627e92e03b365cee0b1332514a91d4e7e))
+
 ## [2.1.1](https://github.com/meeehdi-dev/tt/compare/v2.1.0...v2.1.1) (2026-05-12)
 
 
