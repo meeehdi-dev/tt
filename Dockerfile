@@ -1,24 +1,28 @@
-FROM oven/bun:1 AS base
+FROM node:24-alpine AS base
 
-FROM base AS build
+RUN corepack enable
+
 WORKDIR /app
 
-COPY package.json bun.lock* ./
 
-RUN bun install --frozen-lockfile --ignore-scripts
+FROM base AS build
+
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN bun --bun run build
+RUN pnpm run build
 
-FROM oven/bun:1-alpine AS production
-WORKDIR /app
+
+FROM base AS production
 
 ENV NODE_ENV=production
 
-COPY --from=build --chown=bun:bun /app/.output /app
-COPY --from=build --chown=bun:bun /app/server/db/migrations /app/server/db/migrations
+COPY --from=build /app/.output /app
+COPY --from=build /app/server/db/migrations /app/server/db/migrations
 
-USER bun
 EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "run", "/app/server/index.mjs" ]
+
+ENTRYPOINT [ "pnpm", "run", "/app/server/index.mjs" ]

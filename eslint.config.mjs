@@ -10,7 +10,6 @@ export default withNuxt(prettierConfig, {
     },
   },
   rules: {
-    "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/no-empty-object-type": "off",
 
     "import/order": "error",

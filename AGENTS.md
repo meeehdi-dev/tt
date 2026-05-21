@@ -6,7 +6,7 @@ This file contains instructions, project architecture details, styling guideline
 
 - **Framework:** Nuxt 4 (Vue 3, Composition API)
 - **Language:** strict TypeScript
-- **Package Manager:** Bun
+- **Package Manager:** pnpm
 - **Styling & UI:** Tailwind CSS v4, Nuxt UI (@nuxt/ui v4)
 - **State Management:** Nuxt `useState` or standalone Vue composables (no Pinia)
 - **Key Libraries:** `zod` (runtime validation), `dayjs` (date manipulation), `@vueuse/core` (utility functions)
@@ -27,16 +27,16 @@ This project follows the Nuxt 4 directory structure, meaning all client-side Vue
 
 ### Development, Build, & Execution
 
-- **Install Dependencies:** `bun install`
-- **Run Dev Server:** `bun run dev`
-- **Typecheck Code:** `bun run typecheck`
-- **Build Production App:** `bun run build`
-- **Preview Production App:** `bun run preview`
+- **Install Dependencies:** `pnpm install`
+- **Run Dev Server:** `pnpm run dev`
+- **Typecheck Code:** `pnpm run typecheck`
+- **Build Production App:** `pnpm run build`
+- **Preview Production App:** `pnpm run preview`
 
 ### Linting & Formatting
 
-- **Lint (ESLint):** `bun run lint`
-- **Format (Prettier):** `bun run fmt`
+- **Lint (ESLint):** `pnpm run lint`
+- **Format (Prettier):** `pnpm run fmt`
   _(Note: Prettier uses `prettier-plugin-tailwindcss` to automatically sort class names)._
 
 ### Testing
@@ -44,9 +44,9 @@ This project follows the Nuxt 4 directory structure, meaning all client-side Vue
 _Note: This repository currently lacks a configured test runner._
 If/when `vitest` is introduced to the repository, tests should be written in a corresponding `tests/` directory or alongside files (`*.spec.ts`).
 
-- **Run All Tests:** `bunx vitest run`
-- **Run a Single Test:** `bunx vitest run path/to/file.spec.ts`
-- **Run Tests in Watch Mode:** `bunx vitest watch`
+- **Run All Tests:** `pnpx vitest run`
+- **Run a Single Test:** `pnpx vitest run path/to/file.spec.ts`
+- **Run Tests in Watch Mode:** `pnpx vitest watch`
 
 ## 3. Code Style & Conventions
 

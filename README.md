@@ -37,34 +37,34 @@ Built with a modern, type-safe stack:
 - **Database:** PostgreSQL via [Drizzle ORM](https://orm.drizzle.team/)
 - **Authentication:** [Better Auth](https://better-auth.com/)
 - **Runtime Validation:** [Zod](https://zod.dev/)
-- **Package Manager:** [Bun](https://bun.sh/)
+- **Package Manager:** [pnpm](https://pnpm.io/)
 
 ## Local Development
 
-This project uses [Bun](https://bun.sh/) as its package manager.
+This project uses [pnpm](https://pnpm.io/) as its package manager.
 
 **1. Install dependencies**
 
 ```bash
-bun install
+pnpm install
 ```
 
 **2. Database Setup** Generate and run migrations:
 
 ```bash
-bun run db:generate
-bun run db:migrate
+pnpm run db:generate
+pnpm run db:migrate
 ```
 
 **3. Start the Development Server** Start the development server on `http://localhost:3000`:
 
 ```bash
-bun run dev
+pnpm run dev
 ```
 
 **4. Build for Production**
 
 ```bash
-bun run build
-bun run preview
+pnpm run build
+pnpm run preview
 ```
