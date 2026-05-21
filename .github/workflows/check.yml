@@ -10,20 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
       - run: pnpm install --frozen-lockfile
       - run: pnpm run lint
   fmt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
       - run: pnpm install --frozen-lockfile
       - run: pnpm run fmt
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
