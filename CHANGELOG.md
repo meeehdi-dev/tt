@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/meeehdi-dev/tt/compare/v2.3.0...v2.3.1) (2026-05-21)
+
+
+### Bug Fixes
+
+* **docker:** copy pnpm workspace for approved builds ([40d0345](https://github.com/meeehdi-dev/tt/commit/40d0345768db4c654cbe858e48851035debb25b4))
+
 ## [2.3.0](https://github.com/meeehdi-dev/tt/compare/v2.2.0...v2.3.0) (2026-05-21)
 
 
