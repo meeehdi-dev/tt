@@ -1,5 +1,6 @@
 .github
 AGENTS.md
 CHANGELOG.md
+pnpm-*.yaml
 
 server/db/migrations/
