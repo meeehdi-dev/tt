@@ -33,7 +33,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.107",
+    "@iconify-json/lucide": "^1.2.109",
     "@types/pg": "^8.20.0",
     "@vue/eslint-config-prettier": "^10.2.0",
     "drizzle-kit": "^0.31.10",
