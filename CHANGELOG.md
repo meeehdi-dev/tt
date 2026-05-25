@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.4](https://github.com/meeehdi-dev/tt/compare/v2.3.3...v2.3.4) (2026-05-25)
+
+
+### Bug Fixes
+
+* **deploy:** docker image tag name ([7625932](https://github.com/meeehdi-dev/tt/commit/76259325be19128f2e78ddce45ae4738d8b24f47))
+
 ## [2.3.3](https://github.com/meeehdi-dev/tt/compare/v2.3.2...v2.3.3) (2026-05-25)
 
 
