@@ -44,18 +44,13 @@ jobs:
     environment: Production
     steps:
       - run: |
-          if [ -z "$COOLIFY_API_TOKEN" ] || [ -z "$COOLIFY_API_URL" ] || [ -z "$COOLIFY_APP_UUID" ]; then
-            echo "Coolify secrets are not fully configured. Skipping deployment trigger."
-            exit 0
-          fi
-
-          echo "Triggering deployment on Coolify..."
-          curl --request POST "${COOLIFY_API_URL}/api/v1/deploy?uuid=${COOLIFY_APP_UUID}&force=false" \
-               --header "Authorization: Bearer ${COOLIFY_API_TOKEN}" \
-               --fail --silent --show-error
-        env:
-          COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
-          COOLIFY_API_URL: ${{ secrets.COOLIFY_API_URL }}
-          COOLIFY_APP_UUID: ${{ secrets.COOLIFY_APP_UUID }}
+          curl -X PATCH "${{ secrets.COOLIFY_API_URL }}/api/v1/applications/${{ secrets.COOLIFY_APP_UUID }}" \
+               -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+               -H "Content-Type: application/json" \
+               -d "{\"docker_registry_image_tag\":\"${{ inputs.tag }}\"}" \
+               -f -s -S
+          curl -X POST "${{ secrets.COOLIFY_API_URL }}/api/v1/deploy?uuid=${{ secrets.COOLIFY_APP_UUID }}&force=false" \
+               -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+               -f -s -S
 env:
   REGISTRY: ghcr.io
