@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.3](https://github.com/meeehdi-dev/tt/compare/v2.3.2...v2.3.3) (2026-05-25)
+
+
+### Bug Fixes
+
+* **dev:** use simple dev container setup ([6520289](https://github.com/meeehdi-dev/tt/commit/6520289f572ee1076efccc07c3d4ce8459720f78))
+
 ## [2.3.2](https://github.com/meeehdi-dev/tt/compare/v2.3.1...v2.3.2) (2026-05-21)
 
 
