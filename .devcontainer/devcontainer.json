@@ -1,11 +1,4 @@
 {
   "image": "mcr.microsoft.com/devcontainers/javascript-node:24",
-  "forwardPorts": [3000],
-
-  "runArgs": ["-p", "3000:3000"],
-  "mounts": [
-    "source=${localEnv:HOME}/code/dotfiles/.config/nvim,target=/home/node/.config/nvim,type=bind,consistency=cached"
-  ],
-  "containerEnv": { "DEV_NVIM": "${localEnv:DEV_NVIM}" },
-  "postCreateCommand": "bash .devcontainer/setup.sh"
+  "forwardPorts": [3000]
 }
