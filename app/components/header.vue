@@ -2,6 +2,8 @@
 import type { DropdownMenuItem } from "@nuxt/ui";
 import { authClient } from "~/lib/auth";
 
+const { open } = useModal();
+
 const session = authClient.useSession();
 
 const { currentWeek, now, resetCurrentWeek } = useDate();
