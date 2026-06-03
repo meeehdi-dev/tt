@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.5](https://github.com/meeehdi-dev/tt/compare/v2.3.4...v2.3.5) (2026-06-03)
+
+
+### Bug Fixes
+
+* **settings:** modal open on click ([9fb68a9](https://github.com/meeehdi-dev/tt/commit/9fb68a9036515608b1680c435d2543123ef98b58))
+
 ## [2.3.4](https://github.com/meeehdi-dev/tt/compare/v2.3.3...v2.3.4) (2026-05-25)
 
 
