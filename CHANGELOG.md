@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.6](https://github.com/meeehdi-dev/tt/compare/v2.3.5...v2.3.6) (2026-06-08)
+
+
+### Bug Fixes
+
+* **ui:** current time indicator position ([3467e88](https://github.com/meeehdi-dev/tt/commit/3467e88bcb8f8c33aed8f3567809396332df45b0))
+
 ## [2.3.5](https://github.com/meeehdi-dev/tt/compare/v2.3.4...v2.3.5) (2026-06-03)
 
 
