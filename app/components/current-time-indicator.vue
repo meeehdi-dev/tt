@@ -19,19 +19,22 @@ const isToday = computed(() => date === dayjs().format("YYYY-MM-DD"));
 
 <template>
   <ClientOnly>
-    <USeparator
+    <div
       v-if="isToday && currentTime > startOfDay && currentTime < endOfDay"
-      color="primary"
-      decorative
-      class="pointer-events-none absolute z-10 translate-y-(--translate-y)"
+      class="pointer-events-none absolute left-0 z-10 w-full translate-y-(--translate-y)"
       :style="{
         '--translate-y': `calc(${currentDayNowIndicatorTranslate}px - 50%)`,
       }"
-      :ui="{
-        container: 'm-0',
-      }"
     >
-      <UBadge :label="now.format('HH:mm:ss')" color="primary" size="sm" variant="soft" />
-    </USeparator>
+      <USeparator
+        color="primary"
+        decorative
+        :ui="{
+          container: 'm-0',
+        }"
+      >
+        <UBadge :label="now.format('HH:mm:ss')" color="primary" size="sm" variant="soft" />
+      </USeparator>
+    </div>
   </ClientOnly>
 </template>
