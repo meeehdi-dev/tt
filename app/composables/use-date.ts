@@ -23,6 +23,7 @@ export default function useDate() {
 
   const currentWeekStr = useState<string>("currentWeek", () => dayjs().toISOString());
   const nowStr = useState<string>("now", () => dayjs().toISOString());
+  const todayStr = useState<string>("todayStr", () => dayjs().format("YYYY-MM-DD"));
 
   const currentWeek = computed<Dayjs>({
     get: () => dayjs(currentWeekStr.value),
@@ -42,7 +43,11 @@ export default function useDate() {
     subscriberCount++;
     if (!nowInterval) {
       nowInterval = window.setInterval(() => {
-        now.value = dayjs();
+        nowStr.value = dayjs().toISOString();
+        const currentFormatted = dayjs().format("YYYY-MM-DD");
+        if (todayStr.value !== currentFormatted) {
+          todayStr.value = currentFormatted;
+        }
       }, 1000);
     }
   });
@@ -76,6 +81,7 @@ export default function useDate() {
   return {
     currentWeek,
     now,
+    todayStr,
     startOfWeekDay,
     startOfDay,
     endOfDay,

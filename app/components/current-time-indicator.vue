@@ -4,7 +4,7 @@ const { date, dayHeight } = defineProps<{
   dayHeight: number;
 }>();
 
-const { now, startOfDay, endOfDay } = useDate();
+const { now, todayStr, startOfDay, endOfDay } = useDate();
 
 const currentTime = computed(() => now.value.hour() * 60 + now.value.minute());
 
@@ -12,7 +12,7 @@ const currentDayNowIndicatorTranslate = computed(() =>
   Math.round(((currentTime.value - startOfDay.value) / (endOfDay.value - startOfDay.value)) * dayHeight),
 );
 
-const isToday = computed(() => date === now.value.format("YYYY-MM-DD"));
+const isToday = computed(() => date === todayStr.value);
 </script>
 
 <template>
