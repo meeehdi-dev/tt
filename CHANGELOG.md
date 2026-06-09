@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.7](https://github.com/meeehdi-dev/tt/compare/v2.3.6...v2.3.7) (2026-06-09)
+
+
+### Bug Fixes
+
+* **ui:** correctly handle current day changes ([3db4fc0](https://github.com/meeehdi-dev/tt/commit/3db4fc0a01e3ba5fa88f39a48e49f5c138f0354c))
+* **ui:** optimize current day check ([7d9c70a](https://github.com/meeehdi-dev/tt/commit/7d9c70a933e4946c189f317eeda5b8f7a27440da))
+
 ## [2.3.6](https://github.com/meeehdi-dev/tt/compare/v2.3.5...v2.3.6) (2026-06-08)
 
 
