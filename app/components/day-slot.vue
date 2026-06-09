@@ -8,7 +8,9 @@ const { date, minute, currentEvent } = defineProps<{
   currentEvent: Event | undefined;
 }>();
 
-const currentDay = computed(() => date === dayjs().format("YYYY-MM-DD"));
+const { now } = useDate();
+
+const currentDay = computed(() => date === now.value.format("YYYY-MM-DD"));
 
 const emit = defineEmits<{ slotHover: [MouseEvent] }>();
 

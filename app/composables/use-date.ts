@@ -4,6 +4,9 @@ import dayjs, { type Dayjs } from "dayjs";
 
 import { StartOfWeekDay } from "~/types";
 
+let nowInterval: ReturnType<typeof setInterval> | number | undefined = undefined;
+let subscriberCount = 0;
+
 export default function useDate() {
   const startOfWeekDay = useCookie<StartOfWeekDay>("startOfWeekDay", {
     default: () => StartOfWeekDay.Monday,
@@ -35,14 +38,20 @@ export default function useDate() {
     },
   });
 
-  let nowInterval: number | undefined;
   onMounted(() => {
-    nowInterval = window.setInterval(() => {
-      now.value = dayjs();
-    }, 1000);
+    subscriberCount++;
+    if (!nowInterval) {
+      nowInterval = window.setInterval(() => {
+        now.value = dayjs();
+      }, 1000);
+    }
   });
   onUnmounted(() => {
-    if (nowInterval) clearInterval(nowInterval);
+    subscriberCount--;
+    if (subscriberCount <= 0 && nowInterval) {
+      window.clearInterval(nowInterval);
+      nowInterval = undefined;
+    }
   });
 
   function resetCurrentWeek() {

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import dayjs from "dayjs";
-
 const { date, dayHeight } = defineProps<{
   date: string;
   dayHeight: number;
@@ -14,7 +12,7 @@ const currentDayNowIndicatorTranslate = computed(() =>
   Math.round(((currentTime.value - startOfDay.value) / (endOfDay.value - startOfDay.value)) * dayHeight),
 );
 
-const isToday = computed(() => date === dayjs().format("YYYY-MM-DD"));
+const isToday = computed(() => date === now.value.format("YYYY-MM-DD"));
 </script>
 
 <template>
