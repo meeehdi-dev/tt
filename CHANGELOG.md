@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.8](https://github.com/meeehdi-dev/tt/compare/v2.3.7...v2.3.8) (2026-06-17)
+
+
+### Bug Fixes
+
+* update packages ([82fc3e4](https://github.com/meeehdi-dev/tt/commit/82fc3e48b2a8f92331af91edec76c4bcece91fdd))
+
 ## [2.3.7](https://github.com/meeehdi-dev/tt/compare/v2.3.6...v2.3.7) (2026-06-09)
 
 
