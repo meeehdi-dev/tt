@@ -19,7 +19,7 @@
   "dependencies": {
     "@inspira-ui/plugins": "^0.0.2",
     "@nuxt/eslint": "^1.16.0",
-    "@nuxt/ui": "^4.8.2",
+    "@nuxt/ui": "^4.9.0",
     "@vueuse/core": "^14.3.0",
     "better-auth": "^1.6.19",
     "dayjs": "^1.11.21",
