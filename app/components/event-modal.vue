@@ -7,6 +7,7 @@ const { open, close, isEventModalOpen } = useModal();
 const form = useTemplateRef("form");
 
 const label = ref("");
+const saving = ref(false);
 
 const { selectedEvent, unselectEvent, saveEvent } = useEvents();
 
@@ -57,10 +58,12 @@ const state = reactive<Schema>({
 });
 
 async function onSubmit(e: FormSubmitEvent<Schema>) {
+  saving.value = true;
   await saveEvent({
     projectId: e.data.projectId,
     description: e.data.description ?? null,
   });
+  saving.value = false;
 
   state.projectId = "";
   state.description = undefined;
@@ -170,7 +173,7 @@ function submit() {
     <template #footer>
       <UButton color="neutral" variant="soft" @click="unselectEvent">Cancel</UButton>
       <UPopover mode="hover">
-        <UButton type="submit" @click="form?.submit()"> Save </UButton>
+        <UButton type="submit" :loading="saving" @click="form?.submit()"> Save </UButton>
         <template #content>
           <div class="flex items-center gap-0.5 p-0.5">
             <UKbd value="meta" variant="soft" />
