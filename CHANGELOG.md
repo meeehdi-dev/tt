@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.9](https://github.com/meeehdi-dev/tt/compare/v2.3.8...v2.3.9) (2026-07-03)
+
+
+### Bug Fixes
+
+* **event:** loading state on save ([e17c82d](https://github.com/meeehdi-dev/tt/commit/e17c82dde2cb2f3edb656fa62ffb80aa7d9cb58d))
+
 ## [2.3.8](https://github.com/meeehdi-dev/tt/compare/v2.3.7...v2.3.8) (2026-06-17)
 
 
