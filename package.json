@@ -20,12 +20,12 @@
     "@inspira-ui/plugins": "^0.0.2",
     "@nuxt/eslint": "^1.16.0",
     "@nuxt/ui": "^4.10.0",
-    "@vueuse/core": "^14.3.0",
-    "better-auth": "^1.6.23",
+    "@vueuse/core": "^14.4.0",
+    "better-auth": "^1.6.25",
     "dayjs": "^1.11.21",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
-    "nuxt": "^4.5.0",
+    "nuxt": "^4.5.1",
     "pg": "^8.22.0",
     "tailwindcss": "^4.3.3",
     "uuid": "^14.0.1",
@@ -33,15 +33,15 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@iconify-json/lucide": "^1.2.118",
-    "@types/pg": "^8.20.0",
+    "@iconify-json/lucide": "^1.2.121",
+    "@types/pg": "^8.20.3",
     "@vue/eslint-config-prettier": "^10.2.0",
     "drizzle-kit": "^0.31.10",
-    "eslint": "^10.7.0",
-    "prettier": "^3.9.5",
+    "eslint": "^10.8.0",
+    "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "^6.0.3",
-    "vue-tsc": "^3.3.7"
+    "vue-tsc": "^3.3.9"
   },
   "version": "2.3.9",
   "packageManager": "pnpm@11.7.0+sha512.19cc852c120c7125760f2443ee6be0ca5b40f9f50598de1a09a1f177503e010e57c23c77646e01e761de59bf874fb22a3398c33ab9691fc13eb946b6f0f4d620"
